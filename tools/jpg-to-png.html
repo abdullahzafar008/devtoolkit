@@ -1148,5 +1148,98 @@
       }
     }
   </script>
+  <script>
+  (function() {
+    fetch('/content/tools/jpg-to-png.json')
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        // Update text elements safely
+        // Only update if element exists
+        function setText(sel, val) {
+          var el = document.querySelector(sel);
+          if (el && val) el.textContent = val;
+        }
+        function setAll(sel, val) {
+          var els = document.querySelectorAll(sel);
+          if (val) els.forEach(function(el) { 
+            el.textContent = val; 
+          });
+        }
+
+        // Hero section
+        setAll('h1', d.hero_heading);
+        
+        // How to use section
+        if (d.how_to_use) {
+          var steps = document.querySelectorAll(
+            '.how-to-use .step, .steps .step, ' +
+            '.how-to-step, .steps-grid .step-card');
+          d.how_to_use.forEach(function(s, i) {
+            if (steps[i]) {
+              var title = steps[i].querySelector(
+                'h3, h4, .step-title');
+              var desc = steps[i].querySelector(
+                'p, .step-desc');
+              if (title) title.textContent = s.title;
+              if (desc) desc.textContent = s.description;
+            }
+          });
+        }
+
+        // Features section
+        if (d.features) {
+          var cards = document.querySelectorAll(
+            '.features .feature-card, ' +
+            '.key-features .card, ' +
+            '.features-grid .feature-card');
+          d.features.forEach(function(f, i) {
+            if (cards[i]) {
+              var title = cards[i].querySelector(
+                'h3, h4, .feature-title, .feature-head');
+              if (title) {
+                // If there's an icon prepended, keep icon or replace text. In .feature-head: "⚡ Bidirectional Mapping"
+                var icon = f.icon || '';
+                title.textContent = (icon ? icon + ' ' : '') + f.title;
+              }
+              var desc = cards[i].querySelector(
+                'p, .feature-desc');
+              if (desc) desc.textContent = f.description;
+            }
+          });
+        }
+
+        // FAQ section
+        if (d.faqs) {
+          var faqItems = document.querySelectorAll(
+            '.faq-item, .faq .item');
+          d.faqs.forEach(function(f, i) {
+            if (faqItems[i]) {
+              var q = faqItems[i].querySelector(
+                '.faq-question, .question, h3, h4');
+              var a = faqItems[i].querySelector(
+                '.faq-answer, .answer, p');
+              if (q) {
+                // Keep the span containing "+" if any
+                var span = q.querySelector('span');
+                var spanText = span ? span.outerHTML : ' <span>+</span>';
+                q.innerHTML = f.question + spanText;
+              }
+              if (a) a.textContent = f.answer;
+            }
+          });
+        }
+
+        // Page title
+        if (d.seo_title) {
+          document.title = d.seo_title;
+        }
+
+      })
+      .catch(function() {
+        // If JSON fails, keep original HTML content
+        console.log('CMS: using static content');
+      });
+  })();
+  </script>
 </body>
 </html>

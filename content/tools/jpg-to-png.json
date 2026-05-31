@@ -1,0 +1,114 @@
+{
+  "title": "JPG to PNG Converter",
+  "hero_heading": "JPG to PNG Converter",
+  "hero_subheading": "Convert JPG images to PNG format free online",
+  "how_to_use_heading": "How to Convert Image Formats",
+  "how_to_use": [
+    {
+      "step": "1",
+      "title": "Upload Source Image",
+      "description": "Drag and drop your file into the upload zone or select it from your device storage explorer."
+    },
+    {
+      "step": "2", 
+      "title": "Pick Target Format",
+      "description": "Choose PNG, JPEG, or WebP from the format select box, adjusting quality offsets."
+    },
+    {
+      "step": "3",
+      "title": "Transcode and Save", 
+      "description": "The canvas converter runs the math locally. Click Convert and Download to export the file."
+    }
+  ],
+  "features_heading": "Outstanding Transcoder Features",
+  "features": [
+    {
+      "icon": "⚡",
+      "title": "Bidirectional Mapping",
+      "description": "Transcode elements seamlessly among JPG, PNG, and WebP formats without resizing."
+    },
+    {
+      "icon": "🔒",
+      "title": "Secure Client Execution",
+      "description": "All conversions process in local offscreen buffers. Zero servers uploading preserves privacy."
+    },
+    {
+      "icon": "📊",
+      "title": "Size Savings Estimator",
+      "description": "Displays the original size vs converted size estimation in real-time helping optimize web assets."
+    },
+    {
+      "icon": "✅",
+      "title": "Free Forever",
+      "description": "No signup needed. No credit card. Completely free to use unlimited times."
+    },
+    {
+      "icon": "📱",
+      "title": "Mobile Friendly",
+      "description": "Works perfectly on phones tablets and desktop computers."
+    },
+    {
+      "icon": "🌐",
+      "title": "Browser Based",
+      "description": "No installation needed. Works directly in your web browser."
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Is JPG to PNG converter really free?",
+      "answer": "Yes 100% free forever. No credit card no signup no hidden fees."
+    },
+    {
+      "question": "Do you store my images?",
+      "answer": "No. Everything runs in your browser. Nothing sent to any server."
+    },
+    {
+      "question": "Does it work on mobile?",
+      "answer": "Yes fully optimized for all devices including phones and tablets."
+    },
+    {
+      "question": "What is the maximum file size?",
+      "answer": "You can convert images up to 10MB in size."
+    },
+    {
+      "question": "Can I use it unlimited times?",
+      "answer": "Yes unlimited with no restrictions."
+    },
+    {
+      "question": "Do I need to install anything?",
+      "answer": "No installation needed. Works directly in your web browser."
+    },
+    {
+      "question": "What formats are supported?",
+      "answer": "JPG JPEG PNG and WebP formats are all supported."
+    },
+    {
+      "question": "How do I report a problem?",
+      "answer": "Use the Contact link in footer and we will respond within 24 hours."
+    }
+  ],
+  "seo_title": "JPG to PNG Converter Free Online - DevToolKit",
+  "seo_description": "Convert JPG to PNG free online. No signup needed. Fast secure and works in browser.",
+  "use_cases": [
+    {
+      "emoji": "🎨",
+      "title": "Designers",
+      "description": "Convert product images to PNG for transparent backgrounds."
+    },
+    {
+      "emoji": "👨💻",
+      "title": "Developers",
+      "description": "Convert images for web optimization and compatibility."
+    },
+    {
+      "emoji": "📸",
+      "title": "Photographers",
+      "description": "Convert photos between formats for different platforms."
+    },
+    {
+      "emoji": "📱",
+      "title": "Content Creators",
+      "description": "Convert images for social media posts and thumbnails."
+    }
+  ]
+}
