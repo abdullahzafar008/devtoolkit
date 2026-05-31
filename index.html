@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+  // Handle Netlify Identity redirect tokens
+  if (window.location.hash && 
+      window.location.hash.includes('invite_token')) {
+    window.location.href = '/admin/#' + 
+      window.location.hash.slice(1);
+  }
+  if (window.location.hash && 
+      window.location.hash.includes('recovery_token')) {
+    window.location.href = '/admin/#' + 
+      window.location.hash.slice(1);
+  }
+  if (window.location.hash && 
+      window.location.hash.includes('confirmation_token')) {
+    window.location.href = '/admin/#' + 
+      window.location.hash.slice(1);
+  }
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
