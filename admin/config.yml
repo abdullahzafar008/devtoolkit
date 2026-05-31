@@ -42,3 +42,42 @@ collections:
           - {label: "Site Name", name: "site_name", widget: "string"}
           - {label: "Tagline", name: "tagline", widget: "string"}
           - {label: "Contact Email", name: "contact_email", widget: "string"}
+
+  - name: "tools"
+    label: "🔧 Tools"
+    folder: "content/tools"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Tool Name", name: "title", widget: "string"}
+      - {label: "Hero Heading", name: "hero_heading", widget: "string"}
+      - {label: "Hero Subheading", name: "hero_subheading", widget: "text"}
+      - label: "How To Use Steps"
+        name: "how_to_use"
+        widget: "list"
+        fields:
+          - {label: "Step Number", name: "step", widget: "string"}
+          - {label: "Step Title", name: "title", widget: "string"}
+          - {label: "Step Description", name: "description", widget: "text"}
+      - label: "Key Features"
+        name: "features"
+        widget: "list"
+        fields:
+          - {label: "Icon", name: "icon", widget: "string"}
+          - {label: "Feature Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text"}
+      - label: "FAQs"
+        name: "faqs"
+        widget: "list"
+        fields:
+          - {label: "Question", name: "question", widget: "string"}
+          - {label: "Answer", name: "answer", widget: "text"}
+      - label: "Use Cases"
+        name: "use_cases"
+        widget: "list"
+        fields:
+          - {label: "Emoji", name: "emoji", widget: "string"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text"}
+      - {label: "SEO Title", name: "seo_title", widget: "string"}
+      - {label: "SEO Description", name: "seo_description", widget: "text"}

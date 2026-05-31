@@ -1,12 +1,12 @@
 {
-  "title": "JPG to PNG",
-  "hero_heading": "JPG to PNG",
-  "hero_subheading": "Convert JPG images to PNG format free online.",
+  "title": "Age Calculator",
+  "hero_heading": "Age Calculator",
+  "hero_subheading": "Calculate your chronological age down to days and seconds.",
   "how_to_use": [
     {
       "step": "1",
-      "title": "Access JPG to PNG",
-      "description": "Navigate to the JPG to PNG page on DevToolKit. Input your raw parameters, files, or paste your target assets into the workspaces editor panel."
+      "title": "Access Age Calculator",
+      "description": "Navigate to the Age Calculator page on DevToolKit. Input your raw parameters, files, or paste your target assets into the workspaces editor panel."
     },
     {
       "step": "2",
@@ -23,7 +23,7 @@
     {
       "icon": "✅",
       "title": "Free Forever",
-      "description": "No signup or credit card required. Use JPG to PNG completely free of cost."
+      "description": "No signup or credit card required. Use Age Calculator completely free of cost."
     },
     {
       "icon": "⚡",
@@ -53,8 +53,8 @@
   ],
   "faqs": [
     {
-      "question": "Is JPG to PNG really free?",
-      "answer": "Yes! Every feature of JPG to PNG on DevToolKit is 100% free with no hidden charges, trials, or subscriptions."
+      "question": "Is Age Calculator really free?",
+      "answer": "Yes! Every feature of Age Calculator on DevToolKit is 100% free with no hidden charges, trials, or subscriptions."
     },
     {
       "question": "Do you store or look at my inputs?",
@@ -65,20 +65,20 @@
       "answer": "Yes, our user interface is designed responsively to adapt perfectly to mobile screens and browsers."
     },
     {
-      "question": "How accurate is the JPG to PNG?",
-      "answer": "It is highly accurate. Transcodes image headers client side via canvas pipelines."
+      "question": "How accurate is the Age Calculator?",
+      "answer": "It is highly accurate. Utilizes exact UTC leap year calendar calculations."
     },
     {
       "question": "Are there any usage limits?",
-      "answer": "No, you can run conversions, validations, or generation tasks as many times as you like. Up to 10MB images."
+      "answer": "No, you can run conversions, validations, or generation tasks as many times as you like. No limit."
     },
     {
       "question": "Do I need to download desktop software?",
-      "answer": "No install required. JPG to PNG is built purely with web standards and runs live inside your browser."
+      "answer": "No install required. Age Calculator is built purely with web standards and runs live inside your browser."
     },
     {
       "question": "Is there a file upload size limit?",
-      "answer": "Up to 10MB images."
+      "answer": "No limit."
     },
     {
       "question": "How can I report a bug or request a feature?",
@@ -89,24 +89,24 @@
     {
       "emoji": "👨💻",
       "title": "Developers",
-      "description": "Boost dev workflows by processing data quickly with JPG to PNG directly in your workspace."
+      "description": "Boost dev workflows by processing data quickly with Age Calculator directly in your workspace."
     },
     {
       "emoji": "✍️",
       "title": "Writers & Creators",
-      "description": "Format and optimize written content parameters easily using JPG to PNG."
+      "description": "Format and optimize written content parameters easily using Age Calculator."
     },
     {
       "emoji": "📈",
       "title": "SEO Experts",
-      "description": "Review, generate, and optimize web metrics configurations with JPG to PNG to boost web visibility."
+      "description": "Review, generate, and optimize web metrics configurations with Age Calculator to boost web visibility."
     },
     {
       "emoji": "🎓",
       "title": "Students & Teachers",
-      "description": "Convert, calculate, and format values accurately for academic tasks using JPG to PNG."
+      "description": "Convert, calculate, and format values accurately for academic tasks using Age Calculator."
     }
   ],
-  "seo_title": "JPG to PNG Free Online Tool - DevToolKit",
-  "seo_description": "Use JPG to PNG free online. Convert JPG images to PNG format free online. No signup required. Fast, secure, and private."
+  "seo_title": "Age Calculator Free Online Tool - DevToolKit",
+  "seo_description": "Use Age Calculator free online. Calculate your chronological age down to days and seconds. No signup required. Fast, secure, and private."
 }
