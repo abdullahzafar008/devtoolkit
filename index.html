@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>DevToolkit - Free Online | DevToolkit</title>
+  <meta name="description" content="Access 40+ free, fast, and high-performance utility tools for developers, content creators, SEO experts, and students. Zero cost forever, no sign up required.">
+  <meta name="keywords" content="devtoolkit, developer tools, free online tools, text tools, SEO score checker, sitemap generator, image compressor, json validator">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/index.html">
+  <meta property="og:title" content="DevToolkit - All Tools. One Place. Zero Cost.">
+  <meta property="og:description" content="Access 40+ free utility tools online. Fully client-side, instant, and mobile optimized.">
+  <meta property="og:image" content="https://www.devtoolkit.com/assets/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- WORDPRESS CONNECTION (comment block) -->
+  <!--
+  WORDPRESS INTEGRATION GUIDE:
+
+  Option 1 - iFrame embed in WordPress:
+  <iframe
+  src="https://devtoolkit.com/tools/qr-code-generator.html"
+  width="100%" height="600"
+  frameborder="0"></iframe>
+
+  Option 2 - Subdomain setup:
+  Tools site: devtoolkit.com (this HTML site)
+  Blog/CMS: blog.devtoolkit.com (WordPress)
+  Link between them in navbar
+
+  Option 3 - WordPress REST API
+  Fetch latest posts from WordPress:
+  fetch('https://blog.devtoolkit.com/wp-json/wp/v2/posts?per_page=3')
+  .then(r => r.json())
+  .then(posts => renderBlogSection(posts))
+  Display in "Latest Articles" section
+  on homepage
+
+  RECOMMENDED: Option 2
+  WordPress handles blog + SEO articles
+  DevToolkit HTML handles actual tools
+  -->
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* Background Container */
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Page fade animation */
+    .fade-in {
+      animation: fadeIn 0.8s ease-in-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 24px;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .typewriter-container {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      min-height: 70px;
+    }
+
+    @media (max-width: 768px) {
+      .typewriter-container {
+        font-size: 32px;
+        min-height: 50px;
+      }
+    }
+
+    .typewriter-text {
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      border-right: 3px solid #00CCFF;
+      white-space: nowrap;
+      animation: blink 0.75s step-end infinite;
+      padding-right: 4px;
+    }
+
+    @keyframes blink {
+      from, to { border-color: transparent }
+      50% { border-color: #00CCFF; }
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text-gray);
+      max-width: 600px;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .hero-btn {
+      padding: 14px 28px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .btn-explore {
+      background: transparent;
+      border: 1px solid rgba(0, 204, 255, 0.4);
+      color: #fff;
+    }
+
+    .btn-explore:hover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.1);
+      box-shadow: 0 0 15px rgba(0, 204, 255, 0.3);
+    }
+
+    .btn-start {
+      background: var(--primary);
+      border: 1px solid var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-start:hover {
+      background: #00CCFF;
+      border-color: #00CCFF;
+      box-shadow: 0 4px 20px rgba(0, 204, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 1000px;
+      width: 100%;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      box-sizing: border-box;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .stats-bar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 800;
+      color: #00CCFF;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-gray);
+      font-weight: 500;
+    }
+
+
+
+    /* Centered Search Bar */
+    .search-wrapper {
+      max-width: 600px;
+      width: 100%;
+      margin: 40px auto;
+      padding: 0 24px;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .search-box {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-size: 16px;
+      color: #fff;
+      box-sizing: border-box;
+      outline: none;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .search-box:focus {
+      border-color: #00CCFF;
+      box-shadow: 0 0 15px rgba(0, 204, 255, 0.25);
+      background: rgba(5, 5, 16, 0.8);
+    }
+
+    .search-clear {
+      position: absolute;
+      right: 44px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: var(--text-gray);
+      cursor: pointer;
+      font-size: 18px;
+      display: none;
+    }
+
+    .search-clear:hover {
+      color: #fff;
+    }
+
+    .search-results-dropdown {
+      position: absolute;
+      top: 60px;
+      left: 24px;
+      right: 24px;
+      background: rgba(5, 5, 16, 0.98);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 10px;
+      max-height: 320px;
+      overflow-y: auto;
+      z-index: 999;
+      display: none;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+    }
+
+    .search-result-item {
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.2s ease;
+    }
+
+    .search-result-item:hover, .search-result-item.selected {
+      background: rgba(0, 102, 255, 0.15);
+      padding-left: 26px;
+    }
+
+    .search-result-emoji {
+      font-size: 18px;
+    }
+
+    .search-result-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .search-result-name {
+      font-weight: 700;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .search-result-desc {
+      font-size: 11px;
+      color: var(--text-gray);
+    }
+
+    /* Homepage Tool Sections */
+    .sections-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 80px 24px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 60px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 14px;
+    }
+
+    .section-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-subtitle {
+      font-size: 14px;
+      color: var(--text-gray);
+      margin: 0;
+    }
+
+    .section-view-all {
+      font-size: 14px;
+      font-weight: 600;
+      color: #00CCFF;
+      text-decoration: none;
+      transition: color 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .section-view-all:hover {
+      color: #7B2FFF;
+    }
+
+    /* Grid layout */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Tool Card Design */
+    .tool-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 24px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-6px);
+      border-color: #00CCFF;
+      box-shadow: 0 10px 25px var(--card-glow);
+    }
+
+    .card-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-seo { background: rgba(0, 204, 255, 0.15); color: #00CCFF; }
+    .badge-text { background: rgba(123, 47, 255, 0.15); color: #7B2FFF; }
+    .badge-image { background: rgba(0, 102, 255, 0.15); color: #0066FF; }
+    .badge-video { background: rgba(255, 0, 102, 0.15); color: #FF0066; }
+    .badge-developer { background: rgba(0, 255, 102, 0.15); color: #00FF66; }
+    .badge-converter { background: rgba(255, 153, 0, 0.15); color: #FF9900; }
+
+    .card-emoji {
+      font-size: 36px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin: 0;
+      line-height: 1.4;
+      min-height: 36px;
+    }
+
+    .card-btn {
+      margin-top: auto;
+      font-size: 13px;
+      font-weight: 600;
+      color: #00CCFF;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s ease;
+    }
+
+    .tool-card:hover .card-btn {
+      color: #7B2FFF;
+    }
+
+    /* Footer styles */
+    footer {
+      border-top: 1px solid rgba(0, 102, 255, 0.2);
+      background: rgba(5, 5, 16, 0.95);
+      padding: 48px 24px;
+      font-family: inherit;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-logo span {
+      color: #0066FF;
+      -webkit-text-fill-color: #0066FF;
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      color: var(--text-gray);
+      max-width: 300px;
+    }
+
+    .footer-col-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0066FF;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-link {
+      font-size: 13px;
+      color: var(--text-gray);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #00CCFF;
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 40px auto 0 auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(5, 5, 16, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: rgba(5, 5, 16, 0.95);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 20px 50px rgba(0, 102, 255, 0.2);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: translateY(0);
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: #00CCFF;
+    }
+
+    .modal-body {
+      font-size: 14px;
+      color: var(--text-gray);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .modal-close-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: #00CCFF;
+    }
+  </style>
+</head>
+<body class="fade-in">
+  <!-- Navbar -->
+  <script src="./js/navbar.js" type="module"></script>
+
+  <!-- Floating 3D Background Container -->
+  <div id="bg-container"></div>
+
+  <!-- Hero Section -->
+  <section class="hero" data-section="hero" id="hero">
+    <div class="typewriter-container">
+      <span class="typewriter-text" id="typewriter-lbl"></span>
+    </div>
+    <p class="hero-sub">Get quick access to high performance, secure, and responsive utility tools. Build sitemaps, compress assets, parse variables, and more instantly.</p>
+    
+    <div class="hero-ctas">
+      <a href="#search-anchor" class="hero-btn btn-explore">Explore Tools ↓</a>
+      <a href="/signup.html" class="hero-btn btn-start">Start Free →</a>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar" data-section="stats" id="stats">
+      <div class="stat-item">
+        <span class="stat-number" id="stat-val-free-tools" data-target="40">0</span>
+        <span class="stat-label" id="stat-lbl-free-tools">Free Tools</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" id="stat-val-zero-cost-forever">100%</span>
+        <span class="stat-label" id="stat-lbl-zero-cost-forever">Zero Cost Forever</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" id="stat-val-no-login-required">0</span>
+        <span class="stat-label" id="stat-lbl-no-login-required">No Login Required</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number" id="stat-val-monthly-uses" data-target="1000000">0</span>
+        <span class="stat-label" id="stat-lbl-monthly-uses">Monthly Uses</span>
+      </div>
+    </div>
+  </section>
+
+  <div id="search-anchor"></div>
+
+  <!-- Centered Live Search -->
+  <div class="search-wrapper">
+    <input type="text" class="search-box" id="search-input" placeholder="Search 40+ free tools...">
+    <button class="search-clear" id="search-clear-btn">✕</button>
+    <div class="search-results-dropdown" id="search-results"></div>
+  </div>
+
+  <!-- Sections Container -->
+  <main class="sections-container" id="sections-container">
+    <div id="dynamic-sections-container"></div>
+    <!-- Will be dynamically populated with category headers and grids -->
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/index.html" class="footer-logo">Tool<span>Nest</span></a>
+        <p class="footer-tagline">All Tools. One Place. Zero Cost.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Categories</div>
+        <div class="footer-links">
+          <a href="/category-seo.html" class="footer-link">🔍 SEO Tools</a>
+          <a href="/category-text.html" class="footer-link">✍️ Text Tools</a>
+          <a href="/category-image.html" class="footer-link">🖼️ Image Tools</a>
+          <a href="/category-video.html" class="footer-link">🎬 Video Tools</a>
+          <a href="/category-developer.html" class="footer-link">🧑💻 Developer Tools</a>
+          <a href="/category-converter.html" class="footer-link">🔄 Converter Tools</a>
+        </div>
+      </div>
+      <div>
+                <div class="footer-col-title">Quick Links</div>
+        <div class="footer-links">
+          <a href="/about.html" class="footer-link">About</a>
+          <a href="/privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="/terms.html" class="footer-link">Terms of Service</a>
+          <a href="/contact.html" class="footer-link">Contact</a>
+          <a href="/sitemap.html" class="footer-link">Sitemap</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 DevToolKit. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- Modal Template -->
+  <div class="modal-overlay" id="info-modal" onclick="closeModal(event)">
+    <div class="modal-card">
+      <h3 class="modal-title" id="modal-title-lbl">Modal Title</h3>
+      <div class="modal-body" id="modal-body-lbl">Modal Body Content</div>
+      <button class="modal-close-btn" onclick="closeModal(force=true)">Close</button>
+    </div>
+  </div>
+
+  <!-- Supabase & 3D Background Scripts -->
+  <script type="module">
+    import { supabase } from './js/supabase-config.js';
+    import { initBackground } from './js/3d-background.js';
+    import { logToolUsage } from './js/tools-tracker.js';
+    import { loadPageContent } from './js/cms.js';
+
+    // Start 3D particle background
+    initBackground('bg-container');
+
+    // Tool details data structure
+    const tools = [
+      { name: 'Meta Tag Generator', emoji: '🏷️', slug: 'meta-tag-generator', cat: 'seo', desc: 'Create search-friendly meta tags' },
+      { name: 'Website SEO Score Checker', emoji: '💯', slug: 'seo-score-checker', cat: 'seo', desc: 'Analyze technical web score' },
+      { name: 'Keyword Density Checker', emoji: '📊', slug: 'keyword-density', cat: 'seo', desc: 'Analyze text keyword usage' },
+      { name: 'Robots.txt Generator', emoji: '🤖', slug: 'robots-txt-generator', cat: 'seo', desc: 'Create robots.txt directives' },
+      { name: 'Sitemap Generator', emoji: '🗺️', slug: 'sitemap-generator', cat: 'seo', desc: 'Generate complete XML sitemaps' },
+      { name: 'Domain Age Checker', emoji: '⏳', slug: 'domain-age-checker', cat: 'seo', desc: 'Check domains registration age' },
+      { name: 'DA PA Checker', emoji: '📈', slug: 'da-pa-checker', cat: 'seo', desc: 'Estimate Domain & Page Authority' },
+      { name: 'Backlink Checker', emoji: '🔗', slug: 'backlink-checker', cat: 'seo', desc: 'Analyze backlink profile' },
+      { name: 'Google Index Checker', emoji: '🔍', slug: 'google-index-checker', cat: 'seo', desc: 'Verify index status on Google' },
+      { name: 'HTTP Headers Checker', emoji: '🌐', slug: 'http-headers-checker', cat: 'seo', desc: 'Inspect request/response headers' },
+
+      { name: 'Plagiarism Checker', emoji: '🔍', slug: 'plagiarism-checker', cat: 'text', desc: 'Scan for duplicate contents' },
+      { name: 'Word Counter', emoji: '🔢', slug: 'word-counter', cat: 'text', desc: 'Check words and character stats' },
+      { name: 'Grammar Checker', emoji: '📝', slug: 'grammar-checker', cat: 'text', desc: 'Correct spelling and grammars' },
+      { name: 'Article Rewriter', emoji: '🔄', slug: 'article-rewriter', cat: 'text', desc: 'Rewrite copy with synonyms' },
+      { name: 'Text Case Converter', emoji: '🔠', slug: 'text-case-converter', cat: 'text', desc: 'Convert upper, lower, title cases' },
+      { name: 'Remove Duplicate Lines', emoji: '➖', slug: 'remove-duplicate-lines', cat: 'text', desc: 'Clean duplicate list rows' },
+      { name: 'Word Combiner', emoji: '🔀', slug: 'word-combiner', cat: 'text', desc: 'Combine lists of terms' },
+      { name: 'Text to Binary', emoji: '💻', slug: 'text-to-binary', cat: 'text', desc: 'Encode textual data to binary' },
+      { name: 'Readability Checker', emoji: '📖', slug: 'readability-checker', cat: 'text', desc: 'Calculate Flesch score' },
+      { name: 'Lorem Ipsum Generator', emoji: '📜', slug: 'lorem-ipsum', cat: 'text', desc: 'Generate dummy filler content' },
+
+      { name: 'Image Compressor', emoji: '📉', slug: 'image-compressor', cat: 'image', desc: 'Reduce weight of image files' },
+      { name: 'Image to Text (OCR)', emoji: '👁️', slug: 'image-to-text', cat: 'image', desc: 'Extract text contents from images' },
+      { name: 'Image Resizer', emoji: '📐', slug: 'image-resizer', cat: 'image', desc: 'Resize image dimension canvas' },
+      { name: 'JPG to PNG Converter', emoji: '🔁', slug: 'jpg-to-png', cat: 'image', desc: 'Convert formats easily' },
+      { name: 'Favicon Generator', emoji: '✨', slug: 'favicon-generator', cat: 'image', desc: 'Create favicon.ico files' },
+      { name: 'Color Picker & Converter', emoji: '🎨', slug: 'color-picker', cat: 'image', desc: 'Find color hex & harmonies' },
+
+      { name: 'YouTube Thumbnail Downloader', emoji: '🖼️', slug: 'youtube-thumbnail-downloader', cat: 'video', desc: 'Get HD YouTube thumbnails' },
+      { name: 'YouTube Hashtag Generator', emoji: '🏷️', slug: 'youtube-hashtag-generator', cat: 'video', desc: 'Generate relevant hashtags' },
+      { name: 'TikTok Video Downloader', emoji: '🎥', slug: 'tiktok-downloader', cat: 'video', desc: 'Download without watermark' },
+      { name: 'YouTube to MP3 Converter', emoji: '🎵', slug: 'youtube-to-mp3', cat: 'video', desc: 'Convert video URL to audio track' },
+
+      { name: 'JSON Formatter & Validator', emoji: '💽', slug: 'json-formatter', cat: 'developer', desc: 'Validate and beautify JSON objects' },
+      { name: 'Base64 Encoder/Decoder', emoji: '🗝️', slug: 'base64-encoder', cat: 'developer', desc: 'Encode base64 strings or images' },
+      { name: 'URL Encoder/Decoder', emoji: '🔗', slug: 'url-encoder', cat: 'developer', desc: 'Safe-encode query parameters' },
+      { name: 'MD5/SHA256 Hash Generator', emoji: '🔒', slug: 'hash-generator', cat: 'developer', desc: 'Generate secure hashing checksums' },
+      { name: 'QR Code Generator', emoji: '📱', slug: 'qr-code-generator', cat: 'developer', desc: 'Create customizable QR codes' },
+      { name: 'Password Generator', emoji: '🔐', slug: 'password-generator', cat: 'developer', desc: 'Generate cryptographically strong keys' },
+
+      { name: 'Binary/Hex/Decimal Converter', emoji: '🧮', slug: 'binary-converter', cat: 'converter', desc: 'Interconvert base systems live' },
+      { name: 'Age Calculator', emoji: '📅', slug: 'age-calculator', cat: 'converter', desc: 'Determine chronological exact age' },
+      { name: 'Unit Converter', emoji: '⚖️', slug: 'unit-converter', cat: 'converter', desc: 'Convert metric weight, volume, length' },
+      { name: 'Scientific Calculator', emoji: '➗', slug: 'scientific-calculator', cat: 'converter', desc: 'Perform multi-base computations' }
+    ];
+
+    // Category mapping
+    const categories = [
+      { slug: 'seo', name: 'SEO Tools', emoji: '🔍', subtitle: 'Boost your search rankings' },
+      { slug: 'text', name: 'Text Tools', emoji: '✍️', subtitle: 'Write better, faster' },
+      { slug: 'image', name: 'Image Tools', emoji: '🖼️', subtitle: 'Edit and optimize images' },
+      { slug: 'video', name: 'Video Tools', emoji: '🎬', subtitle: 'Download and convert videos' },
+      { slug: 'developer', name: 'Developer Tools', emoji: '🧑💻', subtitle: 'Code smarter and faster' },
+      { slug: 'converter', name: 'Converter Tools', emoji: '🔄', subtitle: 'Convert anything instantly' }
+    ];
+
+    // Expose allTools globally so that dynamic layout grids can load it
+    window.allTools = tools;
+
+    const sectionsContainer = document.getElementById('sections-container');
+    
+    // Call loadPageContent to fetch live announcement, layouts, and statistics
+    loadPageContent('homepage').then(() => {
+      const dynamicSections = document.getElementById('dynamic-sections-container');
+      if (dynamicSections && dynamicSections.children.length > 0) {
+        console.log("DevToolKit CMS loaded successfully: using dynamic layout grid.");
+        const staticHero = document.querySelector('.hero');
+        if (staticHero) staticHero.style.display = 'none';
+      } else {
+        renderStaticFallback();
+      }
+    });
+
+    function renderStaticFallback() {
+      categories.forEach(cat => {
+        const section = document.createElement('section');
+        
+        const header = `
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <h2 class="section-title">${cat.emoji} ${cat.name}</h2>
+              <p class="section-subtitle">${cat.subtitle}</p>
+            </div>
+            <a href="/category-${cat.slug}.html" class="section-view-all">View All ${cat.name.split(' ')[0]} Tools →</a>
+          </div>
+        `;
+
+        // Filter 4 featured tools for this category
+        const featured = tools.filter(t => t.cat === cat.slug).slice(0, 4);
+        let gridHtml = `<div class="tools-grid">`;
+        
+        featured.forEach(t => {
+          gridHtml += `
+            <a href="/tools/${t.slug}.html" class="tool-card">
+              <span class="card-badge badge-${t.cat}">${t.cat}</span>
+              <span class="card-emoji">${t.emoji}</span>
+              <h3 class="card-title">${t.name}</h3>
+              <p class="card-desc">${t.desc}</p>
+              <span class="card-btn">Use Tool →</span>
+            </a>
+          `;
+        });
+        gridHtml += `</div>`;
+
+        section.innerHTML = header + gridHtml;
+        sectionsContainer.appendChild(section);
+      });
+    }
+
+    // Typewriter effect
+    const typewriterLabels = [
+      "All Tools. One Place.",
+      "For Developers 🧑💻",
+      "For Content Creators 🎬",
+      "For SEO Experts 📈",
+      "For Students 📚"
+    ];
+    let labelIdx = 0;
+    let charIdx = 0;
+    let isDeleting = false;
+    const typewriterLbl = document.getElementById('typewriter-lbl');
+
+    function tickTypewriter() {
+      const currentWord = typewriterLabels[labelIdx];
+      if (isDeleting) {
+        typewriterLbl.textContent = currentWord.slice(0, charIdx - 1);
+        charIdx--;
+      } else {
+        typewriterLbl.textContent = currentWord.slice(0, charIdx + 1);
+        charIdx++;
+      }
+
+      let speed = isDeleting ? 30 : 80;
+
+      if (!isDeleting && charIdx === currentWord.length) {
+        speed = 2000; // Hold at the end
+        isDeleting = true;
+      } else if (isDeleting && charIdx === 0) {
+        isDeleting = false;
+        labelIdx = (labelIdx + 1) % typewriterLabels.length;
+        speed = 500; // Delay before starting next word
+      }
+
+      setTimeout(tickTypewriter, speed);
+    }
+    tickTypewriter();
+
+    // Stats counter animation on scroll
+    const animatedNumbers = document.querySelectorAll('.stat-number[data-target]');
+    let animTriggered = false;
+
+    function startCounterAnimation() {
+      animatedNumbers.forEach(elem => {
+        const target = parseInt(elem.getAttribute('data-target'));
+        const duration = 2000;
+        const start = 0;
+        let startTime = null;
+
+        function step(timestamp) {
+          if (!startTime) startTime = timestamp;
+          const progress = Math.min((timestamp - startTime) / duration, 1);
+          const current = Math.floor(progress * (target - start) + start);
+          
+          if (target >= 1000000) {
+            elem.textContent = (current / 1000000).toFixed(1) + 'M+';
+          } else {
+            elem.textContent = current + '+';
+          }
+
+          if (progress < 1) {
+            window.requestAnimationFrame(step);
+          } else {
+            if (target >= 1000000) elem.textContent = '1M+';
+            else elem.textContent = target + '+';
+          }
+        }
+        window.requestAnimationFrame(step);
+      });
+    }
+
+    const checkScroll = () => {
+      if (animTriggered) return;
+      const statsBar = document.querySelector('.stats-bar');
+      const rect = statsBar.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom >= 0) {
+        animTriggered = true;
+        startCounterAnimation();
+      }
+    };
+    window.addEventListener('scroll', checkScroll);
+    checkScroll(); // Trigger check initially in case it's in view
+
+    // Live search functionality
+    const searchInput = document.getElementById('search-input');
+    const searchClearBtn = document.getElementById('search-clear-btn');
+    const searchResults = document.getElementById('search-results');
+    let selectedIdx = -1;
+    let filteredTools = [];
+
+    searchInput.addEventListener('input', () => {
+      const q = searchInput.value.toLowerCase().trim();
+      if (q.length === 0) {
+        hideSearchDropdown();
+        return;
+      }
+
+      searchClearBtn.style.display = 'block';
+      filteredTools = tools.filter(t => 
+        t.name.toLowerCase().includes(q) || 
+        t.desc.toLowerCase().includes(q) ||
+        t.cat.toLowerCase().includes(q)
+      );
+
+      if (filteredTools.length > 0) {
+        searchResults.innerHTML = '';
+        filteredTools.forEach((t, idx) => {
+          const item = document.createElement('div');
+          item.className = 'search-result-item';
+          item.innerHTML = `
+            <span class="search-result-emoji">${t.emoji}</span>
+            <div class="search-result-info">
+              <span class="search-result-name">${t.name}</span>
+              <span class="search-result-desc">${t.desc}</span>
+            </div>
+          `;
+          item.addEventListener('click', () => {
+            logAndRedirect(t);
+          });
+          searchResults.appendChild(item);
+        });
+        searchResults.style.display = 'block';
+        selectedIdx = -1;
+      } else {
+        searchResults.innerHTML = `<div style="padding: 16px; font-size:13px; color:rgba(255,255,255,0.4); text-align:center;">No tools found matching "${q}"</div>`;
+        searchResults.style.display = 'block';
+      }
+    });
+
+    function hideSearchDropdown() {
+      searchInput.value = '';
+      searchClearBtn.style.display = 'none';
+      searchResults.style.display = 'none';
+      selectedIdx = -1;
+    }
+
+    searchClearBtn.addEventListener('click', hideSearchDropdown);
+
+    // Keyboard navigation arrow keys
+    searchInput.addEventListener('keydown', (e) => {
+      const items = searchResults.querySelectorAll('.search-result-item');
+      if (items.length === 0) return;
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        selectedIdx = (selectedIdx + 1) % items.length;
+        updateSelectedResult(items);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        selectedIdx = (selectedIdx - 1 + items.length) % items.length;
+        updateSelectedResult(items);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (selectedIdx >= 0 && filteredTools[selectedIdx]) {
+          logAndRedirect(filteredTools[selectedIdx]);
+        } else if (filteredTools[0]) {
+          logAndRedirect(filteredTools[0]);
+        }
+      } else if (e.key === 'Escape') {
+        hideSearchDropdown();
+      }
+    });
+
+    function updateSelectedResult(items) {
+      items.forEach((item, idx) => {
+        if (idx === selectedIdx) {
+          item.classList.add('selected');
+          item.scrollIntoView({ block: 'nearest' });
+        } else {
+          item.classList.remove('selected');
+        }
+      });
+    }
+
+    async function logAndRedirect(tool) {
+      await logToolUsage(tool.name, tool.cat, tool.slug);
+      window.location.href = `/tools/${tool.slug}.html`;
+    }
+
+    // Close search dropdown on click outside
+    document.addEventListener('click', (e) => {
+      if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+        searchResults.style.display = 'none';
+      }
+    });
+  </script>
+
+  <script>
+    // Modal controls for About, Privacy, Terms, Contact
+    const modals = {
+      about: {
+        title: "About DevToolkit",
+        body: "DevToolkit is an all-in-one developer utility platform offering high performance, free utility modules directly from your web browser. Nothing is sent to any servers; everything is executed in your client sandbox."
+      },
+      privacy: {
+        title: "Privacy Policy",
+        body: "Your privacy is our utmost priority. DevToolkit runs entirely client-side. We do not store or inspect any text, key, image, metadata or password you enter. All user database storage is kept locally or securely in Supabase."
+      },
+      terms: {
+        title: "Terms of Service",
+        body: "DevToolkit services are provided 'as is' without warranty of any kind. You are free to run calculations, conversions, or optimizations unlimited times for any commercial or non-commercial purposes."
+      },
+      contact: {
+        title: "Contact Us",
+        body: "Need support or want to suggest a new tool? Email us at support@devtoolkit.com and our engineering team will get back to you within 24 hours."
+      }
+    };
+
+    function openModal(type) {
+      const modal = document.getElementById('info-modal');
+      const title = document.getElementById('modal-title-lbl');
+      const body = document.getElementById('modal-body-lbl');
+
+      title.textContent = modals[type].title;
+      body.textContent = modals[type].body;
+
+      modal.classList.add('active');
+    }
+
+    function closeModal(e, force = false) {
+      const modal = document.getElementById('info-modal');
+      if (force || e.target === modal) {
+        modal.classList.remove('active');
+      }
+    }
+  </script>
+</body>
+</html>

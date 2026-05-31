@@ -1,0 +1,11 @@
+{
+  "hero_heading": "🖼️ Image Tools",
+  "hero_subheading": "Resize, compress, and convert images 100% client-side",
+  "seo_title": "Free Online Image Editors & Converters - DevToolKit",
+  "seo_description": "Compress, convert, or resize images instantly with our free image tools, maintaining optimal quality and resolution.",
+  "overview_text": "Image tools allow designers, content managers, and developers to easily manipulate visual assets. Resize to specific resolutions, convert JPG to PNG, or compress sizes to enhance website loading speeds.",
+  "faqs": [
+    {"question": "Do you support PNG compression?", "answer": "Yes, our image compressor tool reduces both PNG and JPG file sizes efficiently without loss of significant quality."},
+    {"question": "Are my images private?", "answer": "Absolutely. All processing occurs locally via JavaScript in your browser window. Your files are never uploaded to any server."}
+  ]
+}

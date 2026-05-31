@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Free Text & Writing Tools Directory - DevToolKit</title>
+  <meta name="description" content="Access 10 free text tools to write better and faster. Check plagiarism, verify grammar, calculate reading time, convert casing, and strip duplicates client-side.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/category-text.html">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- JSON-LD FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are text tools?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Text tools are browser-based web applications designed to parse, modify, format, audit, or generate text inputs. Examples include word counters, case converters, duplicate line removals, and lorem ipsum text generators."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are these text tools safe to use for sensitive drafts?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, absolutely! All formatting and analysis are processed client-side in your local browser sandbox, ensuring that your text is never uploaded to external servers or logged."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the Plagiarism Checker work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It scans your text input blocks and evaluates sentence structures against reference patterns, computing a unique authority index score to flag copied phrasing."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does the Grammar Checker support multiple languages?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Currently, our grammar checker is highly optimized for English, verifying syntax patterns, spelling errors, and style optimizations in real-time."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the Readability Checker score based on?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It uses the Flesch-Kincaid Reading Ease formula. This scores your text on a scale of 0 to 100 based on average sentence length and syllable count."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I convert text casing automatically?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, the Text Case Converter lets you instantly switch text formats into UPPERCASE, lowercase, camelCase, PascalCase, snake_case, or Sentence case."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I remove duplicate lines from a list?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Paste your list into the Remove Duplicate Lines tool. It filters out identical rows, letting you sort them alphabetically or in reverse order with one click."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does the Word Combiner do?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It combines two or three lists of words to generate all possible combinations and permutations, which is ideal for domain ideas or Google Ads keyword builds."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I convert text to binary?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Text to Binary tool reads each character, pulls its ASCII code point value, and formats it into an 8-bit byte representation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much dummy text can the Lorem Ipsum tool generate?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can customize the output to generate up to 50 paragraphs, lists, or custom words, copying the results instantly for design layouts."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .cat-hero {
+      height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+      padding: 24px;
+      position: relative;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .cat-hero h1 {
+      font-size: 42px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cat-hero p {
+      font-size: 16px;
+      color: var(--text-gray);
+      max-width: 600px;
+      margin: 0;
+    }
+
+    /* Content Layout */
+    .content-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    /* Tools Grid */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tool-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 24px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-6px);
+      border-color: #00CCFF;
+      box-shadow: 0 10px 25px var(--card-glow);
+    }
+
+    .card-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(123, 47, 255, 0.15);
+      color: #7B2FFF;
+      letter-spacing: 0.5px;
+    }
+
+    .card-emoji {
+      font-size: 36px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin: 0;
+      line-height: 1.4;
+      min-height: 36px;
+    }
+
+    .card-btn {
+      margin-top: auto;
+      font-size: 13px;
+      font-weight: 600;
+      color: #00CCFF;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s ease;
+    }
+
+    .tool-card:hover .card-btn {
+      color: #7B2FFF;
+    }
+
+    /* Text Article Sections */
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 20px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .article-section h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #00CCFF;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+
+    .article-section p {
+      font-size: 14.5px;
+      color: var(--text-gray);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .article-section a.explain-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13.5px;
+      display: inline-block;
+      margin-top: 4px;
+      margin-bottom: 20px;
+    }
+
+    .article-section a.explain-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Accordion FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Tip Grid */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .tips-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tip-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(0, 102, 255, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tip-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+    }
+
+    .tip-head span.emoji {
+      font-size: 22px;
+    }
+
+    .tip-desc {
+      font-size: 13.5px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    /* Footer styles */
+    footer {
+      border-top: 1px solid rgba(0, 102, 255, 0.2);
+      background: rgba(5, 5, 16, 0.95);
+      padding: 48px 24px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-logo span {
+      color: #0066FF;
+      -webkit-text-fill-color: #0066FF;
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      color: var(--text-gray);
+      max-width: 300px;
+    }
+
+    .footer-col-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0066FF;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-link {
+      font-size: 13px;
+      color: var(--text-gray);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #00CCFF;
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 40px auto 0 auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating 3D Background Container -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="./js/navbar.js" type="module"></script>
+
+  <!-- Hero Section -->
+  <section class="cat-hero" data-section="hero" id="hero">
+    <div class="breadcrumbs">
+      <a href="/index.html">Home</a>
+      <span class="separator">&gt;</span>
+      <span>Text Tools</span>
+    </div>
+    <h1>✍️ Text Tools</h1>
+    <p>Free text tools for writers, students and content creators</p>
+  </section>
+
+  <!-- Content Wrapper -->
+  <main class="content-wrapper">
+    <div id="dynamic-sections-container"></div>
+    
+    <!-- Tools Grid -->
+    <section class="tools-grid" id="static-tools-grid" data-section="text-tools" id="text-tools">
+      <a href="/tools/plagiarism-checker.html" class="tool-card">
+        <span class="card-badge">Text</span>
+        <span class="card-emoji">🔍</span>
+        <h3 class="card-title">Plagiarism Checker</h3>
+        <p class="card-desc">Scan for duplicate contents</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/grammar-checker.html" class="tool-card">
+        <span class="card-badge">Text</span>
+        <span class="card-emoji">📝</span>
+        <h3 class="card-title">Grammar Checker</h3>
+        <p class="card-desc">Correct spelling and grammars</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/readability-checker.html" class="tool-card">
+        <span class="card-badge">Text</span>
+        <span class="card-emoji">📖</span>
+        <h3 class="card-title">Readability Checker</h3>
+        <p class="card-desc">Calculate Flesch score</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/article-rewriter.html" class="tool-card">
+        <span class="card-badge">Text</span>
+        <span class="card-emoji">🔄</span>
+        <h3 class="card-title">Article Rewriter</h3>
+        <p class="card-desc">Rewrite copy with synonyms</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/word-counter.html" class="tool-card">
+        <span class="card-badge">Text</span>
+        <span class="card-emoji">🔢</span>
+        <h3 class="card-title">Word Counter</h3>
+        <p class="card-desc">Check words and character stats</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/text-case-converter.html" class="tool-card">
+        <span class="card-badge">Text</span>
+        <span class="card-emoji">🔠</span>
+        <h3 class="card-title">Text Case Converter</h3>
+        <p class="card-desc">Convert upper, lower, title cases</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/remove-duplicate-lines.html" class="tool-card">
+        <span class="card-badge">Text</span>
+        <span class="card-emoji">➖</span>
+        <h3 class="card-title">Remove Duplicate Lines</h3>
+        <p class="card-desc">Clean duplicate list rows</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/word-combiner.html" class="tool-card">
+        <span class="card-badge">Text</span>
+        <span class="card-emoji">🔀</span>
+        <h3 class="card-title">Word Combiner</h3>
+        <p class="card-desc">Combine lists of terms</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/text-to-binary.html" class="tool-card">
+        <span class="card-badge">Text</span>
+        <span class="card-emoji">💻</span>
+        <h3 class="card-title">Text to Binary</h3>
+        <p class="card-desc">Encode textual data to binary</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/lorem-ipsum.html" class="tool-card">
+        <span class="card-badge">Text</span>
+        <span class="card-emoji">📜</span>
+        <h3 class="card-title">Lorem Ipsum Generator</h3>
+        <p class="card-desc">Generate dummy filler content</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+    </section>
+
+    <!-- Part A: Category Overview -->
+    <section class="glass-card article-section">
+      <h2>What are Text Tools?</h2>
+      <p>Text tools are highly efficient browser-based applications designed to assist authors, copywriters, students, and engineers in restructuring content, auditing formatting parameters, and parsing textual data. These tools operate client-side, enabling operations such as live syntax scanning, casing transformations, sifting lists, and word counts directly inside your local browser memory space. This keeps draft content private, eliminates upload delays, and secures proprietary copy from remote cloud logs.</p>
+      <p>By automating manual text formatting steps, these utility modules allow users to easily polish articles, optimize keyword frequencies, check document grade readability scores, and generate placeholder layouts. Writing for modern audiences requires careful balance: avoiding plagiarized phrases, maintaining a target word count limit, and keeping sentence complexity in line with high readability ease index levels. Text tools streamline these checks so that you can craft highly polished articles without leaving your workspace.</p>
+      <p>Whether you need to quickly fix broken layouts using a casing converter, combine keyword arrays for paid marketing campaigns, remove repeated data logs, or convert plain strings to binary ASCII byte arrays, having a unified collection of text utilities is invaluable. These modules provide instant visual statistics, simple copying buttons, and clean exports, ensuring you work smarter and faster.</p>
+    </section>
+
+    <!-- Part B: Tools Overview Paras -->
+    <section class="glass-card article-section">
+      <h2>All Text Tools Explained</h2>
+
+      <h3>Plagiarism Checker</h3>
+      <p>The Plagiarism Checker helps you scan document drafts to identify copied phrases or duplicate paragraphs. It analyzes sentence syntax and maps phrasing structures against indexing models to compute a uniqueness percentage score.</p>
+      <p>Students and content publishers use this tool to verify content integrity before submissions, helping to avoid penalties associated with scraped copy.</p>
+      <a href="/tools/plagiarism-checker.html" class="explain-link">Use Plagiarism Checker →</a>
+
+      <h3>Grammar Checker</h3>
+      <p>Verify spelling mistakes, punctuation errors, and syntactic flow in real-time. It suggests styling improvements and word substitutions, ensuring your drafts read professionally.</p>
+      <p>This tool is ideal for refining emails, proofreading articles, and preparing clean reports without spelling interruptions.</p>
+      <a href="/tools/grammar-checker.html" class="explain-link">Use Grammar Checker →</a>
+
+      <h3>Readability Checker</h3>
+      <p>Compute readability metrics using the classic Flesch-Kincaid index distributions. It calculates syllable-to-word and word-to-sentence ratios, displaying the equivalent target grade reading ease level.</p>
+      <p>Technical authors and bloggers use this tool to optimize articles, making complex descriptions accessible to broader audiences.</p>
+      <a href="/tools/readability-checker.html" class="explain-link">Use Readability Checker →</a>
+
+      <h3>Article Rewriter</h3>
+      <p>This rewriter parses text and dynamically suggests synonym substitutions to rephrase sentences. It helps you diversify phrasing and explore new ways to convey information.</p>
+      <p>Content creators use this tool to brainstorm variations of ad headlines and generate unique copies from raw notes.</p>
+      <a href="/tools/article-rewriter.html" class="explain-link">Use Article Rewriter →</a>
+
+      <h3>Word Counter</h3>
+      <p>Word Counter provides live statistics on characters, words, sentences, average reading times, and keyword occurrences as you type. It gives you a complete overview of your document properties.</p>
+      <p>Freelance copywriters and students use this to monitor exact length guidelines and keep content concise.</p>
+      <a href="/tools/word-counter.html" class="explain-link">Use Word Counter →</a>
+
+      <h3>Text Case Converter</h3>
+      <p>Text Case Converter lets you instantly switch text formats into UPPERCASE, lowercase, Sentence case, Title Case, camelCase, PascalCase, or snake_case.</p>
+      <p>This is highly useful for programmers cleaning up variable declarations or editors formatting database columns.</p>
+      <a href="/tools/text-case-converter.html" class="explain-link">Use Text Case Converter →</a>
+
+      <h3>Remove Duplicate Lines</h3>
+      <p>Paste list lines here to strip out all duplicate rows. You can configure options to sort alphabetically, in reverse, or preserve original structures.</p>
+      <p>Data analysts and marketers use this tool to clean email lists, manage subscriber rosters, and parse raw log lists.</p>
+      <a href="/tools/remove-duplicate-lines.html" class="explain-link">Use Remove Duplicate Lines →</a>
+
+      <h3>Word Combiner</h3>
+      <p>The Word Combiner takes two or three list arrays of terms and generates all possible variations and keyword matches in seconds.</p>
+      <p>It is excellent for compiling domain name variations, building keyword list combinations for SEO campaigns, and creating naming matrices.</p>
+      <a href="/tools/word-combiner.html" class="explain-link">Use Word Combiner →</a>
+
+      <h3>Text to Binary</h3>
+      <p>Convert standard alphanumeric text strings directly into binary ASCII byte arrays (0 and 1 streams). It translates values instantly character by character.</p>
+      <p>Computer science students and developers use this tool for binary encoding demonstrations and data translation exercises.</p>
+      <a href="/tools/text-to-binary.html" class="explain-link">Use Text to Binary →</a>
+
+      <h3>Lorem Ipsum Generator</h3>
+      <p>Generate clean, customized placeholder dummy Latin text. You can specify the exact number of paragraphs, sentences, or words needed to test user interface layouts.</p>
+      <p>Web designers use this tool to populate layouts and test typographical hierarchies before actual copy is ready.</p>
+      <a href="/tools/lorem-ipsum.html" class="explain-link">Use Lorem Ipsum Generator →</a>
+    </section>
+
+    <!-- Part C: FAQ Section -->
+    <section class="glass-card faq-section" data-section="faq" id="faq">
+      <h2>Frequently Asked Questions about Text Tools</h2>
+      <div class="faq-wrapper">
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">What are text tools? <span>+</span></div>
+          <div class="faq-answer">Text tools are browser-based web applications designed to parse, modify, format, audit, or generate text inputs. Examples include word counters, case converters, duplicate line removals, and lorem ipsum text generators.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Are these text tools safe to use for sensitive drafts? <span>+</span></div>
+          <div class="faq-answer">Yes, absolutely! All formatting and analysis are processed client-side in your local browser sandbox, ensuring that your text is never uploaded to external servers or logged.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">How does the Plagiarism Checker work? <span>+</span></div>
+          <div class="faq-answer">It scans your text input blocks and evaluates sentence structures against reference patterns, computing a unique authority index score to flag copied phrasing.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Does the Grammar Checker support multiple languages? <span>+</span></div>
+          <div class="faq-answer">Currently, our grammar checker is highly optimized for English, verifying syntax patterns, spelling errors, and style optimizations in real-time.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">What is the Readability Checker score based on? <span>+</span></div>
+          <div class="faq-answer">It uses the Flesch-Kincaid Reading Ease formula. This scores your text on a scale of 0 to 100 based on average sentence length and syllable count.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Can I convert text casing automatically? <span>+</span></div>
+          <div class="faq-answer">Yes, the Text Case Converter lets you instantly switch text formats into UPPERCASE, lowercase, camelCase, PascalCase, snake_case, or Sentence case.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">How do I remove duplicate lines from a list? <span>+</span></div>
+          <div class="faq-answer">Paste your list into the Remove Duplicate Lines tool. It filters out identical rows, letting you sort them alphabetically or in reverse order with one click.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">What does the Word Combiner do? <span>+</span></div>
+          <div class="faq-answer">It combines two or three lists of words to generate all possible combinations and permutations, which is ideal for domain ideas or Google Ads keyword builds.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">How do I convert text to binary? <span>+</span></div>
+          <div class="faq-answer">The Text to Binary tool reads each character, pulls its ASCII code point value, and formats it into an 8-bit byte representation.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">How much dummy text can the Lorem Ipsum tool generate? <span>+</span></div>
+          <div class="faq-answer">You can customize the output to generate up to 50 paragraphs, lists, or custom words, copying the results instantly for design layouts.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Part D: Tips & Tricks Section -->
+    <section class="glass-card article-section">
+      <h2>Pro Tips for Text Tools</h2>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">💡</span> <strong>Scan Casing Styles</strong></div>
+          <p class="tip-desc">Use case converters to quickly transition raw copy into program variables (camelCase/snake_case) or print layouts to maintain format consistency.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">📈</span> <strong>Maintain Readable Flow</strong></div>
+          <p class="tip-desc">Aim for Flesch ease scores above 60. Break long sentences in half and replace complex words with clear synonyms using the Re-writer tool.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">📋</span> <strong>Filter Data Lists Instantly</strong></div>
+          <p class="tip-desc">Combine the Duplicate Lines remover with case formatting to quickly normalize messy lists of customer data or keyword matrices.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">📜</span> <strong>Use Dummy text templates</strong></div>
+          <p class="tip-desc">Customize your Lorem Ipsum outputs to include headings and lists rather than plain paragraphs to test visual alignment on website prototypes.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">🔒</span> <strong>Work Offline Safely</strong></div>
+          <p class="tip-desc">Our text tools require no server requests, meaning you can write, edit, and analyze draft blocks offline without sharing information.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/index.html" class="footer-logo">Tool<span>Nest</span></a>
+        <p class="footer-tagline">All Tools. One Place. Zero Cost.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Categories</div>
+        <div class="footer-links">
+          <a href="/category-seo.html" class="footer-link">🔍 SEO Tools</a>
+          <a href="/category-text.html" class="footer-link">✍️ Text Tools</a>
+          <a href="/category-image.html" class="footer-link">🖼️ Image Tools</a>
+          <a href="/category-video.html" class="footer-link">🎬 Video Tools</a>
+          <a href="/category-developer.html" class="footer-link">🧑💻 Developer Tools</a>
+          <a href="/category-converter.html" class="footer-link">🔄 Converter Tools</a>
+        </div>
+      </div>
+      <div>
+                <div class="footer-col-title">Quick Links</div>
+        <div class="footer-links">
+          <a href="/about.html" class="footer-link">About</a>
+          <a href="/privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="/terms.html" class="footer-link">Terms of Service</a>
+          <a href="/contact.html" class="footer-link">Contact</a>
+          <a href="/sitemap.html" class="footer-link">Sitemap</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 DevToolKit. All rights reserved.
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from './js/3d-background.js';
+    import { loadPageContent } from './js/cms.js';
+
+    initBackground('bg-container');
+
+    loadPageContent('category-text').then(() => {
+      const dynamicSections = document.getElementById('dynamic-sections-container');
+      if (dynamicSections && dynamicSections.children.length > 0) {
+        console.log("Category-TEXT CMS layout blocks found: hiding fallback grids.");
+        document.getElementById('static-tools-grid').style.display = 'none';
+        document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
+        const staticHero = document.querySelector('.cat-hero');
+        if (staticHero) staticHero.style.display = 'none';
+      }
+    });
+  </script>
+
+  <script>
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+
+</body>
+</html>

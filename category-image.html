@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Free Image & Design Tools Directory - DevToolKit</title>
+  <meta name="description" content="Optimize, edit, and convert images with 6 free image utilities. Compress files, resize canvases, convert JPG to PNG, create favicons, extract text (OCR), and pick colors.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/category-image.html">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- JSON-LD FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are image tools?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Image tools are browser-based design utilities that let you edit dimensions, compress file sizes, convert formats, extract visual colors, and run character recognition (OCR) on files."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are my uploaded images saved on DevToolKit servers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, never! All image rendering, canvas resizing, compression, and text extraction take place locally in your browser memory space via HTML5 canvas APIs."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does local image compression work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The tool loads your image into an HTML5 canvas and re-renders it back into a data blob using customizable quality compression factors, reducing file size."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I resize images in exact pixels?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, you can specify custom target dimensions in pixels or percentages, with options to lock aspect ratios to prevent warping."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which formats are supported for conversion?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can load popular image formats like JPEG, PNG, and WebP, and instantly convert between them or export them as standard formats."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I generate a favicon package?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Upload a square logo. The generator processes it, creating multi-size PNG files and a classic 16x16 / 32x32 ico file ready for website installation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does Image to Text OCR function?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It uses the Tesseract.js engine inside your browser to scan uploaded pictures, recognize characters, and extract them into editable text blocks."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does the Color Picker support color spaces?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, our color picker handles HEX, RGB, HSL, and HSV models, featuring color palettes and harmony configurations for designers."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is there a file size limit on compression?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Because processing happens client-side, the limit is bound only by your local device RAM. We support processing large files up to 20MB."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do these tools require a GPU?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, standard CPU canvas rendering handles all operations, though hardware acceleration can speed up operations like OCR scans."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .cat-hero {
+      height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+      padding: 24px;
+      position: relative;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .cat-hero h1 {
+      font-size: 42px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cat-hero p {
+      font-size: 16px;
+      color: var(--text-gray);
+      max-width: 600px;
+      margin: 0;
+    }
+
+    /* Content Layout */
+    .content-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    /* Tools Grid */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tool-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 24px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-6px);
+      border-color: #00CCFF;
+      box-shadow: 0 10px 25px var(--card-glow);
+    }
+
+    .card-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(0, 102, 255, 0.15);
+      color: #0066FF;
+      letter-spacing: 0.5px;
+    }
+
+    .card-emoji {
+      font-size: 36px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin: 0;
+      line-height: 1.4;
+      min-height: 36px;
+    }
+
+    .card-btn {
+      margin-top: auto;
+      font-size: 13px;
+      font-weight: 600;
+      color: #00CCFF;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s ease;
+    }
+
+    .tool-card:hover .card-btn {
+      color: #7B2FFF;
+    }
+
+    /* Text Article Sections */
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 20px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .article-section h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #00CCFF;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+
+    .article-section p {
+      font-size: 14.5px;
+      color: var(--text-gray);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .article-section a.explain-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13.5px;
+      display: inline-block;
+      margin-top: 4px;
+      margin-bottom: 20px;
+    }
+
+    .article-section a.explain-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Accordion FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Tip Grid */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .tips-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tip-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(0, 102, 255, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tip-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+    }
+
+    .tip-head span.emoji {
+      font-size: 22px;
+    }
+
+    .tip-desc {
+      font-size: 13.5px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    /* Footer styles */
+    footer {
+      border-top: 1px solid rgba(0, 102, 255, 0.2);
+      background: rgba(5, 5, 16, 0.95);
+      padding: 48px 24px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-logo span {
+      color: #0066FF;
+      -webkit-text-fill-color: #0066FF;
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      color: var(--text-gray);
+      max-width: 300px;
+    }
+
+    .footer-col-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0066FF;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-link {
+      font-size: 13px;
+      color: var(--text-gray);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #00CCFF;
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 40px auto 0 auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating 3D Background Container -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="./js/navbar.js" type="module"></script>
+
+  <!-- Hero Section -->
+  <section class="cat-hero" data-section="hero" id="hero">
+    <div class="breadcrumbs">
+      <a href="/index.html">Home</a>
+      <span class="separator">&gt;</span>
+      <span>Image Tools</span>
+    </div>
+    <h1>🖼️ Image Tools</h1>
+    <p>Free image tools for designers and content creators</p>
+  </section>
+
+  <!-- Content Wrapper -->
+  <main class="content-wrapper">
+    <div id="dynamic-sections-container"></div>
+    
+    <!-- Tools Grid -->
+    <section class="tools-grid" id="static-tools-grid" data-section="image-tools" id="image-tools">
+      <a href="/tools/image-compressor.html" class="tool-card">
+        <span class="card-badge">Image</span>
+        <span class="card-emoji">📉</span>
+        <h3 class="card-title">Image Compressor</h3>
+        <p class="card-desc">Reduce weight of image files</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/image-resizer.html" class="tool-card">
+        <span class="card-badge">Image</span>
+        <span class="card-emoji">📐</span>
+        <h3 class="card-title">Image Resizer</h3>
+        <p class="card-desc">Resize image dimension canvas</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/jpg-to-png.html" class="tool-card">
+        <span class="card-badge">Image</span>
+        <span class="card-emoji">🔁</span>
+        <h3 class="card-title">JPG to PNG Converter</h3>
+        <p class="card-desc">Convert formats easily</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/favicon-generator.html" class="tool-card">
+        <span class="card-badge">Image</span>
+        <span class="card-emoji">✨</span>
+        <h3 class="card-title">Favicon Generator</h3>
+        <p class="card-desc">Create favicon.ico files</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/image-to-text.html" class="tool-card">
+        <span class="card-badge">Image</span>
+        <span class="card-emoji">👁️</span>
+        <h3 class="card-title">Image to Text (OCR)</h3>
+        <p class="card-desc">Extract text contents from images</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/color-picker.html" class="tool-card">
+        <span class="card-badge">Image</span>
+        <span class="card-emoji">🎨</span>
+        <h3 class="card-title">Color Picker & Converter</h3>
+        <p class="card-desc">Find color hex & harmonies</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+    </section>
+
+    <!-- Part A: Category Overview -->
+    <section class="glass-card article-section">
+      <h2>What are Image Tools?</h2>
+      <p>Image tools are specialized web utility applications built to resize, compress, format, extract data from, and analyze digital graphic assets. Running client-side using native HTML5 Canvas APIs, these modules let you optimize file weights, create favicon icon packages, run OCR text extractions, and edit pixel metrics directly inside your browser. Because calculations run on your device, your images are never sent to external servers, protecting your privacy.</p>
+      <p>Graphic designers, frontend developers, social media managers, and bloggers rely on these utilities to prepare high-quality photos for web publishing. Keeping image sizes small is a critical component of web speed optimization and mobile SEO ranking scores. These tools enable anyone to easily reduce PNG and JPG weights, lock aspect ratios, change format files, and harvest exact color palette hex codes for styling guidelines.</p>
+      <p>Whether you need to extract strings from an image file, generate site brand icons, pick matching color harmonies, or compress digital camera assets to under 2MB, our suite of image utilities is built to save you time. These modules feature drag-and-drop dropzones, instant download buttons, and visual compression previews, enabling seamless adjustments.</p>
+    </section>
+
+    <!-- Part B: Tools Overview Paras -->
+    <section class="glass-card article-section">
+      <h2>All Image Tools Explained</h2>
+
+      <h3>Image Compressor</h3>
+      <p>The Image Compressor reduces the byte weight of PNG, JPG, and WebP files using HTML5 Canvas rendering. You can specify target compression quality levels to balance detail clarity against file sizes.</p>
+      <p>This is highly recommended for site admins wanting to speed up landing page load times and improve Lighthouse scores.</p>
+      <a href="/tools/image-compressor.html" class="explain-link">Use Image Compressor →</a>
+
+      <h3>Image Resizer</h3>
+      <p>Edit the dimensions of your images in pixels or percentages. You can lock aspect ratios to prevent stretching and export resized elements instantly.</p>
+      <p>This tool helps content creators prepare banner displays, product thumbnails, and social media post templates to fit specific pixel grids.</p>
+      <a href="/tools/image-resizer.html" class="explain-link">Use Image Resizer →</a>
+
+      <h3>JPG to PNG Converter</h3>
+      <p>JPG to PNG Converter changes JPG and JPEG files to transparent PNG files in seconds. You can load multiple files and download them in your preferred format.</p>
+      <p>This tool is excellent for converting photographs into web-ready formats that support layouts and layering.</p>
+      <a href="/tools/jpg-to-png.html" class="explain-link">Use JPG to PNG Converter →</a>
+
+      <h3>Favicon Generator</h3>
+      <p>The Favicon Generator processes any square logo and outputs classic multi-size ICO files alongside PNG files for site tabs and bookmarks.</p>
+      <p>Web developers use this tool to quickly package favicon formats for modern desktop and mobile browsers, ensuring professional lookups.</p>
+      <a href="/tools/favicon-generator.html" class="explain-link">Use Favicon Generator →</a>
+
+      <h3>Image to Text (OCR)</h3>
+      <p>Extract editable alphanumeric text blocks from screenshots, books, or scanned PDF pages using browser-based Optical Character Recognition (OCR).</p>
+      <p>This tool is highly valuable for students and research coordinators needing to digitize analog notes and copy text from diagrams.</p>
+      <a href="/tools/image-to-text.html" class="explain-link">Use Image to Text (OCR) →</a>
+
+      <h3>Color Picker & Converter</h3>
+      <p>An advanced design tool that lets you select colors using an interactive wheel and convert them into HEX, RGB, HSL, and HSV models.</p>
+      <p>It provides automatic color schemes like monochromatic, triadic, and complementary palettes, helping you build perfect design systems.</p>
+      <a href="/tools/color-picker.html" class="explain-link">Use Color Picker & Converter →</a>
+    </section>
+
+    <!-- Part C: FAQ Section -->
+    <section class="glass-card faq-section" data-section="faq" id="faq">
+      <h2>Frequently Asked Questions about Image Tools</h2>
+      <div class="faq-wrapper">
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">What are image tools? <span>+</span></div>
+          <div class="faq-answer">Image tools are browser-based design utilities that let you edit dimensions, compress file sizes, convert formats, extract visual colors, and run character recognition (OCR) on files.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Are my uploaded images saved on DevToolKit servers? <span>+</span></div>
+          <div class="faq-answer">No, never! All image rendering, canvas resizing, compression, and text extraction take place locally in your browser memory space via HTML5 canvas APIs.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">How does local image compression work? <span>+</span></div>
+          <div class="faq-answer">The tool loads your image into an HTML5 canvas and re-renders it back into a data blob using customizable quality compression factors, reducing file size.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Can I resize images in exact pixels? <span>+</span></div>
+          <div class="faq-answer">Yes, you can specify custom target dimensions in pixels or percentages, with options to lock aspect ratios to prevent warping.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Which formats are supported for conversion? <span>+</span></div>
+          <div class="faq-answer">You can load popular image formats like JPEG, PNG, and WebP, and instantly convert between them or export them as standard formats.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">How do I generate a favicon package? <span>+</span></div>
+          <div class="faq-answer">Upload a square logo. The generator processes it, creating multi-size PNG files and a classic 16x16 / 32x32 ico file ready for website installation.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">How does Image to Text OCR function? <span>+</span></div>
+          <div class="faq-answer">It uses the Tesseract.js engine inside your browser to scan uploaded pictures, recognize characters, and extract them into editable text blocks.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Does the Color Picker support color spaces? <span>+</span></div>
+          <div class="faq-answer">Yes, our color picker handles HEX, RGB, HSL, and HSV models, featuring color palettes and harmony configurations for designers.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Is there a file size limit on compression? <span>+</span></div>
+          <div class="faq-answer">Because processing happens client-side, the limit is bound only by your local device RAM. We support processing large files up to 20MB.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Do these tools require a GPU? <span>+</span></div>
+          <div class="faq-answer">No, standard CPU canvas rendering handles all operations, though hardware acceleration can speed up operations like OCR scans.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Part D: Tips & Tricks Section -->
+    <section class="glass-card article-section">
+      <h2>Pro Tips for Image Tools</h2>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">📉</span> <strong>Optimize Web Graphics</strong></div>
+          <p class="tip-desc">Compress all site images to under 150KB before uploading to production. This dramatically speeds up page rendering on mobile connections.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">📐</span> <strong>Match Pixel Aspect Ratios</strong></div>
+          <p class="tip-desc">Always lock aspect ratios during dimension modifications to prevent visual warping, especially for brand logos and team photos.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">✨</span> <strong>Package All Favicons</strong></div>
+          <p class="tip-desc">A complete favicon set should include a 192x192 PNG for Android, a 180x180 PNG for Apple devices, and a multi-size ICO for standard browsers.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">👁️</span> <strong>Scan Clear OCR Images</strong></div>
+          <p class="tip-desc">For optical character extraction, ensure your source screenshot has high contrast and is well-aligned to improve OCR accuracy scores.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">🎨</span> <strong>Maintain Palette Consistency</strong></div>
+          <p class="tip-desc">Use the HSL color model inside our picker to adjust color values. HSL makes it easy to create consistent light and dark theme variations.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/index.html" class="footer-logo">Tool<span>Nest</span></a>
+        <p class="footer-tagline">All Tools. One Place. Zero Cost.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Categories</div>
+        <div class="footer-links">
+          <a href="/category-seo.html" class="footer-link">🔍 SEO Tools</a>
+          <a href="/category-text.html" class="footer-link">✍️ Text Tools</a>
+          <a href="/category-image.html" class="footer-link">🖼️ Image Tools</a>
+          <a href="/category-video.html" class="footer-link">🎬 Video Tools</a>
+          <a href="/category-developer.html" class="footer-link">🧑💻 Developer Tools</a>
+          <a href="/category-converter.html" class="footer-link">🔄 Converter Tools</a>
+        </div>
+      </div>
+      <div>
+                <div class="footer-col-title">Quick Links</div>
+        <div class="footer-links">
+          <a href="/about.html" class="footer-link">About</a>
+          <a href="/privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="/terms.html" class="footer-link">Terms of Service</a>
+          <a href="/contact.html" class="footer-link">Contact</a>
+          <a href="/sitemap.html" class="footer-link">Sitemap</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 DevToolKit. All rights reserved.
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from './js/3d-background.js';
+    import { loadPageContent } from './js/cms.js';
+
+    initBackground('bg-container');
+
+    loadPageContent('category-image').then(() => {
+      const dynamicSections = document.getElementById('dynamic-sections-container');
+      if (dynamicSections && dynamicSections.children.length > 0) {
+        console.log("Category-IMAGE CMS layout blocks found: hiding fallback grids.");
+        document.getElementById('static-tools-grid').style.display = 'none';
+        document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
+        const staticHero = document.querySelector('.cat-hero');
+        if (staticHero) staticHero.style.display = 'none';
+      }
+    });
+  </script>
+
+  <script>
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Free Google Index Checker - Verify Search Index Status | DevToolkit</title>
+  <meta name="description" content="Check if your website pages are indexed by Google. Parse bulk URLs, generate direct site: search links, track indexation rates, and build custom sitemaps for excluded links.">
+  <meta name="keywords" content="google index checker, search index checker, check google indexation, verify indexed pages, bulk indexing checker, seo index tool">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/tools/google-index-checker.html">
+  <meta property="og:title" content="Free Google Index Checker - Verify Search Index Status | DevToolkit">
+  <meta property="og:description" content="Check website indexing statuses on Google bulk list. Direct search queries generator with indexing sitemaps fallbacks.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- FAQ JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does the Google Index Checker verify page index status?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The tool parses your URLs list and generates direct, secure Google Search query anchors incorporating the 'site:' search operator. Clicking the query shows you instantly on Google if that page is indexed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the Google 'site:' operator?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The 'site:' operator is a special query parameter (e.g. site:yourdomain.com/page) that tells Google to only return search results originating from that specific URL pathway. If zero results load, the page is not currently indexed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why is my page not indexed by Google?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Common reasons include: your page contains a 'noindex' tag, it is blocked by your robots.txt directives, it lacks internal backlinks, Google has not discovered it yet, or it is flagged as thin or duplicate content."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How can I request indexing for failed links?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our tool filters all your 'Not Indexed' pages and generates a dedicated XML sitemap. You can download and host this file, then submit it to Google Search Console to request indexing for those specific links."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Google Index Checker",
+    "url": "https://www.devtoolkit.com/tools/google-index-checker.html",
+    "description": "Premium browser-based SEO index status compiler, site: query generator, and XML index sitemap builder.",
+    "applicationCategory": "SEOApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+      --danger: #FF3366;
+      --success: #00FF66;
+      --warning: #FFAA00;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .tool-hero {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .hero-3d-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: relative;
+      z-index: 2;
+      padding: 24px;
+      max-width: 800px;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .tool-title {
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tool-tagline {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin: 0 0 24px 0;
+    }
+
+    .btn-scroll-down {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 20px;
+      color: #00CCFF;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .btn-scroll-down:hover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.2);
+    }
+
+    /* Workspace */
+    .tool-workspace {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 60px 24px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 1.8fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left configurations columns */
+    .configs-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .panel-group {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel-group-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.1);
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+    }
+
+    .input-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-box label {
+      font-size: 11px;
+      color: var(--text-gray);
+      text-transform: uppercase;
+    }
+
+    .textarea-input {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: #fff;
+      padding: 10px 12px;
+      font-family: inherit;
+      outline: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      resize: vertical;
+      min-height: 180px;
+      line-height: 1.6;
+    }
+
+    .textarea-input:focus {
+      border-color: #00CCFF;
+      box-shadow: 0 0 8px rgba(0, 204, 255, 0.2);
+    }
+
+    .btn-run {
+      width: 100%;
+      background: #0066FF;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+    }
+
+    .btn-run:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.4);
+    }
+
+    /* Right statistics panels */
+    .output-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Stats counts cards */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 480px) {
+      .stats-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-card-value {
+      font-size: 18px;
+      font-weight: 800;
+      color: #00CCFF;
+    }
+
+    .stat-card-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      color: var(--text-gray);
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    /* URLs list grid table container */
+    .table-container {
+      max-height: 380px;
+      overflow-y: auto;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .index-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .index-table th {
+      background: rgba(0, 102, 255, 0.1);
+      color: #00CCFF;
+      font-weight: 700;
+      padding: 12px;
+      border-bottom: 2px solid rgba(0, 102, 255, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .index-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .index-table tr:hover {
+      background: rgba(255,255,255,0.02);
+    }
+
+    .btn-check-live {
+      padding: 4px 8px;
+      background: rgba(0, 204, 255, 0.1);
+      border: 1px solid rgba(0, 204, 255, 0.25);
+      color: #00CCFF;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-check-live:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+    }
+
+    .status-select {
+      background: rgba(5,5,16,0.9);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff;
+      font-size: 11px;
+      padding: 4px;
+      border-radius: 4px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .status-select option {
+      background: #050510;
+      color: #fff;
+    }
+
+    /* General bulk controls styling */
+    .controls-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .ctrl-btn {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      color: #00CCFF;
+      font-weight: 700;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+    }
+
+    .ctrl-btn:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+    }
+
+    /* Article layout elements */
+    .article-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .step-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #00CCFF;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+    }
+
+    /* FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Related Tools Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .blog-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-thumb {
+      height: 140px;
+      background: linear-gradient(135deg, #0066FF, #7B2FFF);
+    }
+
+    .blog-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .blog-desc {
+      font-size: 12px;
+      color: var(--text-gray);
+      line-height: 1.4;
+    }
+
+    .blog-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: auto;
+    }
+
+    .blog-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.4), rgba(123, 47, 255, 0.4));
+      border-top: 1px solid var(--card-border);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cta-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .btn-cta {
+      padding: 12px 24px;
+      background: #0066FF;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-cta:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+    }
+
+    /* WordPress Documentation Comment Requirement */
+    /* 
+     Plugin Name: Google Index Checker
+     Description: Client-side bulk URLs search index status validator generating indexing sitemaps fallbacks.
+     Version: 1.0.0
+     Author: DevToolkit Inc.
+    */
+  </style>
+</head>
+<body>
+
+  <!-- Floating background particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <!-- Section 1: Hero -->
+  <section class="tool-hero">
+    <div class="hero-3d-scene" id="tool-hero-3d"></div>
+    <div class="hero-overlay">
+      <div class="breadcrumbs">
+        <a href="/index.html">Home</a>
+        <span class="separator">&gt;</span>
+        <a href="/category-seo.html">SEO Tools</a>
+        <span class="separator">&gt;</span>
+        <span>Google Index Checker</span>
+      </div>
+      <h1 class="tool-title">Google Search Index Checker</h1>
+      <p class="tool-tagline">Track page indexation statuses on Google bulk list, open secure site: search links, and build indexing recovery sitemaps.</p>
+      <a href="#workspace" class="btn-scroll-down">Use Checker Below ↓</a>
+    </div>
+  </section>
+
+  
+
+  <!-- Section 2: Workspace -->
+  <main class="tool-workspace" id="workspace">
+    <div class="glass-card">
+      
+      <div class="dashboard-layout">
+        
+        <!-- Left configuration options -->
+        <div class="configs-panel">
+          <div class="panel-group">
+            <span class="panel-group-title">Input Page URLs</span>
+            
+            <div class="input-box">
+              <label for="bulk-urls">Bulk Paste URLs (One per line)</label>
+              <textarea class="textarea-input" id="bulk-urls" placeholder="e.g.&#10;https://example.com/&#10;https://example.com/about&#10;https://example.com/blog/hello-world"></textarea>
+            </div>
+
+            <button class="btn-run" id="btn-import">Extract & Parse URLs</button>
+          </div>
+        </div>
+
+        <!-- Right statistics results dashboard -->
+        <div class="output-panel">
+          
+          <!-- Statistics badges row -->
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-card-value" id="stat-total">0</div>
+              <div class="stat-card-label">Total URLs</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-value" style="color:var(--success);" id="stat-indexed">0</div>
+              <div class="stat-card-label">Indexed</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-value" style="color:var(--danger);" id="stat-excluded">0</div>
+              <div class="stat-card-label">Excluded</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-value" style="color:var(--warning);" id="stat-pct">0%</div>
+              <div class="stat-card-label">Index Rate</div>
+            </div>
+          </div>
+
+          <!-- Dynamic Index results list grid -->
+          <div class="table-container">
+            <table class="index-table">
+              <thead>
+                <tr>
+                  <th style="width: 50%;">URL Pathway</th>
+                  <th style="width: 25%;">Google Site Query</th>
+                  <th style="width: 25%;">Mark Status</th>
+                </tr>
+              </thead>
+              <tbody id="table-body">
+                <tr>
+                  <td colspan="3" style="text-align: center; color: var(--text-gray); padding: 40px 0;">
+                    Paste URL pathways and click "Extract" to build indexing checklists.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- General bulk controls -->
+          <div class="controls-bar">
+            <button class="ctrl-btn" id="btn-clear" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.1);">Clear List</button>
+            <button class="ctrl-btn" id="btn-mark-all">Bulk Mark Indexed</button>
+            <button class="ctrl-btn" id="btn-dl-sitemap">Download Indexing Sitemap</button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  
+
+  <!-- Section 3: How to Use -->
+  <section class="article-section">
+    <h2>How to Audit Google Index Statuses</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-emoji">📋</div>
+        <div class="step-title">1. Bulk Import Links</div>
+        <div class="step-desc">Paste your complete list of relative or absolute website links in our extraction panel input.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">🔍</div>
+        <div class="step-title">2. Google Site search Check</div>
+        <div class="step-desc">Click "Check Live" for each link. It opens a direct Google tab executing site: query limits.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">💾</div>
+        <div class="step-title">3. Export Excluded Maps</div>
+        <div class="step-desc">Mark links as Indexed/Excluded. Click "Download Indexing Sitemap" to save recovery maps for GSC.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Key Features -->
+  <section class="article-section">
+    <h2>SEO Index Management Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-head">🚀 Bulk Google site: Linker</div>
+        <div class="feature-desc">Dynamically structures compliant search query links to verify indexing without requiring API keys.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🗺️ Excluded XML Sitemap Compiler</div>
+        <div class="feature-desc">Filters excluded/not indexed links to compile custom sitemaps, speeding up recovery indexing.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🔒 Safe Volatile sandboxing</div>
+        <div class="feature-desc">Operates entirely in client local javascript memory blocks, securing confidential data from tracking.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: FAQ -->
+  <section class="article-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-wrapper">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Why can I not check Google indexing directly in this tool? <span>+</span></div>
+        <div class="faq-answer">Google restricts automated scraping queries and CORS policies. Direct automated indexing check APIs do not exist for public client browsers. Generating direct site: links is the most reliable, compliant workaround.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">What is the indexation rate metric? <span>+</span></div>
+        <div class="faq-answer">It is the percentage of successfully indexed URLs compared to the total list size. Maintaining an indexation rate above 85% is a healthy indicator for quality websites.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">How does submitting an XML sitemap help? <span>+</span></div>
+        <div class="faq-answer">An XML sitemap lists URLs you explicitly want indexed. Submitting it via Google Search Console forces Googlebot to prioritize scanning those pathways, resolving pending indexing items.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Is there a link parsing limit? <span>+</span></div>
+        <div class="faq-answer">We support up to 500 bulk URLs per audit block. Keeping lists small allows quick tab opening and manual index status logging.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Related Tools Injected Dynamically -->
+  <section class="article-section">
+    <h2>Discover Other Developer Utilities</h2>
+    <div class="blog-grid" id="related-tools-grid">
+      <!-- Injected Dynamically -->
+    </div>
+  </section>
+
+  <!-- Section 7: Footer CTA Banner -->
+  <section class="cta-banner">
+    <h2 class="cta-title">Ready to explore more free tools?</h2>
+    <p class="cta-subtitle">DevToolkit has 40+ utility modules waiting for you.</p>
+    <a href="/index.html" class="btn-cta">Explore All Tools →</a>
+  </section>
+
+  <!-- Standard Footer -->
+  <footer>
+    <div style="text-align: center; font-size:12px; color:rgba(255,255,255,0.4); padding: 24px 0;">
+      &copy; 2026 DevToolKit. All rights reserved. | <a href="/index.html" style="color:var(--cyan); text-decoration:none;">Home</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from '../js/3d-background.js';
+    import { logToolUsage } from '../js/tools-tracker.js';
+
+    // Start background particle animation
+    initBackground('bg-container');
+
+    // Local 3D Hero Scene: Search lens scanning a folder mesh representation
+    function initHero3D() {
+      const container = document.getElementById('tool-hero-3d');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000);
+      camera.position.set(0, 5, 120);
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const light1 = new THREE.AmbientLight(0xffffff, 0.4);
+      scene.add(light1);
+
+      const light2 = new THREE.DirectionalLight(0x00CCFF, 1.2);
+      light2.position.set(10, 20, 10);
+      scene.add(light2);
+
+      const searchGroup = new THREE.Group();
+      scene.add(searchGroup);
+
+      // Central folder representation (Box wireframe)
+      const folderGeom = new THREE.BoxGeometry(22, 14, 6);
+      const folderMat = new THREE.MeshPhongMaterial({
+        color: 0x7B2FFF,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.5
+      });
+      const folder = new THREE.Mesh(folderGeom, folderMat);
+      searchGroup.add(folder);
+
+      // Search lens ring (Torus)
+      const lensGroup = new THREE.Group();
+      searchGroup.add(lensGroup);
+
+      const lensGeom = new THREE.TorusGeometry(8, 0.8, 8, 24);
+      const lensMat = new THREE.MeshPhongMaterial({ color: 0x00CCFF });
+      const lensRing = new THREE.Mesh(lensGeom, lensMat);
+      lensGroup.add(lensRing);
+
+      const handleGeom = new THREE.CylinderGeometry(0.6, 0.6, 12, 8);
+      const handleMat = new THREE.MeshPhongMaterial({ color: 0x00CCFF });
+      const handle = new THREE.Mesh(handleGeom, handleMat);
+      handle.position.set(0, -12, 0);
+      handle.rotation.z = Math.PI / 4;
+      lensGroup.add(handle);
+
+      function animate() {
+        requestAnimationFrame(animate);
+        searchGroup.rotation.y += 0.005;
+        
+        // Scan hover offsets animation
+        const time = Date.now() * 0.0025;
+        lensGroup.position.x = Math.sin(time) * 14;
+        lensGroup.position.y = Math.cos(time * 0.5) * 8;
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      });
+    }
+    initHero3D();
+
+    // Related Tools Grid
+    const related = [
+      { name: 'XML Sitemap Generator', emoji: '🗺️', slug: 'sitemap-generator', cat: 'seo', desc: 'Compile XML sitemaps for Google indexation' },
+      { name: 'Robots.txt Rules Generator', emoji: '🤖', slug: 'robots-txt-generator', cat: 'seo', desc: 'Build search bot directives exclusion maps' },
+      { name: 'SEO Tag structure Checker', emoji: '🔍', slug: 'seo-score-checker', cat: 'seo', desc: 'Audit tag and structure errors' },
+      { name: 'Word Count & pace Auditor', emoji: '📝', slug: 'word-counter', cat: 'text', desc: 'Verify readability grade scales index' }
+    ];
+
+    const relatedGrid = document.getElementById('related-tools-grid');
+    related.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <div class="blog-thumb" style="display:flex; align-items:center; justify-content:center; font-size:32px;">${t.emoji}</div>
+        <div class="blog-info">
+          <div class="blog-title">${t.name}</div>
+          <div class="blog-desc">${t.desc}</div>
+          <a href="/tools/${t.slug}.html" class="blog-link">Use Tool →</a>
+        </div>
+      `;
+      card.querySelector('.blog-link').addEventListener('click', async () => {
+        await logToolUsage(t.name, t.cat, t.slug);
+      });
+      relatedGrid.appendChild(card);
+    });
+
+    // Checker Logic controls
+    const bulkUrlsInput = document.getElementById('bulk-urls');
+    const btnImport = document.getElementById('btn-import');
+    const tableBody = document.getElementById('table-body');
+
+    const statTotal = document.getElementById('stat-total');
+    const statIndexed = document.getElementById('stat-indexed');
+    const statExcluded = document.getElementById('stat-excluded');
+    const statPct = document.getElementById('stat-pct');
+
+    const btnClear = document.getElementById('btn-clear');
+    const btnMarkAll = document.getElementById('btn-mark-all');
+    const btnDlSitemap = document.getElementById('btn-dl-sitemap');
+
+    let parsedUrls = []; // Track list of URL items { url, status: 'pending'|'indexed'|'excluded' }
+
+    btnImport.addEventListener('click', importUrls);
+    btnClear.addEventListener('click', clearAll);
+    btnMarkAll.addEventListener('click', bulkMarkIndexed);
+    btnDlSitemap.addEventListener('click', downloadIndexSitemap);
+
+    function importUrls() {
+      const text = bulkUrlsInput.value.trim();
+      if (!text) {
+        alert('Please enter or paste URLs first.');
+        return;
+      }
+
+      const lines = text.split('\n');
+      parsedUrls = [];
+
+      lines.forEach(line => {
+        const cleaned = line.trim();
+        if (!cleaned) return;
+        
+        // Basic URL syntax check
+        if (cleaned.startsWith('http') || cleaned.startsWith('/') || cleaned.includes('.')) {
+          parsedUrls.push({
+            url: cleaned,
+            status: 'pending'
+          });
+        }
+      });
+
+      bulkUrlsInput.value = '';
+      renderTable();
+      logToolUsage('Google Index Checker', 'seo', 'google-index-checker');
+    }
+
+    function renderTable() {
+      tableBody.innerHTML = '';
+      if (parsedUrls.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="3" style="text-align: center; color: var(--text-gray); padding: 40px 0;">
+              No URLs parsed. Add links to check indexing status.
+            </td>
+          </tr>
+        `;
+        updateStats();
+        return;
+      }
+
+      parsedUrls.forEach((item, idx) => {
+        const tr = document.createElement('tr');
+        
+        // Direct site: query Google Search hyperlink link
+        let queryUrl = `https://www.google.com/search?q=site:${encodeURIComponent(item.url)}`;
+        
+        tr.innerHTML = `
+          <td style="word-break:break-all; font-weight:600;">${escapeHtml(item.url)}</td>
+          <td>
+            <a href="${queryUrl}" target="_blank" class="btn-check-live">
+              Check Live 🔍
+            </a>
+          </td>
+          <td>
+            <select class="status-select" data-idx="${idx}">
+              <option value="pending" ${item.status === 'pending' ? 'selected' : ''}>Pending ⏱️</option>
+              <option value="indexed" ${item.status === 'indexed' ? 'selected' : ''}>Indexed ✓</option>
+              <option value="excluded" ${item.status === 'excluded' ? 'selected' : ''}>Excluded 🛑</option>
+            </select>
+          </td>
+        `;
+
+        // Select Change event update status
+        tr.querySelector('.status-select').addEventListener('change', (e) => {
+          const index = parseInt(e.target.getAttribute('data-idx'));
+          parsedUrls[index].status = e.target.value;
+          updateStats();
+        });
+
+        tableBody.appendChild(tr);
+      });
+
+      updateStats();
+    }
+
+    function updateStats() {
+      const total = parsedUrls.length;
+      const indexed = parsedUrls.filter(u => u.status === 'indexed').length;
+      const excluded = parsedUrls.filter(u => u.status === 'excluded').length;
+
+      statTotal.textContent = total;
+      statIndexed.textContent = indexed;
+      statExcluded.textContent = excluded;
+
+      const rate = total > 0 ? ((indexed / total) * 100).toFixed(0) : 0;
+      statPct.textContent = `${rate}%`;
+    }
+
+    function clearAll() {
+      parsedUrls = [];
+      renderTable();
+    }
+
+    function bulkMarkIndexed() {
+      parsedUrls.forEach(u => {
+        if (u.status === 'pending') u.status = 'indexed';
+      });
+      renderTable();
+    }
+
+    // Download custom sitemap for failed indexing recovery
+    function downloadIndexSitemap() {
+      const excludedUrls = parsedUrls.filter(u => u.status === 'excluded');
+      if (excludedUrls.length === 0) {
+        alert('You have no URLs marked as "Excluded". Only excluded/unindexed links are exported into this recovery sitemap.');
+        return;
+      }
+
+      let sitemap = [];
+      sitemap.push('<?xml version="1.0" encoding="UTF-8"?>');
+      sitemap.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
+      
+      excludedUrls.forEach(item => {
+        sitemap.push('  <url>');
+        sitemap.push(`    <loc>${escapeXml(item.url)}</loc>`);
+        sitemap.push(`    <changefreq>daily</changefreq>`);
+        sitemap.push(`    <priority>1.0</priority>`);
+        sitemap.push('  </url>');
+      });
+
+      sitemap.push('</urlset>');
+
+      const raw = sitemap.join('\n');
+      const blob = new Blob([raw], { type: 'application/xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'indexing_request_sitemap.xml';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      alert('Indexing recovery sitemap downloaded successfully! Host and submit this file on Google Search Console. 🚀');
+      logToolUsage('Google Index Checker', 'seo', 'google-index-checker');
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function escapeXml(string) {
+      return string.replace(/[<>&'"]/g, (c) => {
+        switch (c) {
+          case '<': return '&lt;';
+          case '>': return '&gt;';
+          case '&': return '&amp;';
+          case '\'': return '&apos;';
+          case '"': return '&quot;';
+          default: return c;
+        }
+      });
+    }
+
+  </script>
+
+  <script>
+    // FAQ accordion helper
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

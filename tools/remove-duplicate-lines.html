@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Free Online Duplicate Line Remover - Text Cleanup | DevToolkit</title>
+  <meta name="description" content="Clean your text lists by removing duplicate lines instantly. Options for case sensitivity, whitespace trimming, sorting, and empty lines removal. Secure client-side execution.">
+  <meta name="keywords" content="remove duplicate lines, duplicate lines remover, deduplicate text list, clean text file, sort unique lines, lines list clean, online text deduplicator">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/tools/remove-duplicate-lines.html">
+  <meta property="og:title" content="Free Online Duplicate Line Remover - Text Cleanup | DevToolkit">
+  <meta property="og:description" content="Clean and deduplicate textual lists locally inside your browser. Support case-insensitivity and custom sort.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- FAQ JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does duplicate lines removal work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The tool splits your input string by line breaks, evaluates each line against a unique JS Set structure (with options to ignore case and whitespaces), and joins the remaining unique list elements back together."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my text data stored or sent anywhere?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. All operations execute inside your browser volatile context. Your lists, database records, or texts are never transmitted to external servers."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What sorting options are supported?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can keep the original order, sort alphabetically (A-Z or Z-A), or sort lines by their character length."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Remove Duplicate Lines",
+    "url": "https://www.devtoolkit.com/tools/remove-duplicate-lines.html",
+    "description": "Premium browser-based list deduplication checker, text sorting parameters, and whitespace cleaning tool.",
+    "applicationCategory": "TextManipulationApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .tool-hero {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .hero-3d-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: relative;
+      z-index: 2;
+      padding: 24px;
+      max-width: 800px;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .tool-title {
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tool-tagline {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin: 0 0 24px 0;
+    }
+
+    .btn-scroll-down {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 20px;
+      color: #00CCFF;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .btn-scroll-down:hover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.2);
+    }
+
+    /* Workspace */
+    .tool-workspace {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 60px 24px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    /* Configuration options bar */
+    .configs-bar {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.03);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .configs-bar {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .checkbox-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-gray);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-wrap input {
+      cursor: pointer;
+    }
+
+    .select-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .select-wrap label {
+      font-size: 11px;
+      color: var(--text-gray);
+      text-transform: uppercase;
+    }
+
+    .select-field {
+      background: rgba(5, 5, 16, 0.9);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: #fff;
+      padding: 8px 12px;
+      outline: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    /* Editors Grid */
+    .editors-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .editors-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .editor-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .editor-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .workspace-textarea {
+      width: 100%;
+      height: 250px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: inherit;
+      font-size: 13px;
+      color: #fff;
+      box-sizing: border-box;
+      outline: none;
+      resize: vertical;
+      line-height: 1.6;
+      transition: all 0.3s ease;
+    }
+
+    .workspace-textarea:focus {
+      border-color: #00CCFF;
+      background: rgba(5, 5, 16, 0.85);
+    }
+
+    /* Statistics display badges */
+    .stats-bar {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .stat-badge {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: var(--text-gray);
+    }
+
+    .stat-badge span {
+      color: #00CCFF;
+      font-weight: 800;
+    }
+
+    /* Actions Triggers */
+    .controls-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+    }
+
+    .ctrl-btn {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      color: #00CCFF;
+      font-weight: 700;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .ctrl-btn:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+    }
+
+    /* Article layout elements */
+    .article-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .step-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #00CCFF;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+    }
+
+    /* FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Related Tools Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .blog-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-thumb {
+      height: 140px;
+      background: linear-gradient(135deg, #0066FF, #7B2FFF);
+    }
+
+    .blog-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .blog-desc {
+      font-size: 12px;
+      color: var(--text-gray);
+      line-height: 1.4;
+    }
+
+    .blog-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: auto;
+    }
+
+    .blog-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.4), rgba(123, 47, 255, 0.4));
+      border-top: 1px solid var(--card-border);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cta-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .btn-cta {
+      padding: 12px 24px;
+      background: #0066FF;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-cta:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+    }
+
+    /* WordPress Documentation Comment Requirement */
+    /* 
+     Plugin Name: Duplicate Lines Remover
+     Description: Client-side deduplication builder supporting case insensitivity, white space trim, sorting filters.
+     Version: 1.0.0
+     Author: DevToolkit Inc.
+    */
+  </style>
+</head>
+<body>
+
+  <!-- Floating background particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <!-- Section 1: Hero -->
+  <section class="tool-hero">
+    <div class="hero-3d-scene" id="tool-hero-3d"></div>
+    <div class="hero-overlay">
+      <div class="breadcrumbs">
+        <a href="/index.html">Home</a>
+        <span class="separator">&gt;</span>
+        <a href="/category-text.html">Text Tools</a>
+        <span class="separator">&gt;</span>
+        <span>Remove Duplicate Lines</span>
+      </div>
+      <h1 class="tool-title">Remove Duplicate Lines & Sort Lists</h1>
+      <p class="tool-tagline">Deduplicate textual databases, sort unique list components, trim white spaces, and filter empty structures in real-time locally.</p>
+      <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
+    </div>
+  </section>
+
+  
+
+  <!-- Section 2: Workspace -->
+  <main class="tool-workspace" id="workspace">
+    <div class="glass-card">
+      
+      <!-- Configurations bar -->
+      <div class="configs-bar">
+        
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="case-sensitive" checked>
+            Case Sensitive (e.g., "Apple" vs "apple")
+          </label>
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="trim-spaces" checked>
+            Trim whitespace (Trailing/leading spaces)
+          </label>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div class="select-wrap">
+            <label for="sort-mode">Sort Lines Order</label>
+            <select class="select-field" id="sort-mode">
+              <option value="none">Keep Original Order</option>
+              <option value="asc">Alphabetical (A - Z)</option>
+              <option value="desc">Alphabetical (Z - A)</option>
+              <option value="len-asc">Shortest to Longest</option>
+              <option value="len-desc">Longest to Shortest</option>
+            </select>
+          </div>
+
+          <div class="select-wrap">
+            <label for="empty-lines">Empty Lines Filter</label>
+            <select class="select-field" id="empty-lines">
+              <option value="remove">Remove All Empty Lines</option>
+              <option value="keep-one">Keep Exactly One Empty Line</option>
+              <option value="keep-all">Keep All Empty Lines</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Editors Grid -->
+      <div class="editors-grid">
+        
+        <div class="editor-group">
+          <span class="editor-label">Source List / Text</span>
+          <textarea class="workspace-textarea" id="text-input" placeholder="Paste your lists or lines block here..."></textarea>
+        </div>
+
+        <div class="editor-group">
+          <span class="editor-label">Unique Clean Output</span>
+          <textarea class="workspace-textarea" id="text-output" readonly placeholder="Clean output will appear here..."></textarea>
+        </div>
+
+      </div>
+
+      <!-- Statistics bar -->
+      <div class="stats-bar">
+        <div class="stat-badge">Original lines: <span id="stat-orig">0</span></div>
+        <div class="stat-badge">Clean unique: <span id="stat-unique">0</span></div>
+        <div class="stat-badge">Duplicates removed: <span id="stat-removed">0</span></div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls-bar">
+        <button class="ctrl-btn" id="btn-clear" style="background: rgba(255,255,255,0.03); color:#fff; border-color: rgba(255,255,255,0.1);">Clear</button>
+        <button class="ctrl-btn" id="btn-sample">Load Sample List</button>
+        <button class="ctrl-btn" id="btn-copy">Copy Output</button>
+      </div>
+
+    </div>
+  </main>
+
+  
+
+  <!-- Section 3: How to Use -->
+  <section class="article-section">
+    <h2>How to Deduplicate Lists</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-emoji">📝</div>
+        <div class="step-title">1. Paste Your Text</div>
+        <div class="step-desc">Paste your lines, email databases, logs, or word files into the left text editor.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">⚙️</div>
+        <div class="step-title">2. Set Clean Rules</div>
+        <div class="step-desc">Pick case requirements, specify if spaces should be trimmed, and select sorting preferences.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">📋</div>
+        <div class="step-title">3. Copy Unique Outputs</div>
+        <div class="step-desc">The unique unique lines will compile in the right text block immediately. Click Copy to save.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Key Features -->
+  <section class="article-section">
+    <h2>Deduplicator Clean Metrics</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-head">⚡ Real-Time Set Indexing</div>
+        <div class="feature-desc">Utilizes compiled JS Set filters to parse millions of characters text structures inside milliseconds.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🗂️ Multiple Sort Matrices</div>
+        <div class="feature-desc">Orders unique results alphabetically ascending or descending, or sorts lines by character lengths.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🔒 Secure Vault Privacy</div>
+        <div class="feature-desc">All list deduplication runs locally. Zero text database uploads, ensuring complete information privacy.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: FAQ -->
+  <section class="article-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-wrapper">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">What is the difference between Case-Sensitive and Insensitive? <span>+</span></div>
+        <div class="faq-answer">Case-sensitive matches "Orange" and "orange" as different lines. Unchecking the case-sensitivity rule matches them as duplicates and keeps only the first parsed occurrence.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">How does trim whitespace affect matching? <span>+</span></div>
+        <div class="faq-answer">Lines containing leading or trailing spaces (e.g. " apple " vs "apple") are matched as identical if trim whitespace is enabled, preventing syntax issues.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Is there a limit on list size? <span>+</span></div>
+        <div class="faq-answer">Since deduplication operates in your local web browser sandbox using memory arrays, complete data logs up to 100,000 lines are cleaned smoothly.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Related Tools Injected Dynamically -->
+  <section class="article-section">
+    <h2>Explore Complementary Text Tools</h2>
+    <div class="blog-grid" id="related-tools-grid">
+      <!-- Injected Dynamically -->
+    </div>
+  </section>
+
+  <!-- Section 7: Footer CTA Banner -->
+  <section class="cta-banner">
+    <h2 class="cta-title">Ready to explore more free tools?</h2>
+    <p class="cta-subtitle">DevToolkit has 40+ utility modules waiting for you.</p>
+    <a href="/index.html" class="btn-cta">Explore All Tools →</a>
+  </section>
+
+  <!-- Ads Slot Bottom -->
+  
+
+  <!-- Standard Footer -->
+  <footer>
+    <div style="text-align: center; font-size:12px; color:rgba(255,255,255,0.4); padding: 24px 0;">
+      &copy; 2026 DevToolKit. All rights reserved. | <a href="/index.html" style="color:var(--cyan); text-decoration:none;">Home</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from '../js/3d-background.js';
+    import { logToolUsage } from '../js/tools-tracker.js';
+
+    // Start background particle animation
+    initBackground('bg-container');
+
+    // Local 3D Hero Scene: Duplicate boxes floating and merging
+    function initHero3D() {
+      const container = document.getElementById('tool-hero-3d');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000);
+      camera.position.z = 240;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const light1 = new THREE.AmbientLight(0xffffff, 0.4);
+      scene.add(light1);
+
+      const light2 = new THREE.DirectionalLight(0x00CCFF, 1.2);
+      light2.position.set(0, 10, 20);
+      scene.add(light2);
+
+      // Create pairs of duplicate boxes floating together
+      const groups = [];
+      const speeds = [];
+
+      for (let i = 0; i < 4; i++) {
+        const geom = new THREE.BoxGeometry(8, 8, 8);
+        const mat = new THREE.MeshPhongMaterial({
+          color: i % 2 === 0 ? 0x0066FF : 0x7B2FFF,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.35
+        });
+
+        const pairGroup = new THREE.Group();
+        const box1 = new THREE.Mesh(geom, mat);
+        box1.position.x = -8;
+        pairGroup.add(box1);
+
+        const box2 = new THREE.Mesh(geom, mat);
+        box2.position.x = 8;
+        pairGroup.add(box2);
+
+        pairGroup.position.set(
+          (Math.random() - 0.5) * 150,
+          (Math.random() - 0.5) * 90,
+          (Math.random() - 0.5) * 40
+        );
+
+        scene.add(pairGroup);
+        groups.push({
+          group: pairGroup,
+          b1: box1,
+          b2: box2,
+          mergeDir: -1
+        });
+        speeds.push(Math.random() * 0.01 + 0.005);
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        groups.forEach((pair) => {
+          pair.group.rotation.y += 0.005;
+          pair.group.rotation.x += 0.002;
+
+          // Merge animation
+          pair.b1.position.x += pair.mergeDir * 0.04;
+          pair.b2.position.x -= pair.mergeDir * 0.04;
+
+          if (pair.b1.position.x < -8) pair.mergeDir = 1; // expand
+          if (pair.b1.position.x > 0) pair.mergeDir = -1; // merge
+        });
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      });
+    }
+    initHero3D();
+
+    // Related Tools Grid
+    const related = [
+      { name: 'Word Counter & Pace', emoji: '📝', slug: 'word-counter', cat: 'text', desc: 'Readability level metric validation' },
+      { name: 'Text Case Converter', emoji: '🔠', slug: 'text-case-converter', cat: 'text', desc: 'Format Pascal or snake strings' },
+      { name: 'Base64 Encoder/Decoder', emoji: '💽', slug: 'base64-encoder', cat: 'developer', desc: 'Serialize strings into binary' },
+      { name: 'JSON Formatter & Validator', emoji: '⚙️', slug: 'json-formatter', cat: 'developer', desc: 'Validate files elements structure' }
+    ];
+
+    const relatedGrid = document.getElementById('related-tools-grid');
+    related.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <div class="blog-thumb" style="display:flex; align-items:center; justify-content:center; font-size:32px;">${t.emoji}</div>
+        <div class="blog-info">
+          <div class="blog-title">${t.name}</div>
+          <div class="blog-desc">${t.desc}</div>
+          <a href="/tools/${t.slug}.html" class="blog-link">Use Tool →</a>
+        </div>
+      `;
+      card.querySelector('.blog-link').addEventListener('click', async () => {
+        await logToolUsage(t.name, t.cat, t.slug);
+      });
+      relatedGrid.appendChild(card);
+    });
+
+    // Deduplication parser logic
+    const textInput = document.getElementById('text-input');
+    const textOutput = document.getElementById('text-output');
+    
+    const caseSensitiveCheckbox = document.getElementById('case-sensitive');
+    const trimSpacesCheckbox = document.getElementById('trim-spaces');
+    const sortModeSelect = document.getElementById('sort-mode');
+    const emptyLinesSelect = document.getElementById('empty-lines');
+
+    const statOrig = document.getElementById('stat-orig');
+    const statUnique = document.getElementById('stat-unique');
+    const statRemoved = document.getElementById('stat-removed');
+
+    function performDeduplication() {
+      const val = textInput.value;
+      if (!val) {
+        textOutput.value = '';
+        statOrig.textContent = '0';
+        statUnique.textContent = '0';
+        statRemoved.textContent = '0';
+        return;
+      }
+
+      // Split lines
+      let lines = val.split(/\r?\n/);
+      const originalCount = lines.length;
+
+      // Track occurrences
+      const uniqueLines = [];
+      const seen = new Set();
+      let emptyCount = 0;
+
+      lines.forEach(line => {
+        let processedLine = line;
+
+        // Trim whitespace option
+        if (trimSpacesCheckbox.checked) {
+          processedLine = processedLine.trim();
+        }
+
+        // Empty lines options filter
+        if (processedLine === '') {
+          const filter = emptyLinesSelect.value;
+          if (filter === 'remove') {
+            return; // skip
+          } else if (filter === 'keep-one') {
+            if (emptyCount > 0) return; // skip
+            emptyCount++;
+          }
+          // keep-all allows standard additions
+        }
+
+        // Case sensitivity verification matching
+        let matchKey = processedLine;
+        if (!caseSensitiveCheckbox.checked) {
+          matchKey = matchKey.toLowerCase();
+        }
+
+        if (!seen.has(matchKey)) {
+          seen.add(matchKey);
+          uniqueLines.push(processedLine);
+        }
+      });
+
+      // Sorting modes logic
+      const sortMode = sortModeSelect.value;
+      if (sortMode === 'asc') {
+        uniqueLines.sort((a, b) => a.localeCompare(b));
+      } else if (sortMode === 'desc') {
+        uniqueLines.sort((a, b) => b.localeCompare(a));
+      } else if (sortMode === 'len-asc') {
+        uniqueLines.sort((a, b) => a.length - b.length);
+      } else if (sortMode === 'len-desc') {
+        uniqueLines.sort((a, b) => b.length - a.length);
+      }
+
+      // Output values injection
+      textOutput.value = uniqueLines.join('\n');
+
+      // Statistics updating
+      const finalCount = uniqueLines.length;
+      statOrig.textContent = originalCount;
+      statUnique.textContent = finalCount;
+      statRemoved.textContent = originalCount - finalCount;
+    }
+
+    // Bind event inputs
+    [textInput, caseSensitiveCheckbox, trimSpacesCheckbox, sortModeSelect, emptyLinesSelect].forEach(el => {
+      el.addEventListener('input', performDeduplication);
+      el.addEventListener('change', performDeduplication);
+    });
+
+    // Load sample duplicate text list
+    document.getElementById('btn-sample').addEventListener('click', () => {
+      textInput.value = `apple
+banana
+apple
+Orange
+  banana 
+apple
+orange
+grape
+apple`;
+      performDeduplication();
+    });
+
+    // Clear trigger
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      textInput.value = '';
+      textOutput.value = '';
+      statOrig.textContent = '0';
+      statUnique.textContent = '0';
+      statRemoved.textContent = '0';
+    });
+
+    // Copy action
+    document.getElementById('btn-copy').addEventListener('click', async () => {
+      const val = textOutput.value;
+      if (!val) return;
+      navigator.clipboard.writeText(val);
+      alert("Unique deduplicated output copied! 📋");
+
+      await logToolUsage('Remove Duplicate Lines', 'text', 'remove-duplicate-lines');
+    });
+
+  </script>
+
+  <script>
+    // FAQ accordion helper
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Free Online Lorem Ipsum Placeholder Text Generator | DevToolkit</title>
+  <meta name="description" content="Generate custom Lorem Ipsum placeholder text instantly. Choose paragraphs, sentences, words, or lists. Customize lengths and output as HTML markup tags or plain text. Secure client builder.">
+  <meta name="keywords" content="lorem ipsum generator, dummy text creator, placeholder text builder, html dummy text, developer lorem ipsum, randomized latin text, standard passage generator">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/tools/lorem-ipsum.html">
+  <meta property="og:title" content="Free Online Lorem Ipsum Placeholder Text Generator | DevToolkit">
+  <meta property="og:description" content="Generate plain text or HTML dummy paragraphs, sentences, and list elements instantly. Local client-side creation.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- FAQ JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Lorem Ipsum?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Lorem Ipsum is standard placeholder text used in the publishing and graphic design industries since the 1500s to demonstrate visual layouts before content is ready."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I export dummy text as HTML markup?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, absolutely. By enabling the 'Generate HTML tags' toggle, the output is formatted with clean paragraph (<p>) or list item (<li>) elements."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is the generator completely client-side?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The text is assembled dynamically inside your local browser using a dictionary of standard Latin words, ensuring fast offline operations."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Lorem Ipsum Generator",
+    "url": "https://www.devtoolkit.com/tools/lorem-ipsum.html",
+    "description": "Premium browser-based placeholder text creator, HTML dummy markup generator, and developer layout mock builder.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .tool-hero {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .hero-3d-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: relative;
+      z-index: 2;
+      padding: 24px;
+      max-width: 800px;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .tool-title {
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tool-tagline {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin: 0 0 24px 0;
+    }
+
+    .btn-scroll-down {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 20px;
+      color: #00CCFF;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .btn-scroll-down:hover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.2);
+    }
+
+    /* Workspace */
+    .tool-workspace {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 60px 24px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    /* Generator layout grid */
+    .generator-dashboard {
+      display: grid;
+      grid-template-columns: 1.2fr 1.8fr;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .generator-dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left panel: configurations form */
+    .configs-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .panel-group {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel-group-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.1);
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+    }
+
+    .input-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-box label {
+      font-size: 11px;
+      color: var(--text-gray);
+      text-transform: uppercase;
+    }
+
+    .num-input {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: #fff;
+      padding: 8px 12px;
+      font-family: inherit;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .num-input:focus {
+      border-color: #00CCFF;
+    }
+
+    .select-field {
+      background: rgba(5, 5, 16, 0.9);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: #fff;
+      padding: 8px 12px;
+      outline: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .checkbox-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-gray);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-wrap input {
+      cursor: pointer;
+    }
+
+    /* Right panel: Output block */
+    .output-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .output-textarea {
+      width: 100%;
+      height: 320px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: inherit;
+      font-size: 14px;
+      color: #fff;
+      box-sizing: border-box;
+      outline: none;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    /* Stats display bar */
+    .stats-bar {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-badge {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: var(--text-gray);
+    }
+
+    .stat-badge span {
+      color: #00CCFF;
+      font-weight: 800;
+    }
+
+    /* Controls Triggers */
+    .controls-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .ctrl-btn {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      color: #00CCFF;
+      font-weight: 700;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .ctrl-btn:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+    }
+
+    /* Article layout elements */
+    .article-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .step-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #00CCFF;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+    }
+
+    /* FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Related Tools Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .blog-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-thumb {
+      height: 140px;
+      background: linear-gradient(135deg, #0066FF, #7B2FFF);
+    }
+
+    .blog-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .blog-desc {
+      font-size: 12px;
+      color: var(--text-gray);
+      line-height: 1.4;
+    }
+
+    .blog-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: auto;
+    }
+
+    .blog-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.4), rgba(123, 47, 255, 0.4));
+      border-top: 1px solid var(--card-border);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cta-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .btn-cta {
+      padding: 12px 24px;
+      background: #0066FF;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-cta:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+    }
+
+    /* WordPress Documentation Comment Requirement */
+    /* 
+     Plugin Name: Lorem Ipsum Generator
+     Description: Client-side dummy placeholder text generator supporting plain text and HTML tags.
+     Version: 1.0.0
+     Author: DevToolkit Inc.
+    */
+  </style>
+</head>
+<body>
+
+  <!-- Floating background particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <!-- Section 1: Hero -->
+  <section class="tool-hero">
+    <div class="hero-3d-scene" id="tool-hero-3d"></div>
+    <div class="hero-overlay">
+      <div class="breadcrumbs">
+        <a href="/index.html">Home</a>
+        <span class="separator">&gt;</span>
+        <a href="/category-text.html">Text Tools</a>
+        <span class="separator">&gt;</span>
+        <span>Lorem Ipsum</span>
+      </div>
+      <h1 class="tool-title">Lorem Ipsum Dummy Text Generator</h1>
+      <p class="tool-tagline">Create custom randomized Latin placeholder text, customize length thresholds, and format clean HTML paragraphs markup locally.</p>
+      <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
+    </div>
+  </section>
+
+  
+
+  <!-- Section 2: Workspace -->
+  <main class="tool-workspace" id="workspace">
+    <div class="glass-card">
+      
+      <!-- Generator dashboard -->
+      <div class="generator-dashboard">
+        
+        <!-- Left configuration options -->
+        <div class="configs-panel">
+          
+          <div class="panel-group">
+            <span class="panel-group-title">Configure output</span>
+            
+            <div class="input-box">
+              <label for="ipsum-type">Generator Unit</label>
+              <select class="select-field" id="ipsum-type">
+                <option value="paragraphs">Paragraphs</option>
+                <option value="sentences">Sentences</option>
+                <option value="words">Words</option>
+                <option value="lists">List Items</option>
+              </select>
+            </div>
+
+            <div class="input-box">
+              <label for="ipsum-amount" id="amount-label">Paragraphs Count</label>
+              <input type="number" class="num-input" id="ipsum-amount" min="1" max="100" value="5">
+            </div>
+
+            <label class="checkbox-wrap">
+              <input type="checkbox" id="start-lorem" checked>
+              Start with "Lorem ipsum..."
+            </label>
+
+            <label class="checkbox-wrap">
+              <input type="checkbox" id="generate-html">
+              Generate HTML tags (e.g. &lt;p&gt;)
+            </label>
+          </div>
+
+        </div>
+
+        <!-- Right Output Text block -->
+        <div class="output-panel">
+          <span class="editor-label">Generated Placeholder Text</span>
+          <textarea class="output-textarea" id="output-text" readonly></textarea>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div class="stats-bar">
+              <div class="stat-badge">Words: <span id="stat-words">0</span></div>
+              <div class="stat-badge">Characters: <span id="stat-chars">0</span></div>
+            </div>
+            <div class="controls-bar" style="margin-top:0;">
+              <button class="ctrl-btn" id="btn-generate">Regenerate Text</button>
+              <button class="ctrl-btn" id="btn-copy">Copy Dummy Text</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  
+
+  <!-- Section 3: How to Use -->
+  <section class="article-section">
+    <h2>How to Generate Placeholder Text</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-emoji">⚙️</div>
+        <div class="step-title">1. Set Configurations</div>
+        <div class="step-desc">Pick dummy units (Paragraphs, Sentences, Words, Lists) and select count quantities.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">🖥️</div>
+        <div class="step-title">2. Choose HTML formats</div>
+        <div class="step-desc">Toggle HTML checks to automatically envelope outputs inside paragraph or list elements.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">📋</div>
+        <div class="step-title">3. Copy Dummy Data</div>
+        <div class="step-desc">The mock passages build dynamically in real-time. Click the Copy button to save it.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Key Features -->
+  <section class="article-section">
+    <h2>Deduplicator Clean Metrics</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-head">⚡ Instant Randomizations</div>
+        <div class="feature-desc">Dynamically structures sentences using Latin dictionary databases to prevent repeating layouts.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🏷️ HTML Developer Mode</div>
+        <div class="feature-desc">Direct formatting with semantic markup saves developers time when mocking web pages layouts.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🔒 Safe Client Builders</div>
+        <div class="feature-desc">All generations calculate locally inside browser volatile threads, maintaining security.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: FAQ -->
+  <section class="article-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-wrapper">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Where did the standard standard passage come from? <span>+</span></div>
+        <div class="faq-answer">It originates from a passage written by Cicero in 45 BC. A type specialist scrambled the words in the 1500s to create a book of type samples.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">How does list items mode behave? <span>+</span></div>
+        <div class="faq-answer">Selecting "List Items" structures each item as a bullet point. With HTML enabled, items are enveloped inside standard list item tags (e.g. &lt;li&gt;Lorem ipsum...&lt;/li&gt;).</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Is there a limit on text size? <span>+</span></div>
+        <div class="faq-answer">The tool caps paragraph generation at 100 items to keep browser performance optimal and avoid rendering slowdowns.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Related Tools Injected Dynamically -->
+  <section class="article-section">
+    <h2>Discover Other Developer Utilities</h2>
+    <div class="blog-grid" id="related-tools-grid">
+      <!-- Injected Dynamically -->
+    </div>
+  </section>
+
+  <!-- Section 7: Footer CTA Banner -->
+  <section class="cta-banner">
+    <h2 class="cta-title">Ready to explore more free tools?</h2>
+    <p class="cta-subtitle">DevToolkit has 40+ utility modules waiting for you.</p>
+    <a href="/index.html" class="btn-cta">Explore All Tools →</a>
+  </section>
+
+  <!-- Ads Slot Bottom -->
+  
+
+  <!-- Standard Footer -->
+  <footer>
+    <div style="text-align: center; font-size:12px; color:rgba(255,255,255,0.4); padding: 24px 0;">
+      &copy; 2026 DevToolKit. All rights reserved. | <a href="/index.html" style="color:var(--cyan); text-decoration:none;">Home</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from '../js/3d-background.js';
+    import { logToolUsage } from '../js/tools-tracker.js';
+
+    // Start background particle animation
+    initBackground('bg-container');
+
+    // Local 3D Hero Scene: Floating Latin character cubes
+    function initHero3D() {
+      const container = document.getElementById('tool-hero-3d');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000);
+      camera.position.z = 240;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const light1 = new THREE.AmbientLight(0xffffff, 0.4);
+      scene.add(light1);
+
+      const light2 = new THREE.DirectionalLight(0x00CCFF, 1);
+      light2.position.set(0, 10, 20);
+      scene.add(light2);
+
+      // Create letters meshes (L, I, D, S, A)
+      const characters = ['L', 'I', 'D', 'S', 'A', 'M', 'T'];
+      const meshes = [];
+      const speeds = [];
+
+      characters.forEach((char, idx) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 64;
+        canvas.height = 64;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'rgba(0,0,0,0)';
+        ctx.fillRect(0,0,64,64);
+        ctx.fillStyle = idx % 2 === 0 ? '#0066FF' : '#7B2FFF';
+        ctx.font = 'bold 42px Inter, Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(char, 32, 32);
+
+        const texture = new THREE.CanvasTexture(canvas);
+        const geom = new THREE.BoxGeometry(8, 8, 8);
+        const mat = new THREE.MeshPhongMaterial({
+          map: texture,
+          transparent: true,
+          opacity: 0.7,
+          wireframe: true
+        });
+
+        const mesh = new THREE.Mesh(geom, mat);
+        mesh.position.set(
+          (Math.random() - 0.5) * 160,
+          (Math.random() - 0.5) * 90,
+          (Math.random() - 0.5) * 40
+        );
+        scene.add(mesh);
+        meshes.push(mesh);
+        speeds.push(Math.random() * 0.01 + 0.005);
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        meshes.forEach((mesh, idx) => {
+          mesh.rotation.y += speeds[idx];
+          mesh.rotation.x += 0.004;
+        });
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      });
+    }
+    initHero3D();
+
+    // Related Tools Grid
+    const related = [
+      { name: 'Word Counter & Pace', emoji: '📝', slug: 'word-counter', cat: 'text', desc: 'Readability levels validation' },
+      { name: 'Duplicate Lines Remover', emoji: '🗂️', slug: 'remove-duplicate-lines', cat: 'text', desc: 'Deduplicate text lists' },
+      { name: 'Text Case Converter', emoji: '🔠', slug: 'text-case-converter', cat: 'text', desc: 'Convert Title and sentence case' },
+      { name: 'Readability Level Checker', emoji: '📖', slug: 'readability-checker', cat: 'text', desc: 'Verify Flesch grade indexes' }
+    ];
+
+    const relatedGrid = document.getElementById('related-tools-grid');
+    related.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <div class="blog-thumb" style="display:flex; align-items:center; justify-content:center; font-size:32px;">${t.emoji}</div>
+        <div class="blog-info">
+          <div class="blog-title">${t.name}</div>
+          <div class="blog-desc">${t.desc}</div>
+          <a href="/tools/${t.slug}.html" class="blog-link">Use Tool →</a>
+        </div>
+      `;
+      card.querySelector('.blog-link').addEventListener('click', async () => {
+        await logToolUsage(t.name, t.cat, t.slug);
+      });
+      relatedGrid.appendChild(card);
+    });
+
+    // Dictionary of Latin words
+    const latinWords = [
+      'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit', 'sed', 'do', 
+      'eiusmod', 'tempor', 'incididunt', 'ut', 'labore', 'et', 'dolore', 'magna', 'aliqua', 'ut', 
+      'enim', 'ad', 'minim', 'veniam', 'quis', 'nostrud', 'exercitation', 'ullamco', 'laboris', 
+      'nisi', 'ut', 'aliquip', 'ex', 'ea', 'commodo', 'consequat', 'duis', 'aute', 'irure', 
+      'dolor', 'in', 'reprehenderit', 'in', 'voluptate', 'velit', 'esse', 'cillum', 'dolore', 
+      'eu', 'fugiat', 'nulla', 'pariatur', 'excepteur', 'sint', 'occaecat', 'cupidatat', 'non', 
+      'proident', 'sunt', 'in', 'culpa', 'qui', 'officia', 'deserunt', 'mollit', 'anim', 'id', 
+      'est', 'laborum'
+    ];
+
+    const ipsumType = document.getElementById('ipsum-type');
+    const ipsumAmount = document.getElementById('ipsum-amount');
+    const startLorem = document.getElementById('start-lorem');
+    const generateHtml = document.getElementById('generate-html');
+    const outputText = document.getElementById('output-text');
+
+    const statWords = document.getElementById('stat-words');
+    const statChars = document.getElementById('stat-chars');
+    const amountLabel = document.getElementById('amount-label');
+
+    // Dynamic UI updates labels
+    ipsumType.addEventListener('change', () => {
+      const type = ipsumType.value;
+      amountLabel.textContent = type.charAt(0).toUpperCase() + type.slice(1) + ' Count';
+      generateLorem();
+    });
+
+    [ipsumAmount, startLorem, generateHtml].forEach(el => {
+      el.addEventListener('input', generateLorem);
+      el.addEventListener('change', generateLorem);
+    });
+
+    document.getElementById('btn-generate').addEventListener('click', generateLorem);
+
+    function getRandomWord() {
+      return latinWords[Math.floor(Math.random() * latinWords.length)];
+    }
+
+    // Build sentence
+    function generateSentence() {
+      const length = Math.floor(Math.random() * 8) + 6; // 6 to 13 words
+      const words = [];
+      for (let i = 0; i < length; i++) {
+        words.push(getRandomWord());
+      }
+      let sentence = words.join(' ');
+      // Capitalize first letter
+      sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
+      return sentence + '.';
+    }
+
+    // Build paragraph
+    function generateParagraph() {
+      const length = Math.floor(Math.random() * 4) + 4; // 4 to 7 sentences
+      const sentences = [];
+      for (let i = 0; i < length; i++) {
+        sentences.push(generateSentence());
+      }
+      return sentences.join(' ');
+    }
+
+    // Main generator controller
+    function generateLorem() {
+      const type = ipsumType.value;
+      const count = Math.max(1, Math.min(100, parseInt(ipsumAmount.value) || 1));
+      const startWithLorem = startLorem.checked;
+      const withHtml = generateHtml.checked;
+
+      let results = [];
+
+      if (type === 'paragraphs') {
+        for (let i = 0; i < count; i++) {
+          let para = generateParagraph();
+          if (i === 0 && startWithLorem) {
+            // Prepend standard opening
+            para = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " + para;
+          }
+
+          if (withHtml) {
+            results.push(`<p>${para}</p>`);
+          } else {
+            results.push(para);
+          }
+        }
+      } else if (type === 'sentences') {
+        for (let i = 0; i < count; i++) {
+          let sent = generateSentence();
+          if (i === 0 && startWithLorem) {
+            sent = "Lorem ipsum dolor sit amet.";
+          }
+
+          if (withHtml) {
+            results.push(`<p>${sent}</p>`);
+          } else {
+            results.push(sent);
+          }
+        }
+      } else if (type === 'words') {
+        const words = [];
+        if (startWithLorem) {
+          const defaults = ['lorem', 'ipsum', 'dolor', 'sit', 'amet'];
+          for (let i = 0; i < Math.min(count, 5); i++) {
+            words.push(defaults[i]);
+          }
+        }
+        while (words.length < count) {
+          words.push(getRandomWord());
+        }
+        // Capitalize first word
+        words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+
+        const text = words.join(' ') + '.';
+        if (withHtml) {
+          results.push(`<p>${text}</p>`);
+        } else {
+          results.push(text);
+        }
+      } else if (type === 'lists') {
+        if (withHtml) results.push('<ul>');
+        for (let i = 0; i < count; i++) {
+          let item = generateSentence();
+          if (i === 0 && startWithLorem) {
+            item = "Lorem ipsum dolor sit amet.";
+          }
+
+          if (withHtml) {
+            results.push(`  <li>${item}</li>`);
+          } else {
+            results.push(`• ${item}`);
+          }
+        }
+        if (withHtml) results.push('</ul>');
+      }
+
+      // Display outputs
+      const joined = results.join(withHtml || type === 'lists' ? '\n' : '\n\n');
+      outputText.value = joined;
+
+      // Update text parameters stats
+      const totalWords = joined.replace(/<[^>]*>/g, '').trim().split(/\s+/).filter(w => w.length > 0).length;
+      statWords.textContent = totalWords;
+      statChars.textContent = joined.length;
+    }
+
+    // Copy action
+    document.getElementById('btn-copy').addEventListener('click', async () => {
+      const val = outputText.value;
+      if (!val) return;
+      navigator.clipboard.writeText(val);
+      alert('Dummy placeholder text copied! 📋');
+
+      await logToolUsage('Lorem Ipsum', 'text', 'lorem-ipsum');
+    });
+
+    // Trigger initial generation on page load
+    generateLorem();
+
+  </script>
+
+  <script>
+    // FAQ accordion helper
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

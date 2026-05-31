@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Color Picker & Harmony Generator - Free Online | DevToolkit</title>
+  <meta name="description" content="A premium online Color Picker & Palette Generator. Convert HEX, RGB, HSL, RGBA, HSLA, CMYK formats. Test text contrast ratios (WCAG) and generate complementary, triadic, and monochromatic schemes.">
+  <meta name="keywords" content="color picker, color palette generator, hex to rgb, rgb to hsl, color harmony, color contrast checker, cmyk color converter">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/tools/color-picker.html">
+  <meta property="og:title" content="Color Picker & Harmony Generator - Free Online | DevToolkit">
+  <meta property="og:description" content="Generate beautiful color harmonies, convert HEX/RGB/HSL/CMYK, and test WCAG contrast ratios in real-time.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- FAQ JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is this Color Picker free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, 100% free with no sign-ups or color generation restrictions."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is Color Harmony?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Color harmony refers to aesthetically pleasing color combinations. This tool generates complementary, triadic, analogous, monochromatic, split-complementary, and tetradic color palettes dynamically based on your root selection."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the Contrast Ratio Checker work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It calculates the relative luminance of your foreground text color vs. the background color using WCAG 2.1 specifications, providing AA and AAA rating compliance benchmarks."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Color Picker & Harmony Generator",
+    "url": "https://www.devtoolkit.com/tools/color-picker.html",
+    "description": "Premium multi-format color palette editor, HSL range slider matrix, color contrast ratios evaluator, and harmony wheel simulator.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .tool-hero {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .hero-3d-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: relative;
+      z-index: 2;
+      padding: 24px;
+      max-width: 800px;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .tool-title {
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tool-tagline {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin: 0 0 24px 0;
+    }
+
+    .btn-scroll-down {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 20px;
+      color: #00CCFF;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .btn-scroll-down:hover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.2);
+    }
+
+    /* Workspace */
+    .tool-workspace {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 60px 24px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    /* Color Grid Dashboard */
+    .color-dashboard {
+      display: grid;
+      grid-template-columns: 1.2fr 1.8fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .color-dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Side: Visual picker & sliders */
+    .picker-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .color-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--card-border);
+      padding: 16px;
+      border-radius: 12px;
+    }
+
+    .custom-color-btn {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.2);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .custom-color-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .custom-color-btn input[type="color"] {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: 90px;
+      height: 90px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      padding: 0;
+    }
+
+    .color-meta {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .color-meta-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-gray);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .color-meta-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    /* Slider Matrix */
+    .slider-matrix {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-gray);
+    }
+
+    .slider-label span.val {
+      color: #00CCFF;
+      font-family: monospace;
+    }
+
+    .color-slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      outline: none;
+      background: rgba(255, 255, 255, 0.1);
+      transition: background 0.3s ease;
+    }
+
+    .color-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid #0066FF;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 102, 255, 0.5);
+      transition: transform 0.1s ease;
+    }
+
+    .color-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    /* Hue Slider Gradient background */
+    #slider-hue {
+      background: linear-gradient(to right, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+    }
+
+    /* Right Side: Output Formats */
+    .format-outputs {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .output-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(0, 102, 255, 0.1);
+      border-radius: 8px;
+      padding: 10px 16px;
+      transition: border-color 0.2s ease;
+    }
+
+    .output-row:hover {
+      border-color: rgba(0, 102, 255, 0.3);
+    }
+
+    .output-format-name {
+      width: 70px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+    }
+
+    .output-format-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      padding: 4px;
+    }
+
+    .copy-btn {
+      padding: 6px 12px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      color: #00CCFF;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+    }
+
+    .copy-btn:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+    }
+
+    /* Color Harmonies Panel */
+    .harmonies-section {
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .harmonies-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .schemes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 600px) {
+      .schemes-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .scheme-card {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .scheme-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-gray);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .swatches-row {
+      display: flex;
+      height: 48px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .swatch {
+      flex: 1;
+      height: 100%;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .swatch:hover {
+      transform: scaleY(1.1);
+      z-index: 10;
+      filter: brightness(1.1);
+    }
+
+    .swatch::after {
+      content: attr(data-color);
+      position: absolute;
+      bottom: -32px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #050510;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 9px;
+      color: #fff;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      white-space: nowrap;
+      z-index: 20;
+    }
+
+    .swatch:hover::after {
+      opacity: 1;
+    }
+
+    /* Contrast Testing Workspace */
+    .contrast-testing-panel {
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .contrast-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .contrast-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .contrast-checker-card {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .contrast-preview-area {
+      height: 140px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .contrast-ratio-score {
+      font-size: 32px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .contrast-ratio-score small {
+      font-size: 14px;
+      color: var(--text-gray);
+      font-weight: 400;
+    }
+
+    .rating-badge-container {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .rating-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    .rating-pass {
+      background: rgba(0, 255, 102, 0.15);
+      border: 1px solid #00FF66;
+      color: #00FF66;
+    }
+
+    .rating-fail {
+      background: rgba(255, 0, 102, 0.15);
+      border: 1px solid #FF0066;
+      color: #FF0066;
+    }
+
+    .contrast-swapping {
+      display: flex;
+      gap: 12px;
+    }
+
+    /* General text updates */
+    .article-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .step-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #00CCFF;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+    }
+
+    /* Comparison Table */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .comparison-table th {
+      color: #00CCFF;
+      font-weight: 700;
+      padding: 12px;
+      border-bottom: 2px solid rgba(0,102,255,0.2);
+    }
+
+    .comparison-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Use cases */
+    .use-cases-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .use-cases-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .use-case-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .use-case-header {
+      font-weight: 700;
+      color: #00CCFF;
+      font-size: 15px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .use-case-body {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    /* FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Blog Teaser */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .blog-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-thumb {
+      height: 140px;
+      background: linear-gradient(135deg, #0066FF, #7B2FFF);
+    }
+
+    .blog-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .blog-desc {
+      font-size: 12px;
+      color: var(--text-gray);
+      line-height: 1.4;
+    }
+
+    .blog-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: auto;
+    }
+
+    .blog-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.4), rgba(123, 47, 255, 0.4));
+      border-top: 1px solid var(--card-border);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cta-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .btn-cta {
+      padding: 12px 24px;
+      background: #0066FF;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-cta:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+    }
+
+    /* WordPress Documentation Comment Requirement */
+    /* 
+     WordPress Style Resource Header:
+     Plugin Name: Color Picker & Harmony Toolkit
+     Description: Interactive visual HSV wheel and contrast validator. Includes full client conversions.
+     Version: 1.0.0
+     Author: DevToolkit Inc.
+    */
+  </style>
+</head>
+<body>
+
+  <!-- Floating background particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <!-- Section 1: Hero -->
+  <section class="tool-hero">
+    <div class="hero-3d-scene" id="tool-hero-3d"></div>
+    <div class="hero-overlay">
+      <div class="breadcrumbs">
+        <a href="/index.html">Home</a>
+        <span class="separator">&gt;</span>
+        <a href="/category-developer.html">Developer Tools</a>
+        <span class="separator">&gt;</span>
+        <span>Color Picker</span>
+      </div>
+      <h1 class="tool-title">Color Picker & Harmony Generator</h1>
+      <p class="tool-tagline">Select colors visually, extract values instantly, create proportional matching harmonies, and check WCAG contrast compliance.</p>
+      <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
+    </div>
+  </section>
+
+  
+
+  <!-- Section 2: Workspace -->
+  <main class="tool-workspace" id="workspace">
+    <div class="glass-card">
+      
+      <!-- Main Dashboard Grid -->
+      <div class="color-dashboard">
+        
+        <!-- Left: Interactive visual sliders and hex selection -->
+        <div class="picker-section">
+          <div class="color-input-wrapper">
+            <div class="custom-color-btn" id="picker-trigger-btn">
+              <input type="color" id="main-html-picker" value="#0066FF">
+            </div>
+            <div class="color-meta">
+              <span class="color-meta-label">Selected Color</span>
+              <span class="color-meta-value" id="main-hex-label">#0066FF</span>
+            </div>
+          </div>
+
+          <div class="slider-matrix">
+            <div class="slider-group">
+              <label class="slider-label">Hue <span class="val" id="hue-val">215°</span></label>
+              <input type="range" class="color-slider" id="slider-hue" min="0" max="360" value="215">
+            </div>
+            <div class="slider-group">
+              <label class="slider-label">Saturation <span class="val" id="sat-val">100%</span></label>
+              <input type="range" class="color-slider" id="slider-sat" min="0" max="100" value="100" style="background: linear-gradient(to right, #808080, #0066FF);">
+            </div>
+            <div class="slider-group">
+              <label class="slider-label">Lightness <span class="val" id="light-val">50%</span></label>
+              <input type="range" class="color-slider" id="slider-light" min="0" max="100" value="50" style="background: linear-gradient(to right, #000, #0066FF, #fff);">
+            </div>
+            <div class="slider-group">
+              <label class="slider-label">Alpha (Opacity) <span class="val" id="alpha-val">1.00</span></label>
+              <input type="range" class="color-slider" id="slider-alpha" min="0" max="100" value="100" style="background: linear-gradient(to right, rgba(0,0,0,0), #0066FF);">
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Conversions Outputs & Copy -->
+        <div class="format-outputs">
+          <div class="output-row">
+            <span class="output-format-name">HEX</span>
+            <input type="text" class="output-format-input" id="out-hex" readonly value="#0066FF">
+            <button class="copy-btn" data-target="out-hex">Copy</button>
+          </div>
+          <div class="output-row">
+            <span class="output-format-name">RGB</span>
+            <input type="text" class="output-format-input" id="out-rgb" readonly value="rgb(0, 102, 255)">
+            <button class="copy-btn" data-target="out-rgb">Copy</button>
+          </div>
+          <div class="output-row">
+            <span class="output-format-name">RGBA</span>
+            <input type="text" class="output-format-input" id="out-rgba" readonly value="rgba(0, 102, 255, 1.00)">
+            <button class="copy-btn" data-target="out-rgba">Copy</button>
+          </div>
+          <div class="output-row">
+            <span class="output-format-name">HSL</span>
+            <input type="text" class="output-format-input" id="out-hsl" readonly value="hsl(215, 100%, 50%)">
+            <button class="copy-btn" data-target="out-hsl">Copy</button>
+          </div>
+          <div class="output-row">
+            <span class="output-format-name">HSLA</span>
+            <input type="text" class="output-format-input" id="out-hsla" readonly value="hsla(215, 100%, 50%, 1.00)">
+            <button class="copy-btn" data-target="out-hsla">Copy</button>
+          </div>
+          <div class="output-row">
+            <span class="output-format-name">CMYK</span>
+            <input type="text" class="output-format-input" id="out-cmyk" readonly value="cmyk(100%, 60%, 0%, 0%)">
+            <button class="copy-btn" data-target="out-cmyk">Copy</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Harmonies Panel -->
+      <div class="harmonies-section">
+        <h3 class="harmonies-title">🎨 Color Harmonies & Matching Schemes</h3>
+        <div class="schemes-grid">
+          
+          <div class="scheme-card">
+            <div class="scheme-name">Complementary (180°)</div>
+            <div class="swatches-row" id="scheme-complementary">
+              <!-- Swatches injected via JavaScript -->
+            </div>
+          </div>
+
+          <div class="scheme-card">
+            <div class="scheme-name">Analogous (-30°, 0°, +30°)</div>
+            <div class="swatches-row" id="scheme-analogous">
+              <!-- Swatches injected via JavaScript -->
+            </div>
+          </div>
+
+          <div class="scheme-card">
+            <div class="scheme-name">Triadic (120°, 240°)</div>
+            <div class="swatches-row" id="scheme-triadic">
+              <!-- Swatches injected via JavaScript -->
+            </div>
+          </div>
+
+          <div class="scheme-card">
+            <div class="scheme-name">Split Complementary (150°, 210°)</div>
+            <div class="swatches-row" id="scheme-split">
+              <!-- Swatches injected via JavaScript -->
+            </div>
+          </div>
+
+          <div class="scheme-card">
+            <div class="scheme-name">Monochromatic (Varying Lightness)</div>
+            <div class="swatches-row" id="scheme-monochromatic">
+              <!-- Swatches injected via JavaScript -->
+            </div>
+          </div>
+
+          <div class="scheme-card">
+            <div class="scheme-name">Tetradic (0°, 60°, 180°, 240°)</div>
+            <div class="swatches-row" id="scheme-tetradic">
+              <!-- Swatches injected via JavaScript -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- WCAG Contrast Testing Section -->
+      <div class="contrast-testing-panel">
+        <h3 class="harmonies-title">👁️ WCAG 2.1 Contrast Checker</h3>
+        <div class="contrast-grid">
+          
+          <div class="contrast-checker-card">
+            <div style="font-size: 13px; font-weight:700; color: #00CCFF; text-transform:uppercase;">Setup Custom Layer</div>
+            
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; color:var(--text-gray);">Text Foreground Color:</span>
+                <input type="color" id="text-fg-picker" value="#ffffff" style="cursor:pointer; border:none; background:none;">
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:13px; color:var(--text-gray);">Background Color:</span>
+                <input type="color" id="text-bg-picker" value="#0066FF" style="cursor:pointer; border:none; background:none;">
+              </div>
+            </div>
+
+            <div class="contrast-swapping">
+              <button class="ctrl-btn" id="btn-use-selected-fg" style="flex:1; font-size:11px;">Set Active as FG</button>
+              <button class="ctrl-btn" id="btn-use-selected-bg" style="flex:1; font-size:11px;">Set Active as BG</button>
+            </div>
+          </div>
+
+          <div class="contrast-checker-card" id="contrast-preview-box">
+            <div class="contrast-preview-area" id="preview-layer">
+              <div style="font-size: 18px; font-weight: 800; margin-bottom: 4px;">DevToolkit Web Elements</div>
+              <div style="font-size: 12px; opacity:0.8;">Sample layout showing contrast scores.</div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div class="contrast-ratio-score" id="contrast-ratio-score">4.5 <small>: 1</small></div>
+              <div class="rating-badge-container" id="rating-badge-container">
+                <span class="rating-badge rating-pass" id="badge-normal-aa">Normal AA</span>
+                <span class="rating-badge rating-pass" id="badge-large-aaa">Large AAA</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  
+
+  <!-- Section 3: How to Use -->
+  <section class="article-section">
+    <h2>How to Use the Color Picker & Harmony Generator</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-emoji">🎨</div>
+        <div class="step-title">1. Choose a Color</div>
+        <div class="step-desc">Click the circular color preview button to open the visual canvas, or slide the Hue, Saturation, and Lightness bars.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">📋</div>
+        <div class="step-title">2. Select Your Format</div>
+        <div class="step-desc">Instantly view and copy color values across HEX, RGB, RGBA, HSL, HSLA, and CMYK formats.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">👁️</div>
+        <div class="step-title">3. Test Harmonies & contrast</div>
+        <div class="step-desc">Browse corresponding color schemes, click swatches to test them, and check accessibility contrast ratios.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Key Features -->
+  <section class="article-section">
+    <h2>Outstanding Utility Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-head">💡 Proportional Harmonies</div>
+        <div class="feature-desc">Dynamically generates matching schemes (Analogous, Monochromatic, Triadic, Tetradic) to instantly create gorgeous visual interfaces.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">⚡ Precise Formats Mapping</div>
+        <div class="feature-desc">Flawless conversions using client mathematical models. Instantly converts alpha opacity transparency fields.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">♿ Accessibility Standard Compliance</div>
+        <div class="feature-desc">Ensures your designs meet WCAG 2.1 specifications with the built-in color contrast evaluation meter.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Comparison Table -->
+  <section class="article-section">
+    <h2>Color Formats At A Glance</h2>
+    <div class="glass-card" style="padding: 24px; overflow-x: auto;">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Color Format</th>
+            <th>Components</th>
+            <th>Typical Use Case</th>
+            <th>Alpha Support</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>HEX</strong></td>
+            <td>Hexadecimal (Red, Green, Blue)</td>
+            <td>Modern Web CSS styling & UI graphic mockups</td>
+            <td>Yes (8-digit hex)</td>
+          </tr>
+          <tr>
+            <td><strong>RGB</strong></td>
+            <td>Red, Green, Blue integers (0 - 255)</td>
+            <td>Digital screens, photography, computing engines</td>
+            <td>Yes (RGBA)</td>
+          </tr>
+          <tr>
+            <td><strong>HSL</strong></td>
+            <td>Hue (0-360), Saturation (0-100), Lightness (0-100)</td>
+            <td>Dynamic palettes styling, light / dark mode scaling</td>
+            <td>Yes (HSLA)</td>
+          </tr>
+          <tr>
+            <td><strong>CMYK</strong></td>
+            <td>Cyan, Magenta, Yellow, Key Black percentages</td>
+            <td>Physical publishing offset presses, graphic design branding</td>
+            <td>No</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section 6: Real-World Use Cases -->
+  <section class="article-section">
+    <h2>Where to Apply Color Harmonies</h2>
+    <div class="use-cases-grid">
+      <div class="use-case-card">
+        <div class="use-case-header">💻 Web Interface Design</div>
+        <div class="use-case-body">Deploy complementary and split-complementary schemes to highlight buttons, badges, navigation headers, and micro-animations flawlessly.</div>
+      </div>
+      <div class="use-case-card">
+        <div class="use-case-header">📱 Accessible Content Structures</div>
+        <div class="use-case-body">Always run text background and foreground inputs through the contrast validator to pass visual criteria for users worldwide.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7: FAQ -->
+  <section class="article-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-wrapper">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Are these color calculations exact? <span>+</span></div>
+        <div class="faq-answer">Yes. The conversions use precise mathematical formulas for RGB, HSL, and CMYK translation models, running instantly and locally in your browser context.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Why is HSL extremely useful for web design? <span>+</span></div>
+        <div class="faq-answer">HSL allows developers to change a single component (like lightness or saturation) to adjust tones without changing the root hue. This is highly useful for light/dark mode styling.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Does this tool support alpha channel transparency? <span>+</span></div>
+        <div class="faq-answer">Absolutely. Adjusting the Alpha slider updates the outputs to RGBA and HSLA strings, complete with transparency values in fractional decimal formats.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 8: Related Tools Injected Dynamically -->
+  <section class="article-section">
+    <h2>Explore Complementary Developer Tools</h2>
+    <div class="blog-grid" id="related-tools-grid">
+      <!-- Cards dynamically injected -->
+    </div>
+  </section>
+
+  <!-- Section 9: Footer CTA Banner -->
+  <section class="cta-banner">
+    <h2 class="cta-title">Ready to explore more free tools?</h2>
+    <p class="cta-subtitle">DevToolkit has 40+ utility modules waiting for you.</p>
+    <a href="/index.html" class="btn-cta">Explore All Tools →</a>
+  </section>
+
+  <!-- Ads Slot Bottom -->
+  
+
+  <!-- Standard Footer -->
+  <footer>
+    <div style="text-align: center; font-size:12px; color:rgba(255,255,255,0.4); padding: 24px 0;">
+      &copy; 2026 DevToolKit. All rights reserved. | <a href="/index.html" style="color:var(--cyan); text-decoration:none;">Home</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from '../js/3d-background.js';
+    import { logToolUsage } from '../js/tools-tracker.js';
+
+    // Start background particle animation
+    initBackground('bg-container');
+
+    // Local 3D Hero Scene: Floating Colorful Balls
+    function initHero3D() {
+      const container = document.getElementById('tool-hero-3d');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(55, w / h, 1, 1000);
+      camera.position.z = 200;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      dirLight.position.set(20, 40, 20);
+      scene.add(dirLight);
+
+      const pointLight = new THREE.PointLight(0x00CCFF, 1.5, 300);
+      pointLight.position.set(0, 0, 50);
+      scene.add(pointLight);
+
+      // Create spheres with colorful visual shaders
+      const sphereGeom = new THREE.SphereGeometry(6, 32, 32);
+      const meshes = [];
+      const speeds = [];
+      const colorPal = [0x0066FF, 0x00CCFF, 0x7B2FFF, 0xFF0066, 0x00FF66, 0xFFFF00];
+
+      for (let i = 0; i < 12; i++) {
+        const mat = new THREE.MeshPhongMaterial({
+          color: colorPal[i % colorPal.length],
+          shininess: 100,
+          specular: 0xffffff,
+          transparent: true,
+          opacity: 0.85
+        });
+        const mesh = new THREE.Mesh(sphereGeom, mat);
+        mesh.position.set(
+          (Math.random() - 0.5) * 140,
+          (Math.random() - 0.5) * 80,
+          (Math.random() - 0.5) * 60
+        );
+        scene.add(mesh);
+        meshes.push(mesh);
+        speeds.push({
+          x: (Math.random() - 0.5) * 0.3,
+          y: (Math.random() - 0.5) * 0.3 + 0.1,
+          z: (Math.random() - 0.5) * 0.2
+        });
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        meshes.forEach((mesh, idx) => {
+          const sp = speeds[idx];
+          mesh.position.x += sp.x;
+          mesh.position.y += sp.y;
+          mesh.position.z += sp.z;
+
+          // Boundaries wrap
+          if (mesh.position.y > 50) {
+            mesh.position.y = -50;
+            mesh.position.x = (Math.random() - 0.5) * 140;
+          }
+          if (Math.abs(mesh.position.x) > 80) sp.x = -sp.x;
+        });
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      });
+    }
+    initHero3D();
+
+    // Related Tools Injected Dynamically
+    const related = [
+      { name: 'Base64 Encoder/Decoder', emoji: '💽', slug: 'base64-encoder', cat: 'developer', desc: 'Binary conversion tool' },
+      { name: 'JSON Formatter & Validator', emoji: '⚙️', slug: 'json-formatter', cat: 'developer', desc: 'Validate & beautify objects' },
+      { name: 'QR Code Generator', emoji: '📱', slug: 'qr-code-generator', cat: 'developer', desc: 'Generate customized graphics' },
+      { name: 'Image Compressor', emoji: '🖼️', slug: 'image-compressor', cat: 'image', desc: 'Shrink assets size client-side' }
+    ];
+
+    const relatedGrid = document.getElementById('related-tools-grid');
+    related.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <div class="blog-thumb" style="display:flex; align-items:center; justify-content:center; font-size:32px;">${t.emoji}</div>
+        <div class="blog-info">
+          <div class="blog-title">${t.name}</div>
+          <div class="blog-desc">${t.desc}</div>
+          <a href="/tools/${t.slug}.html" class="blog-link">Use Tool →</a>
+        </div>
+      `;
+      card.querySelector('.blog-link').addEventListener('click', async () => {
+        await logToolUsage(t.name, t.cat, t.slug);
+      });
+      relatedGrid.appendChild(card);
+    });
+
+    // Dual direction sync Color Picker Mechanics
+    const htmlPicker = document.getElementById('main-html-picker');
+    const mainHexLabel = document.getElementById('main-hex-label');
+    const sliderHue = document.getElementById('slider-hue');
+    const sliderSat = document.getElementById('slider-sat');
+    const sliderLight = document.getElementById('slider-light');
+    const sliderAlpha = document.getElementById('slider-alpha');
+
+    const hueVal = document.getElementById('hue-val');
+    const satVal = document.getElementById('sat-val');
+    const lightVal = document.getElementById('light-val');
+    const alphaVal = document.getElementById('alpha-val');
+
+    const outHex = document.getElementById('out-hex');
+    const outRgb = document.getElementById('out-rgb');
+    const outRgba = document.getElementById('out-rgba');
+    const outHsl = document.getElementById('out-hsl');
+    const outHsla = document.getElementById('out-hsla');
+    const outCmyk = document.getElementById('out-cmyk');
+
+    // Harmony layout swatches containers
+    const elComp = document.getElementById('scheme-complementary');
+    const elAnal = document.getElementById('scheme-analogous');
+    const elTria = document.getElementById('scheme-triadic');
+    const elSplit = document.getElementById('scheme-split');
+    const elMono = document.getElementById('scheme-monochromatic');
+    const elTet = document.getElementById('scheme-tetradic');
+
+    // Accessibility nodes
+    const textFgPicker = document.getElementById('text-fg-picker');
+    const textBgPicker = document.getElementById('text-bg-picker');
+    const previewLayer = document.getElementById('preview-layer');
+    const contrastRatioScore = document.getElementById('contrast-ratio-score');
+    const badgeNormalAA = document.getElementById('badge-normal-aa');
+    const badgeLargeAAA = document.getElementById('badge-large-aaa');
+
+    // Base math: Hex to HSL & RGB
+    function hexToRgb(hex) {
+      let r = 0, g = 0, b = 0;
+      hex = hex.replace(/^#/, '');
+      if (hex.length === 3) {
+        r = parseInt(hex[0] + hex[0], 16);
+        g = parseInt(hex[1] + hex[1], 16);
+        b = parseInt(hex[2] + hex[2], 16);
+      } else if (hex.length === 6) {
+        r = parseInt(hex.substring(0, 2), 16);
+        g = parseInt(hex.substring(2, 4), 16);
+        b = parseInt(hex.substring(4, 6), 16);
+      }
+      return { r, g, b };
+    }
+
+    function rgbToHex(r, g, b) {
+      const toHex = (c) => {
+        const hex = c.toString(16);
+        return hex.length == 1 ? "0" + hex : hex;
+      };
+      return "#" + toHex(r) + toHex(g) + toHex(b);
+    }
+
+    function rgbToHsl(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h = 0, s = 0, l = (max + min) / 2;
+
+      if (max !== min) {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+      }
+      return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+    }
+
+    function hslToRgb(h, s, l) {
+      h /= 360; s /= 100; l /= 100;
+      let r = l, g = l, b = l;
+      if (s !== 0) {
+        const hue2rgb = (p, q, t) => {
+          if (t < 0) t += 1;
+          if (t > 1) t -= 1;
+          if (t < 1/6) return p + (q - p) * 6 * t;
+          if (t < 1/2) return q;
+          if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+          return p;
+        };
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+      }
+      return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+    }
+
+    function rgbToCmyk(r, g, b) {
+      let c = 1 - (r / 255);
+      let m = 1 - (g / 255);
+      let y = 1 - (b / 255);
+      let k = Math.min(c, Math.min(m, y));
+
+      if (k === 1) {
+        c = 0; m = 0; y = 0;
+      } else {
+        c = Math.round(((c - k) / (1 - k)) * 100);
+        m = Math.round(((m - k) / (1 - k)) * 100);
+        y = Math.round(((y - k) / (1 - k)) * 100);
+      }
+      k = Math.round(k * 100);
+      return { c, m, y, k };
+    }
+
+    // Refresh UI Components based on model values
+    function updateColorsUI(h, s, l, alphaDecimal) {
+      hueVal.textContent = h + '°';
+      satVal.textContent = s + '%';
+      lightVal.textContent = l + '%';
+      alphaVal.textContent = alphaDecimal.toFixed(2);
+
+      const rgb = hslToRgb(h, s, l);
+      const hex = rgbToHex(rgb.r, rgb.g, rgb.b);
+      const cmyk = rgbToCmyk(rgb.r, rgb.g, rgb.b);
+
+      // Main triggers
+      mainHexLabel.textContent = hex.toUpperCase();
+      htmlPicker.value = hex;
+
+      // Outputs fields
+      outHex.value = hex.toUpperCase();
+      outRgb.value = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+      outRgba.value = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alphaDecimal.toFixed(2)})`;
+      outHsl.value = `hsl(${h}, ${s}%, ${l}%)`;
+      outHsla.value = `hsla(${h}, ${s}%, ${l}%, ${alphaDecimal.toFixed(2)})`;
+      outCmyk.value = `cmyk(${cmyk.c}%, ${cmyk.m}%, ${cmyk.y}%, ${cmyk.k}%)`;
+
+      // Slider visual fills updates
+      sliderSat.style.background = `linear-gradient(to right, ${rgbToHex(hslToRgb(h, 0, 50).r, hslToRgb(h, 0, 50).g, hslToRgb(h, 0, 50).b)}, ${rgbToHex(hslToRgb(h, 100, 50).r, hslToRgb(h, 100, 50).g, hslToRgb(h, 100, 50).b)})`;
+      sliderLight.style.background = `linear-gradient(to right, #000000, ${hex}, #ffffff)`;
+      sliderAlpha.style.background = `linear-gradient(to right, rgba(${rgb.r},${rgb.g},${rgb.b},0), ${hex})`;
+
+      // Render Harmony swatch palettes
+      renderSwatches(elComp, generateHarmonies(h, s, l, 'complementary'));
+      renderSwatches(elAnal, generateHarmonies(h, s, l, 'analogous'));
+      renderSwatches(elTria, generateHarmonies(h, s, l, 'triadic'));
+      renderSwatches(elSplit, generateHarmonies(h, s, l, 'split'));
+      renderSwatches(elMono, generateHarmonies(h, s, l, 'monochromatic'));
+      renderSwatches(elTet, generateHarmonies(h, s, l, 'tetradic'));
+    }
+
+    function renderSwatches(container, list) {
+      container.innerHTML = '';
+      list.forEach(col => {
+        const div = document.createElement('div');
+        div.className = 'swatch';
+        div.style.backgroundColor = col;
+        div.setAttribute('data-color', col.toUpperCase());
+        div.addEventListener('click', () => {
+          const rgb = hexToRgb(col);
+          const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+          sliderHue.value = hsl.h;
+          sliderSat.value = hsl.s;
+          sliderLight.value = hsl.l;
+          updateColorsUI(hsl.h, hsl.s, hsl.l, parseFloat(sliderAlpha.value)/100);
+        });
+        container.appendChild(div);
+      });
+    }
+
+    function generateHarmonies(h, s, l, type) {
+      const constructHex = (hueShift, sat = s, light = l) => {
+        const shift = (hueShift + 360) % 360;
+        const rgb = hslToRgb(shift, sat, light);
+        return rgbToHex(rgb.r, rgb.g, rgb.b);
+      };
+
+      switch (type) {
+        case 'complementary':
+          return [constructHex(0), constructHex(180)];
+        case 'analogous':
+          return [constructHex(-30), constructHex(0), constructHex(30)];
+        case 'triadic':
+          return [constructHex(0), constructHex(120), constructHex(240)];
+        case 'split':
+          return [constructHex(0), constructHex(150), constructHex(210)];
+        case 'monochromatic':
+          return [
+            constructHex(0, s, Math.max(10, l - 30)),
+            constructHex(0, s, Math.max(20, l - 15)),
+            constructHex(0, s, l),
+            constructHex(0, s, Math.min(90, l + 15)),
+            constructHex(0, s, Math.min(100, l + 30))
+          ];
+        case 'tetradic':
+          return [constructHex(0), constructHex(60), constructHex(180), constructHex(240)];
+        default:
+          return [];
+      }
+    }
+
+    // Input listeners (Sliders Matrix)
+    [sliderHue, sliderSat, sliderLight, sliderAlpha].forEach(elem => {
+      elem.addEventListener('input', () => {
+        updateColorsUI(
+          parseInt(sliderHue.value),
+          parseInt(sliderSat.value),
+          parseInt(sliderLight.value),
+          parseFloat(sliderAlpha.value) / 100
+        );
+      });
+    });
+
+    // Native color picker trigger interaction
+    htmlPicker.addEventListener('input', (e) => {
+      const hex = e.target.value;
+      const rgb = hexToRgb(hex);
+      const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+
+      sliderHue.value = hsl.h;
+      sliderSat.value = hsl.s;
+      sliderLight.value = hsl.l;
+
+      updateColorsUI(hsl.h, hsl.s, hsl.l, parseFloat(sliderAlpha.value) / 100);
+    });
+
+    // Copy actions listener
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = btn.getAttribute('data-target');
+        const input = document.getElementById(id);
+        if (input) {
+          input.select();
+          navigator.clipboard.writeText(input.value);
+          const original = btn.textContent;
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = original, 1200);
+        }
+      });
+    });
+
+    // Accessibility Contrast Score calculations
+    function getLuminance(r, g, b) {
+      const a = [r, g, b].map(v => {
+        v /= 255;
+        return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+      });
+      return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+    }
+
+    function calculateContrast(hex1, hex2) {
+      const c1 = hexToRgb(hex1);
+      const c2 = hexToRgb(hex2);
+      const l1 = getLuminance(c1.r, c1.g, c1.b);
+      const l2 = getLuminance(c2.r, c2.g, c2.b);
+      return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+    }
+
+    function refreshContrastScore() {
+      const fgVal = textFgPicker.value;
+      const bgVal = textBgPicker.value;
+
+      previewLayer.style.color = fgVal;
+      previewLayer.style.backgroundColor = bgVal;
+
+      const ratio = calculateContrast(fgVal, bgVal);
+      contrastRatioScore.innerHTML = `${ratio.toFixed(1)} <small>: 1</small>`;
+
+      // AA normal text 4.5, large AAA 7.0 compliance levels
+      if (ratio >= 4.5) {
+        badgeNormalAA.className = 'rating-badge rating-pass';
+        badgeNormalAA.textContent = 'Normal AA - Pass';
+      } else {
+        badgeNormalAA.className = 'rating-badge rating-fail';
+        badgeNormalAA.textContent = 'Normal AA - Fail';
+      }
+
+      if (ratio >= 7.0) {
+        badgeLargeAAA.className = 'rating-badge rating-pass';
+        badgeLargeAAA.textContent = 'Large AAA - Pass';
+      } else {
+        badgeLargeAAA.className = 'rating-badge rating-fail';
+        badgeLargeAAA.textContent = 'Large AAA - Fail';
+      }
+    }
+
+    textFgPicker.addEventListener('input', refreshContrastScore);
+    textBgPicker.addEventListener('input', refreshContrastScore);
+
+    document.getElementById('btn-use-selected-fg').addEventListener('click', () => {
+      const hex = outHex.value;
+      textFgPicker.value = hex;
+      refreshContrastScore();
+    });
+
+    document.getElementById('btn-use-selected-bg').addEventListener('click', () => {
+      const hex = outHex.value;
+      textBgPicker.value = hex;
+      refreshContrastScore();
+    });
+
+    // Initialize default states
+    updateColorsUI(215, 100, 50, 1.00);
+    refreshContrastScore();
+
+  </script>
+
+  <script>
+    // FAQ accordion helper
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

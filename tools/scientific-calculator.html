@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Free Online Scientific Calculator & Function Plotter | DevToolkit</title>
+  <meta name="description" content="Calculate mathematical expressions with our free scientific calculator. Evaluate trigonometric, logarithmic, and algebraic formulas with Degree/Radian toggles and a live 2D function graph plotter.">
+  <meta name="keywords" content="scientific calculator online, math calculator free, trigonometry solver, log calculator, graphing calculator, algebraic function plotter">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/tools/scientific-calculator.html">
+  <meta property="og:title" content="Free Online Scientific Calculator & Function Plotter | DevToolkit">
+  <meta property="og:description" content="Evaluate algebraic equations, trigonometry, logs, and plot custom functions live. Free, clean developer calculator.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- FAQ JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Does this calculator support Degree and Radian modes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. You can toggle between Degrees (DEG) and Radians (RAD) for all trigonometric operations (sin, cos, tan, etc.)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I plot functions on the graph?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Type an expression in terms of 'x' (for example: Math.sin(x), x*x, or Math.cos(x)) in the graph configuration panel and click Plot to render it instantly on the canvas graph."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use my physical keyboard to type equations?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Standard keys (numbers 0-9, decimal point, operators +, -, *, /, parenthesis, and Enter for equals) are fully mapped to the interface."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the calculator handle invalid syntax?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "If an expression contains unmatched brackets, syntax errors, or division by zero, the LED glass screen displays a friendly 'Syntax Error' alert."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Scientific Calculator",
+    "url": "https://www.devtoolkit.com/tools/scientific-calculator.html",
+    "description": "Premium browser-based scientific calculator with trigonometric log variables, parenthesis groupings, and canvas function plotters.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+      --danger: #FF3366;
+      --success: #00FF66;
+      --warning: #FFAA00;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .tool-hero {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .hero-3d-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: relative;
+      z-index: 2;
+      padding: 24px;
+      max-width: 800px;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .tool-title {
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tool-tagline {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin: 0 0 24px 0;
+    }
+
+    .btn-scroll-down {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 20px;
+      color: #00CCFF;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .btn-scroll-down:hover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.2);
+    }
+
+    /* Workspace */
+    .tool-workspace {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 60px 24px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    .calculator-dashboard {
+      display: grid;
+      grid-template-columns: 1.6fr 1.4fr;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .calculator-dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Panel: Calculator keypad */
+    .calc-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(0, 102, 255, 0.25);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Glass Screen */
+    .calc-screen {
+      background: rgba(5, 5, 16, 0.9);
+      border: 1px solid rgba(0, 204, 255, 0.25);
+      border-radius: 10px;
+      padding: 16px 20px;
+      text-align: right;
+      font-family: monospace;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: inset 0 0 15px rgba(0, 204, 255, 0.1);
+    }
+
+    .screen-history {
+      font-size: 13px;
+      color: var(--text-gray);
+      word-wrap: break-word;
+      min-height: 18px;
+    }
+
+    .screen-output {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--cyan);
+      word-wrap: break-word;
+      margin-top: 4px;
+      text-shadow: 0 0 5px rgba(0, 204, 255, 0.5);
+    }
+
+    /* Keyboard controls bar (DEG/RAD toggle, clear) */
+    .calc-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .toggle-group {
+      display: flex;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 6px;
+      padding: 2px;
+    }
+
+    .toggle-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-gray);
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 800;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .toggle-btn.active {
+      background: #0066FF;
+      color: #fff;
+    }
+
+    /* Keys Grid */
+    .keys-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+
+    .calc-key {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #fff;
+      border-radius: 8px;
+      padding: 14px 0;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      user-select: none;
+    }
+
+    .calc-key:hover {
+      background: rgba(0, 102, 255, 0.25);
+      border-color: #00CCFF;
+      transform: translateY(-2px);
+    }
+
+    .calc-key:active {
+      transform: translateY(0);
+    }
+
+    /* Operator keys highlights */
+    .calc-key.op {
+      color: #00CCFF;
+      background: rgba(0, 204, 255, 0.05);
+    }
+
+    .calc-key.fn {
+      color: #7B2FFF;
+      background: rgba(123, 47, 255, 0.05);
+      font-size: 12px;
+    }
+
+    .calc-key.clear {
+      color: var(--danger);
+      background: rgba(255, 51, 102, 0.05);
+    }
+
+    .calc-key.equal {
+      grid-column: span 2;
+      background: #0066FF;
+      color: #fff;
+      border-color: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+    }
+
+    .calc-key.equal:hover {
+      background: #00CCFF;
+      color: #050510;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+    }
+
+    /* Right Panel: Dynamic function graphing */
+    .graph-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .graph-configs {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .graph-configs h3 {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+      margin: 0 0 6px 0;
+    }
+
+    .graph-input-box {
+      display: flex;
+      gap: 8px;
+    }
+
+    .text-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: #fff;
+      padding: 10px;
+      font-family: monospace;
+      outline: none;
+      font-size: 13px;
+    }
+
+    .text-input:focus {
+      border-color: #00CCFF;
+    }
+
+    .btn-plot {
+      background: #7B2FFF;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      padding: 0 16px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-plot:hover {
+      background: #9b5cff;
+    }
+
+    .graph-canvas-container {
+      background: #050510;
+      border: 1px solid rgba(0, 102, 255, 0.25);
+      border-radius: 12px;
+      overflow: hidden;
+      width: 100%;
+      height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    canvas#graph-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Article layouts */
+    .article-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .step-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #00CCFF;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+    }
+
+    /* FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Related Tools Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .blog-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-thumb {
+      height: 140px;
+      background: linear-gradient(135deg, #0066FF, #7B2FFF);
+    }
+
+    .blog-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .blog-desc {
+      font-size: 12px;
+      color: var(--text-gray);
+      line-height: 1.4;
+    }
+
+    .blog-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: auto;
+    }
+
+    .blog-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.4), rgba(123, 47, 255, 0.4));
+      border-top: 1px solid var(--card-border);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cta-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .btn-cta {
+      padding: 12px 24px;
+      background: #0066FF;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-cta:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+    }
+
+    /* WordPress Documentation Comment Requirement */
+    /* 
+     Plugin Name: Scientific Calculator
+     Description: Client-side scientific calculator and equation graph plotter.
+     Version: 1.0.0
+     Author: DevToolkit Inc.
+    */
+  </style>
+</head>
+<body>
+
+  <!-- Floating background particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <!-- Section 1: Hero -->
+  <section class="tool-hero">
+    <div class="hero-3d-scene" id="tool-hero-3d"></div>
+    <div class="hero-overlay">
+      <div class="breadcrumbs">
+        <a href="/index.html">Home</a>
+        <span class="separator">&gt;</span>
+        <a href="/category-developer.html">Developer Tools</a>
+        <span class="separator">&gt;</span>
+        <span>Scientific Calculator</span>
+      </div>
+      <h1 class="tool-title">Scientific Calculator</h1>
+      <p class="tool-tagline">Evaluate complex algebraic functions, configure DEG/RAD values, and plot 2D graphs in real-time.</p>
+      <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
+    </div>
+  </section>
+
+  
+
+  <!-- Section 2: Workspace -->
+  <main class="tool-workspace" id="workspace">
+    <div class="glass-card">
+      
+      <!-- Calculator Dashboard -->
+      <div class="calculator-dashboard">
+        
+        <!-- Left Panel: Keypad & Display Screen -->
+        <div class="calc-wrapper">
+          
+          <div class="calc-screen">
+            <div class="screen-history" id="calc-history"></div>
+            <div class="screen-output" id="calc-output">0</div>
+          </div>
+
+          <div class="calc-controls">
+            <div class="toggle-group">
+              <button class="toggle-btn active" id="btn-deg">DEG</button>
+              <button class="toggle-btn" id="btn-rad">RAD</button>
+            </div>
+            <button class="calc-key clear" style="padding: 6px 14px; font-size:11px; margin:0;" id="btn-back">Backspace</button>
+          </div>
+
+          <!-- Keys Grid Layout -->
+          <div class="keys-grid">
+            <!-- Row 1 -->
+            <div class="calc-key fn" data-val="sin">sin</div>
+            <div class="calc-key fn" data-val="cos">cos</div>
+            <div class="calc-key fn" data-val="tan">tan</div>
+            <div class="calc-key op" data-val="(">(</div>
+            <div class="calc-key op" data-val=")">)</div>
+            
+            <!-- Row 2 -->
+            <div class="calc-key fn" data-val="ln">ln</div>
+            <div class="calc-key fn" data-val="log">log</div>
+            <div class="calc-key fn" data-val="sqrt">√</div>
+            <div class="calc-key fn" data-val="^">x^y</div>
+            <div class="calc-key clear" id="btn-clear">C</div>
+
+            <!-- Row 3 -->
+            <div class="calc-key fn" data-val="pi">π</div>
+            <div class="calc-key" data-val="7">7</div>
+            <div class="calc-key" data-val="8">8</div>
+            <div class="calc-key" data-val="9">9</div>
+            <div class="calc-key op" data-val="/">÷</div>
+
+            <!-- Row 4 -->
+            <div class="calc-key fn" data-val="e">e</div>
+            <div class="calc-key" data-val="4">4</div>
+            <div class="calc-key" data-val="5">5</div>
+            <div class="calc-key" data-val="6">6</div>
+            <div class="calc-key op" data-val="*">×</div>
+
+            <!-- Row 5 -->
+            <div class="calc-key fn" data-val="!">x!</div>
+            <div class="calc-key" data-val="1">1</div>
+            <div class="calc-key" data-val="2">2</div>
+            <div class="calc-key" data-val="3">3</div>
+            <div class="calc-key op" data-val="-">-</div>
+
+            <!-- Row 6 -->
+            <div class="calc-key fn" data-val="mod">mod</div>
+            <div class="calc-key" data-val="0">0</div>
+            <div class="calc-key" data-val=".">.</div>
+            <div class="calc-key equal" id="btn-equal">=</div>
+            <div class="calc-key op" data-val="+">+</div>
+          </div>
+
+        </div>
+
+        <!-- Right Panel: Canvas function graph plotter -->
+        <div class="graph-panel">
+          <div class="graph-configs">
+            <h3>2D Equation Graph Plotter</h3>
+            <p style="font-size:11px; color:var(--text-gray); margin:0;">Enter function in terms of x using standard JavaScript Math methods (e.g. `Math.sin(x)`, `x*x/10`, `Math.cos(x)*5`):</p>
+            <div class="graph-input-box">
+              <input type="text" class="text-input" id="graph-expr" value="Math.sin(x) * 10">
+              <button class="btn-plot" id="btn-plot-expr">Plot Graph</button>
+            </div>
+          </div>
+
+          <div class="graph-canvas-container">
+            <canvas id="graph-canvas"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  
+
+  <!-- Section 3: How to Use -->
+  <section class="article-section">
+    <h2>How to Use the Graphing Scientific Calculator</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-emoji">🔢</div>
+        <div class="step-title">1. Evaluate formulas</div>
+        <div class="step-desc">Utilize standard digits, brackets, and math keys. Use your physical keyboard keys to append values.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">📐</div>
+        <div class="step-title">2. Toggle trigonometry</div>
+        <div class="step-desc">Click DEG/RAD to toggle radian angle offsets. Use logarithmic ln and factorials variables.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">📈</div>
+        <div class="step-title">3. Plot curves</div>
+        <div class="step-desc">Enter algebraic functions of x (e.g. `Math.cos(x)`) in the graph builder and press Plot to draw.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Key Features -->
+  <section class="article-section">
+    <h2>Scientific Computations Metrics</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-head">🚀 Dynamic Live Canvas Plotter</div>
+        <div class="feature-desc">Integrated function plotter renders custom Cartesian lines on a canvas coordinate axis.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">⌨️ Keyboard Key Mapping</div>
+        <div class="feature-desc">Interactive event listeners map desktop key entries directly into screen formulas.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🔒 Safe Client Computing</div>
+        <div class="feature-desc">All equations evaluate client-side using JavaScript expression builders. No server logs exist.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: FAQ -->
+  <section class="article-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-wrapper">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">What is the difference between DEG and RAD modes? <span>+</span></div>
+        <div class="faq-answer">DEG (Degrees) treats circle angles as 360 units, while RAD (Radians) defines circles by 2π units. Toggle DEG or RAD to verify correct trigonometric properties.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">How do I type exponents? <span>+</span></div>
+        <div class="faq-answer">Click the `x^y` key. This inserts the exponent operator symbol `^`. You can type your base, click `x^y`, and enter your power. In the JavaScript parser, this converts to `Math.pow(base, exponent)`.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">What values can I plot on the graph canvas? <span>+</span></div>
+        <div class="faq-answer">Any mathematical equation using variable `x`. Remember to write valid JS math expressions, such as `Math.sin(x)`, `x*x`, `Math.sqrt(Math.abs(x))`, or `Math.sin(x)/x`. The system loops x from -50 to 50 to draw the vector lines.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Does this tool support parenthesis grouping? <span>+</span></div>
+        <div class="faq-answer">Yes, absolutely. You can nest multiple levels of parenthesis to enforce mathematical order of operations (PEMDAS). Make sure to close all open brackets to avoid syntax errors.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Related Tools Injected Dynamically -->
+  <section class="article-section">
+    <h2>Discover Other Developer Utilities</h2>
+    <div class="blog-grid" id="related-tools-grid">
+      <!-- Injected Dynamically -->
+    </div>
+  </section>
+
+  <!-- Section 7: Footer CTA Banner -->
+  <section class="cta-banner">
+    <h2 class="cta-title">Ready to explore more free tools?</h2>
+    <p class="cta-subtitle">DevToolkit has 40+ utility modules waiting for you.</p>
+    <a href="/index.html" class="btn-cta">Explore All Tools →</a>
+  </section>
+
+  <!-- Standard Footer -->
+  <footer>
+    <div style="text-align: center; font-size:12px; color:rgba(255,255,255,0.4); padding: 24px 0;">
+      &copy; 2026 DevToolKit. All rights reserved. | <a href="/index.html" style="color:var(--cyan); text-decoration:none;">Home</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from '../js/3d-background.js';
+    import { logToolUsage } from '../js/tools-tracker.js';
+
+    // Start background particle animation
+    initBackground('bg-container');
+
+    // Local 3D Hero Scene: Floating mathematical symbols
+    function initHero3D() {
+      const container = document.getElementById('tool-hero-3d');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000);
+      camera.position.z = 180;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const light1 = new THREE.AmbientLight(0xffffff, 0.4);
+      scene.add(light1);
+
+      const light2 = new THREE.DirectionalLight(0x7B2FFF, 1.2);
+      light2.position.set(10, 10, 10);
+      scene.add(light2);
+
+      // Create floating 3D mathematical symbols (casing cube representations)
+      const symbols = ['+', '-', '×', '÷', 'π', 'e', '√', 'sin', 'cos', 'log'];
+      const meshes = [];
+      const speeds = [];
+
+      symbols.forEach((sym, idx) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 64;
+        canvas.height = 64;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'rgba(0,0,0,0)';
+        ctx.fillRect(0,0,64,64);
+        ctx.fillStyle = idx % 2 === 0 ? '#00CCFF' : '#7B2FFF';
+        ctx.font = 'bold 36px monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(sym, 32, 32);
+
+        const texture = new THREE.CanvasTexture(canvas);
+        const geom = new THREE.BoxGeometry(10, 10, 10);
+        const mat = new THREE.MeshPhongMaterial({
+          map: texture,
+          transparent: true,
+          opacity: 0.7,
+          wireframe: true
+        });
+
+        const mesh = new THREE.Mesh(geom, mat);
+        mesh.position.set(
+          (Math.random() - 0.5) * 160,
+          (Math.random() - 0.5) * 80,
+          (Math.random() - 0.5) * 40
+        );
+        scene.add(mesh);
+        meshes.push(mesh);
+        speeds.push(0.005 + Math.random() * 0.01);
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        meshes.forEach((mesh, idx) => {
+          mesh.rotation.y += speeds[idx];
+          mesh.rotation.x += 0.003;
+        });
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      });
+    }
+    initHero3D();
+
+    // Related Tools Grid
+    const related = [
+      { name: 'Base64 Byte Encoder', emoji: '🔑', slug: 'base64-encoder', cat: 'developer', desc: 'Securely encode string files data' },
+      { name: 'JSON Validator & Formatter', emoji: '⚙️', slug: 'json-formatter', cat: 'developer', desc: 'Prettify and index JSON parameters' },
+      { name: 'Binary Text Converter', emoji: '🔢', slug: 'binary-converter', cat: 'developer', desc: 'Translate alphanumeric keys to binary' },
+      { name: 'FAVICON Tool Creator', emoji: '🎨', slug: 'favicon-generator', cat: 'image', desc: 'Design customizable web browser favicons' }
+    ];
+
+    const relatedGrid = document.getElementById('related-tools-grid');
+    related.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <div class="blog-thumb" style="display:flex; align-items:center; justify-content:center; font-size:32px;">${t.emoji}</div>
+        <div class="blog-info">
+          <div class="blog-title">${t.name}</div>
+          <div class="blog-desc">${t.desc}</div>
+          <a href="/tools/${t.slug}.html" class="blog-link">Use Tool →</a>
+        </div>
+      `;
+      card.querySelector('.blog-link').addEventListener('click', async () => {
+        await logToolUsage(t.name, t.cat, t.slug);
+      });
+      relatedGrid.appendChild(card);
+    });
+
+    // Calculator Logic
+    const calcHistory = document.getElementById('calc-history');
+    const calcOutput = document.getElementById('calc-output');
+    const btnDeg = document.getElementById('btn-deg');
+    const btnRad = document.getElementById('btn-rad');
+
+    let currentInput = '';
+    let angleMode = 'DEG'; // DEG or RAD
+    let evaluated = false;
+
+    // Toggle Angle Modes
+    btnDeg.addEventListener('click', () => {
+      btnDeg.classList.add('active');
+      btnRad.classList.remove('active');
+      angleMode = 'DEG';
+    });
+
+    btnRad.addEventListener('click', () => {
+      btnRad.classList.add('active');
+      btnDeg.classList.remove('active');
+      angleMode = 'RAD';
+    });
+
+    // Keypad Click Listeners
+    document.querySelectorAll('.calc-key').forEach(key => {
+      key.addEventListener('click', () => {
+        const val = key.getAttribute('data-val');
+        if (!val) return; // Controls managed by specific element IDs
+        appendInput(val);
+      });
+    });
+
+    document.getElementById('btn-clear').addEventListener('click', clearScreen);
+    document.getElementById('btn-back').addEventListener('click', backspace);
+    document.getElementById('btn-equal').addEventListener('click', evaluateExpression);
+
+    // Keyboard support
+    window.addEventListener('keydown', (e) => {
+      if (e.key >= '0' && e.key <= '9' || e.key === '.') {
+        appendInput(e.key);
+      } else if (['+', '-', '*', '/'].includes(e.key)) {
+        appendInput(e.key);
+      } else if (e.key === '(' || e.key === ')') {
+        appendInput(e.key);
+      } else if (e.key === 'Enter' || e.key === '=') {
+        evaluateExpression();
+      } else if (e.key === 'Backspace') {
+        backspace();
+      } else if (e.key === 'Escape') {
+        clearScreen();
+      }
+    });
+
+    function appendInput(val) {
+      if (evaluated) {
+        // If evaluated, start new expression unless entering operator
+        if (['+', '-', '*', '/', 'mod'].includes(val)) {
+          evaluated = false;
+        } else {
+          clearScreen();
+        }
+      }
+
+      // Format functions displays
+      if (['sin', 'cos', 'tan', 'ln', 'log', 'sqrt'].includes(val)) {
+        currentInput += val + '(';
+      } else if (val === 'pi') {
+        currentInput += 'π';
+      } else {
+        currentInput += val;
+      }
+
+      updateDisplay();
+    }
+
+    function clearScreen() {
+      currentInput = '';
+      calcHistory.textContent = '';
+      calcOutput.textContent = '0';
+      evaluated = false;
+    }
+
+    function backspace() {
+      if (evaluated) {
+        clearScreen();
+        return;
+      }
+      
+      // Check if deleting function strings (e.g. sin() which is 4 chars)
+      const checks = ['sin(', 'cos(', 'tan(', 'log(', 'sqrt('];
+      let deleted = false;
+      for (const check of checks) {
+        if (currentInput.endsWith(check)) {
+          currentInput = currentInput.slice(0, -check.length);
+          deleted = true;
+          break;
+        }
+      }
+
+      if (!deleted) {
+        if (currentInput.endsWith('ln(')) {
+          currentInput = currentInput.slice(0, -3);
+        } else {
+          currentInput = currentInput.slice(0, -1);
+        }
+      }
+
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      calcOutput.textContent = currentInput || '0';
+    }
+
+    // Mathematical parser & evaluator
+    async function evaluateExpression() {
+      if (!currentInput) return;
+
+      try {
+        calcHistory.textContent = currentInput + ' =';
+        
+        let jsExpr = currentInput;
+        
+        // Replace constants
+        jsExpr = jsExpr.replace(/π/g, 'Math.PI');
+        jsExpr = jsExpr.replace(/e/g, 'Math.E');
+
+        // Replace operations
+        jsExpr = jsExpr.replace(/mod/g, '%');
+
+        // Manage Factorial recursion parsing
+        jsExpr = parseFactorials(jsExpr);
+
+        // Replace custom exponential base notation base^power -> Math.pow(base, power)
+        jsExpr = parseExponents(jsExpr);
+
+        // Map trig and logs incorporating angle DEG/RAD overrides
+        jsExpr = jsExpr.replace(/sin\(([^)]+)\)/g, (_, angle) => {
+          const evalAngle = evalSubExpr(angle);
+          const rad = angleMode === 'DEG' ? (evalAngle * Math.PI / 180) : evalAngle;
+          return `Math.sin(${rad})`;
+        });
+
+        jsExpr = jsExpr.replace(/cos\(([^)]+)\)/g, (_, angle) => {
+          const evalAngle = evalSubExpr(angle);
+          const rad = angleMode === 'DEG' ? (evalAngle * Math.PI / 180) : evalAngle;
+          return `Math.cos(${rad})`;
+        });
+
+        jsExpr = jsExpr.replace(/tan\(([^)]+)\)/g, (_, angle) => {
+          const evalAngle = evalSubExpr(angle);
+          const rad = angleMode === 'DEG' ? (evalAngle * Math.PI / 180) : evalAngle;
+          return `Math.tan(${rad})`;
+        });
+
+        jsExpr = jsExpr.replace(/ln\(([^)]+)\)/g, 'Math.log($1)');
+        jsExpr = jsExpr.replace(/log\(([^)]+)\)/g, 'Math.log10($1)');
+        jsExpr = jsExpr.replace(/sqrt\(([^)]+)\)/g, 'Math.sqrt($1)');
+
+        // Evaluate using safe Function constructor sandbox (No raw eval)
+        const solver = new Function(`return (${jsExpr})`);
+        let result = solver();
+
+        // Round decimal floats logically
+        if (typeof result === 'number' && !isNaN(result)) {
+          if (result.toString().includes('.') && result.toString().split('.')[1].length > 8) {
+            result = parseFloat(result.toFixed(8));
+          }
+          calcOutput.textContent = result;
+          currentInput = result.toString();
+        } else {
+          calcOutput.textContent = 'Error';
+        }
+      } catch (err) {
+        calcOutput.textContent = 'Syntax Error';
+      }
+
+      evaluated = true;
+      await logToolUsage('Scientific Calculator', 'developer', 'scientific-calculator');
+    }
+
+    function evalSubExpr(str) {
+      try {
+        // Evaluate simple helper numbers
+        let js = str.replace(/π/g, 'Math.PI').replace(/e/g, 'Math.E');
+        const f = new Function(`return (${js})`);
+        return f();
+      } catch(_) {
+        return 0;
+      }
+    }
+
+    function parseFactorials(expr) {
+      // Regex detects numbers followed by ! e.g. 5!
+      return expr.replace(/(\d+)!/g, (_, num) => {
+        const n = parseInt(num);
+        return factorial(n);
+      });
+    }
+
+    function factorial(n) {
+      if (n < 0) return NaN;
+      if (n === 0 || n === 1) return 1;
+      let res = 1;
+      for (let i = 2; i <= n; i++) res *= i;
+      return res;
+    }
+
+    function parseExponents(expr) {
+      // Matches base^power patterns (e.g. 2^3 -> Math.pow(2, 3))
+      // Simple base match supporting digits and decimals
+      const regex = /(\d+(\.\d+)?)\^(\d+(\.\d+)?)/g;
+      while (expr.match(regex)) {
+        expr = expr.replace(regex, 'Math.pow($1, $3)');
+      }
+      return expr;
+    }
+
+    // Graph plotting logic
+    const canvas = document.getElementById('graph-canvas');
+    const ctx = canvas.getContext('2d');
+    const graphExpr = document.getElementById('graph-expr');
+    const btnPlotExpr = document.getElementById('btn-plot-expr');
+
+    btnPlotExpr.addEventListener('click', drawGraph);
+
+    function resizeCanvas() {
+      const rect = canvas.parentNode.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      drawGraph();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    setTimeout(resizeCanvas, 300);
+
+    function drawGraph() {
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // Clear Canvas
+      ctx.fillStyle = '#050510';
+      ctx.fillRect(0, 0, w, h);
+
+      // Draw Grid Axis
+      ctx.strokeStyle = 'rgba(0, 102, 255, 0.15)';
+      ctx.lineWidth = 1;
+
+      // X/Y grids spacing spacing
+      const step = 20;
+      for (let x = 0; x < w; x += step) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        ctx.stroke();
+      }
+      for (let y = 0; y < h; y += step) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      // Draw Center Main Origin Axis
+      ctx.strokeStyle = 'rgba(0, 102, 255, 0.5)';
+      ctx.lineWidth = 2;
+      const cx = w / 2;
+      const cy = h / 2;
+
+      // X-Axis
+      ctx.beginPath();
+      ctx.moveTo(0, cy);
+      ctx.lineTo(w, cy);
+      ctx.stroke();
+
+      // Y-Axis
+      ctx.beginPath();
+      ctx.moveTo(cx, 0);
+      ctx.lineTo(cx, h);
+      ctx.stroke();
+
+      // Plot Dynamic Function Line
+      const expr = graphExpr.value.trim();
+      if (!expr) return;
+
+      ctx.strokeStyle = '#00FF66';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+
+      let started = false;
+      const scaleX = 10; // Pixels per unit
+      const scaleY = 10; // Pixels per unit
+
+      for (let pixelX = 0; pixelX < w; pixelX++) {
+        // Translate pixel X to Math coordinate x
+        const mathX = (pixelX - cx) / scaleX;
+        
+        try {
+          // Construct evaluator function
+          const evaluator = new Function('x', `return ${expr}`);
+          const mathY = evaluator(mathX);
+
+          if (typeof mathY === 'number' && !isNaN(mathY) && isFinite(mathY)) {
+            // Translate Math coordinate y back to pixel Y
+            const pixelY = cy - (mathY * scaleY);
+
+            if (!started) {
+              ctx.moveTo(pixelX, pixelY);
+              started = true;
+            } else {
+              ctx.lineTo(pixelX, pixelY);
+            }
+          }
+        } catch (_) {
+          // Skip invalid points
+        }
+      }
+      ctx.stroke();
+    }
+
+  </script>
+
+  <script>
+    // FAQ accordion helper
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

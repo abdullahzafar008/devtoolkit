@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Sign Up - DevToolkit</title>
+  <meta name="description" content="Create a free DevToolkit account to track your utility usage history and access user statistics.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      box-sizing: border-box;
+    }
+
+    .signup-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      box-sizing: border-box;
+    }
+
+    .card-title {
+      font-size: 28px;
+      font-weight: 800;
+      margin-top: 0;
+      margin-bottom: 8px;
+      text-align: center;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .card-sub {
+      font-size: 14px;
+      color: var(--text-gray);
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .form-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: #fff;
+      outline: none;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+
+    .form-input:focus {
+      border-color: #00CCFF;
+      background: rgba(5, 5, 16, 0.8);
+      box-shadow: 0 0 10px rgba(0, 204, 255, 0.2);
+    }
+
+    /* Strength Meter */
+    .strength-wrapper {
+      margin-top: 4px;
+    }
+
+    .strength-bar {
+      height: 4px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .strength-fill {
+      height: 100%;
+      width: 0;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .strength-label {
+      font-size: 11px;
+      color: var(--text-gray);
+      font-weight: 500;
+    }
+
+    .checkbox-row {
+      font-size: 13px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+      line-height: 1.4;
+    }
+
+    .checkbox-row input {
+      margin-top: 2px;
+      cursor: pointer;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      border: 1px solid var(--primary);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-submit:hover {
+      background: #00CCFF;
+      border-color: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-msg {
+      color: #ff3333;
+      font-size: 13px;
+      margin-top: 12px;
+      text-align: center;
+      min-height: 18px;
+      font-weight: 500;
+    }
+
+    .login-teaser {
+      font-size: 13px;
+      color: var(--text-gray);
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    .login-teaser a {
+      color: #00CCFF;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .login-teaser a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating 3D Background Container -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <main>
+    <div class="signup-card">
+      <h2 class="card-title">Create Account</h2>
+      <p class="card-sub">Start managing your utility workflows today</p>
+
+      <form id="signup-form">
+        <div class="form-group">
+          <label class="form-label" for="username-input">Username</label>
+          <input class="form-input" type="text" id="username-input" required placeholder="alphanumeric only" pattern="^[a-zA-Z0-9]+$" title="Only alphanumeric characters allowed">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email-input">Email Address</label>
+          <input class="form-input" type="email" id="email-input" required placeholder="name@example.com">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password-input">Password</label>
+          <input class="form-input" type="password" id="password-input" required placeholder="Min 8 characters">
+          <div class="strength-wrapper">
+            <div class="strength-bar">
+              <div class="strength-fill" id="strength-fill"></div>
+            </div>
+            <span class="strength-label" id="strength-lbl">Strength: Weak</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="confirm-password-input">Confirm Password</label>
+          <input class="form-input" type="password" id="confirm-password-input" required placeholder="Confirm your password">
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" id="terms-checkbox" required>
+          <span>I agree to the <a href="#" style="color:#00CCFF; text-decoration:none;" onclick="alert('By signing up, you agree to our terms of service.')">Terms of Service</a> & <a href="#" style="color:#00CCFF; text-decoration:none;" onclick="alert('We do not share your profile details with external platforms.')">Privacy Policy</a></span>
+        </label>
+
+        <button type="submit" class="btn-submit" id="submit-btn">
+          <span class="spinner" id="btn-spinner"></span>
+          <span>Create Account</span>
+        </button>
+
+        <div class="error-msg" id="error-lbl"></div>
+      </form>
+
+      <div class="login-teaser">
+        Already have an account? <a href="/login.html">Login</a>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { checkAuth, signUp, getErrorMessage } from './js/auth.js';
+    import { initBackground } from './js/3d-background.js';
+
+    // Start 3D background
+    initBackground('bg-container');
+
+    // Protect check
+    checkAuth(false);
+
+    const signupForm = document.getElementById('signup-form');
+    const usernameInput = document.getElementById('username-input');
+    const emailInput = document.getElementById('email-input');
+    const passwordInput = document.getElementById('password-input');
+    const confirmPasswordInput = document.getElementById('confirm-password-input');
+    const termsCheckbox = document.getElementById('terms-checkbox');
+    const submitBtn = document.getElementById('submit-btn');
+    const btnSpinner = document.getElementById('btn-spinner');
+    const errorLbl = document.getElementById('error-lbl');
+    
+    const strengthFill = document.getElementById('strength-fill');
+    const strengthLbl = document.getElementById('strength-lbl');
+
+    // Live Password Strength Meter
+    passwordInput.addEventListener('input', () => {
+      const pw = passwordInput.value;
+      let score = 0;
+
+      if (pw.length >= 8) score++;
+      if (/[A-Z]/.test(pw)) score++;
+      if (/[0-9]/.test(pw)) score++;
+      if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+      if (pw.length === 0) {
+        strengthFill.style.width = '0%';
+        strengthLbl.textContent = 'Strength: Weak';
+        strengthLbl.style.color = '#ff3333';
+      } else if (pw.length < 8) {
+        strengthFill.style.width = '25%';
+        strengthFill.style.backgroundColor = '#ff3333';
+        strengthLbl.textContent = 'Strength: Weak (Too Short)';
+        strengthLbl.style.color = '#ff3333';
+      } else if (score < 3) {
+        strengthFill.style.width = '60%';
+        strengthFill.style.backgroundColor = '#e6b800';
+        strengthLbl.textContent = 'Strength: Fair';
+        strengthLbl.style.color = '#e6b800';
+      } else {
+        strengthFill.style.width = '100%';
+        strengthFill.style.backgroundColor = '#00FF66';
+        strengthLbl.textContent = 'Strength: Strong';
+        strengthLbl.style.color = '#00FF66';
+      }
+    });
+
+    // Submit handler
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorLbl.textContent = '';
+
+      const username = usernameInput.value.trim();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const confirmPassword = confirmPasswordInput.value;
+
+      if (!/^[a-zA-Z0-9]+$/.test(username)) {
+        errorLbl.textContent = 'Username must be alphanumeric only.';
+        return;
+      }
+
+      if (password.length < 8) {
+        errorLbl.textContent = 'Min 8 characters required for password.';
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        errorLbl.textContent = 'Passwords do not match.';
+        return;
+      }
+
+      if (!termsCheckbox.checked) {
+        errorLbl.textContent = 'You must agree to the Terms & Privacy policy.';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      btnSpinner.style.display = 'block';
+
+      try {
+        await signUp(email, password, username);
+      } catch (err) {
+        errorLbl.textContent = getErrorMessage(err);
+        submitBtn.disabled = false;
+        btnSpinner.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

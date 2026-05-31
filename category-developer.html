@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Free Developer Tools & Code Utilities Directory - DevToolKit</title>
+  <meta name="description" content="Streamline programming with 6 free developer utilities. Format JSON, encode Base64, encode URLs, generate hashes, build QR codes, and create secure passwords.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/category-developer.html">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- JSON-LD FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are developer tools?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Developer tools are web utilities that help programmers format code, encode or decode parameters, compile checksum hashes, and generate security passwords or QR code data structures."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my code secure on DevToolKit?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Absolutely! All operations run client-side in Javascript. Your confidential code, API keys, JSON payloads, or credentials are never uploaded to any servers."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the JSON Formatter validate syntax?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It uses native browser JSON parsers to check structure. If there are syntax errors, it identifies the exact line and character causing the issue."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I convert images to Base64?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, our Base64 tool supports file inputs, letting you encode graphics directly into base64 data URI strings for CSS embedding."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why is URL encoding necessary?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "URL encoding replaces unsafe ASCII characters with a '%' followed by two hexadecimal digits, ensuring parameters are safely transmitted in HTTP requests."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which hashing algorithms are supported?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our generator supports MD5, SHA-1, SHA-256, and SHA-512 algorithms, running fully client-side to verify checksum signatures."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I download generated QR codes?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, once you generate a QR code, you can download it as a high-quality PNG file or configure custom colors and sizes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How secure is the Password Generator?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It uses cryptographically secure random number generators (window.crypto) rather than Math.random, ensuring passwords are highly resistant to brute-force attacks."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does the JSON Validator highlight syntax?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, it color-codes keys, strings, numbers, booleans, and nulls, letting you collapse and expand nested objects easily."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need command-line tools for these?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, these browser-based alternatives provide visual interfaces that replace terminal setups for daily coding tasks."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .cat-hero {
+      height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+      padding: 24px;
+      position: relative;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .cat-hero h1 {
+      font-size: 42px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cat-hero p {
+      font-size: 16px;
+      color: var(--text-gray);
+      max-width: 600px;
+      margin: 0;
+    }
+
+    /* Content Layout */
+    .content-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    /* Tools Grid */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tool-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 24px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-6px);
+      border-color: #00CCFF;
+      box-shadow: 0 10px 25px var(--card-glow);
+    }
+
+    .card-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(0, 255, 102, 0.15);
+      color: #00FF66;
+      letter-spacing: 0.5px;
+    }
+
+    .card-emoji {
+      font-size: 36px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin: 0;
+      line-height: 1.4;
+      min-height: 36px;
+    }
+
+    .card-btn {
+      margin-top: auto;
+      font-size: 13px;
+      font-weight: 600;
+      color: #00CCFF;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s ease;
+    }
+
+    .tool-card:hover .card-btn {
+      color: #7B2FFF;
+    }
+
+    /* Text Article Sections */
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 20px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .article-section h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #00CCFF;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+
+    .article-section p {
+      font-size: 14.5px;
+      color: var(--text-gray);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .article-section a.explain-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13.5px;
+      display: inline-block;
+      margin-top: 4px;
+      margin-bottom: 20px;
+    }
+
+    .article-section a.explain-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Accordion FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Tip Grid */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .tips-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tip-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(0, 102, 255, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tip-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+    }
+
+    .tip-head span.emoji {
+      font-size: 22px;
+    }
+
+    .tip-desc {
+      font-size: 13.5px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    /* Footer styles */
+    footer {
+      border-top: 1px solid rgba(0, 102, 255, 0.2);
+      background: rgba(5, 5, 16, 0.95);
+      padding: 48px 24px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-logo span {
+      color: #0066FF;
+      -webkit-text-fill-color: #0066FF;
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      color: var(--text-gray);
+      max-width: 300px;
+    }
+
+    .footer-col-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0066FF;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-link {
+      font-size: 13px;
+      color: var(--text-gray);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #00CCFF;
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 40px auto 0 auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating 3D Background Container -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="./js/navbar.js" type="module"></script>
+
+  <!-- Hero Section -->
+  <section class="cat-hero" data-section="hero" id="hero">
+    <div class="breadcrumbs">
+      <a href="/index.html">Home</a>
+      <span class="separator">&gt;</span>
+      <span>Developer Tools</span>
+    </div>
+    <h1>🧑💻 Developer Tools</h1>
+    <p>Free developer tools for programmers and web developers</p>
+  </section>
+
+  <!-- Content Wrapper -->
+  <main class="content-wrapper">
+    <div id="dynamic-sections-container"></div>
+    
+    <!-- Tools Grid -->
+    <section class="tools-grid" id="static-tools-grid" data-section="developer-tools" id="developer-tools">
+      <a href="/tools/json-formatter.html" class="tool-card">
+        <span class="card-badge">Developer</span>
+        <span class="card-emoji">💽</span>
+        <h3 class="card-title">JSON Formatter & Validator</h3>
+        <p class="card-desc">Validate and beautify JSON objects</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/base64-encoder.html" class="tool-card">
+        <span class="card-badge">Developer</span>
+        <span class="card-emoji">🗝️</span>
+        <h3 class="card-title">Base64 Encoder/Decoder</h3>
+        <p class="card-desc">Encode base64 strings or images</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/url-encoder.html" class="tool-card">
+        <span class="card-badge">Developer</span>
+        <span class="card-emoji">🔗</span>
+        <h3 class="card-title">URL Encoder/Decoder</h3>
+        <p class="card-desc">Safe-encode query parameters</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/hash-generator.html" class="tool-card">
+        <span class="card-badge">Developer</span>
+        <span class="card-emoji">🔒</span>
+        <h3 class="card-title">MD5/SHA256 Hash Generator</h3>
+        <p class="card-desc">Generate secure hashing checksums</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/qr-code-generator.html" class="tool-card">
+        <span class="card-badge">Developer</span>
+        <span class="card-emoji">📱</span>
+        <h3 class="card-title">QR Code Generator</h3>
+        <p class="card-desc">Create customizable QR codes</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/password-generator.html" class="tool-card">
+        <span class="card-badge">Developer</span>
+        <span class="card-emoji">🔐</span>
+        <h3 class="card-title">Password Generator</h3>
+        <p class="card-desc">Generate cryptographically strong keys</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+    </section>
+
+    <!-- Part A: Category Overview -->
+    <section class="glass-card article-section">
+      <h2>What are Developer Tools?</h2>
+      <p>Developer tools are dedicated, browser-based web applications that assist software engineers, web developers, database administrators, and QA engineers in formatting variables, translating values, checking hash values, and generating security tokens. Processing inputs client-side, these modules let you format JSON files, encode Base64 strings, hash payloads, and create QR codes locally. Your sensitive keys, private data structures, and URLs are never sent over the web.</p>
+      <p>Having a lightweight, browser-based collection of developer tools increases productivity. Programmers constantly need to check and structure API responses, encode URL query strings safely, or generate temporary secure hashes for file integrity checks. Using client-side utilities eliminates dependency installation steps and ensures that code audits, passwords, and JSON objects remain private.</p>
+      <p>Whether you need to beautify nested objects, prepare a base64 image data URI for CSS layouts, compile sha256 checksum signatures, or generate randomized passwords, our developer utilities are built to assist you. These tools feature responsive layouts, auto-formatting, instant copy inputs, and file downloads, streamlining your workflow.</p>
+    </section>
+
+    <!-- Part B: Tools Overview Paras -->
+    <section class="glass-card article-section">
+      <h2>All Developer Tools Explained</h2>
+
+      <h3>JSON Formatter & Validator</h3>
+      <p>Beautify, validate, minify, and highlight JSON arrays instantly. The tool validates syntax structure, highlights errors, and allows you to expand and collapse nested objects.</p>
+      <p>This is highly recommended for backend developers diagnosing REST API payloads and verifying configuration structures.</p>
+      <a href="/tools/json-formatter.html" class="explain-link">Use JSON Formatter & Validator →</a>
+
+      <h3>Base64 Encoder/Decoder</h3>
+      <p>Convert text strings or uploaded images into Base64 format. It also handles Base64 string decoding, revealing original values or restoring images.</p>
+      <p>Web developers use this tool to compile raw image files into inline data URI strings for faster CSS and HTML rendering.</p>
+      <a href="/tools/base64-encoder.html" class="explain-link">Use Base64 Encoder/Decoder →</a>
+
+      <h3>URL Encoder/Decoder</h3>
+      <p>Safe-encode target URL strings by replacing query characters with valid hexadecimal sequences. It also decodes parameters, displaying standard paths.</p>
+      <p>This tool is ideal for creating tracking parameters, managing redirect links, and troubleshooting REST requests.</p>
+      <a href="/tools/url-encoder.html" class="explain-link">Use URL Encoder/Decoder →</a>
+
+      <h3>MD5/SHA256 Hash Generator</h3>
+      <p>Compile secure hashing checksum signatures using MD5, SHA-1, SHA-256, and SHA-512 algorithms. The generator processes values instantly.</p>
+      <p>Security engineers use this tool to verify file signatures, validate download checksums, and check data integrity.</p>
+      <a href="/tools/hash-generator.html" class="explain-link">Use MD5/SHA256 Hash Generator →</a>
+
+      <h3>QR Code Generator</h3>
+      <p>Create custom, downloadable QR codes by entering any URL or text. You can configure canvas sizes, margins, error correction levels, and colors.</p>
+      <p>Marketing managers and print designers use this to build QR codes for booklets, business cards, and display ads.</p>
+      <a href="/tools/qr-code-generator.html" class="explain-link">Use QR Code Generator →</a>
+
+      <h3>Password Generator</h3>
+      <p>Generate highly secure passwords using cryptographically random number generators. You can set lengths and toggle lowercase, uppercase, numbers, and symbols.</p>
+      <p>This tool creates passwords resistant to dictionary attacks, helping you secure user accounts and database systems.</p>
+      <a href="/tools/password-generator.html" class="explain-link">Use Password Generator →</a>
+    </section>
+
+    <!-- Part C: FAQ Section -->
+    <section class="glass-card faq-section" data-section="faq" id="faq">
+      <h2>Frequently Asked Questions about Developer Tools</h2>
+      <div class="faq-wrapper">
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">What are developer tools? <span>+</span></div>
+          <div class="faq-answer">Developer tools are web utilities that help programmers format code, encode or decode parameters, compile checksum hashes, and generate security passwords or QR code data structures.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Is my code secure on DevToolKit? <span>+</span></div>
+          <div class="faq-answer">Absolutely! All operations run client-side in Javascript. Your confidential code, API keys, JSON payloads, or credentials are never uploaded to any servers.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">How does the JSON Formatter validate syntax? <span>+</span></div>
+          <div class="faq-answer">It uses native browser JSON parsers to check structure. If there are syntax errors, it identifies the exact line and character causing the issue.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Can I convert images to Base64? <span>+</span></div>
+          <div class="faq-answer">Yes, our Base64 tool supports file inputs, letting you encode graphics directly into base64 data URI strings for CSS embedding.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Why is URL encoding necessary? <span>+</span></div>
+          <div class="faq-answer">URL encoding replaces unsafe ASCII characters with a '%' followed by two hexadecimal digits, ensuring parameters are safely transmitted in HTTP requests.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Which hashing algorithms are supported? <span>+</span></div>
+          <div class="faq-answer">Our generator supports MD5, SHA-1, SHA-256, and SHA-512 algorithms, running fully client-side to verify checksum signatures.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Can I download generated QR codes? <span>+</span></div>
+          <div class="faq-answer">Yes, once you generate a QR code, you can download it as a high-quality PNG file or configure custom colors and sizes.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">How secure is the Password Generator? <span>+</span></div>
+          <div class="faq-answer">It uses cryptographically secure random number generators (window.crypto) rather than Math.random, ensuring passwords are highly resistant to brute-force attacks.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Does the JSON Validator highlight syntax? <span>+</span></div>
+          <div class="faq-answer">Yes, it color-codes keys, strings, numbers, booleans, and nulls, letting you collapse and expand nested objects easily.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Do I need command-line tools for these? <span>+</span></div>
+          <div class="faq-answer">No, these browser-based alternatives provide visual interfaces that replace terminal setups for daily coding tasks.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Part D: Tips & Tricks Section -->
+    <section class="glass-card article-section">
+      <h2>Pro Tips for Developer Tools</h2>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">💽</span> <strong>Debug JSON Payloads</strong></div>
+          <p class="tip-desc">Use the JSON Formatter validator to check syntax errors before parsing API configurations. It saves hours of debugging time.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">🗝️</span> <strong>Optimize Asset Embeds</strong></div>
+          <p class="tip-desc">Encode small icons under 5KB in Base64 and embed them directly in your CSS files. This reduces HTTP requests and speeds up page load times.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">🔒</span> <strong>Verify File Checksums</strong></div>
+          <p class="tip-desc">Always check SHA-256 hashes of downloaded installation packages against official vendor signatures to block security injection attempts.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">🔐</span> <strong>Create Complex Passwords</strong></div>
+          <p class="tip-desc">Generate random keys of at least 16 characters including uppercase, lowercase, numbers, and symbols to maximize security margins.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">📱</span> <strong>Customize QR Color Codes</strong></div>
+          <p class="tip-desc">When customizing QR colors, ensure high contrast between the pattern and the background to maintain fast scanning speeds.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/index.html" class="footer-logo">Tool<span>Nest</span></a>
+        <p class="footer-tagline">All Tools. One Place. Zero Cost.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Categories</div>
+        <div class="footer-links">
+          <a href="/category-seo.html" class="footer-link">🔍 SEO Tools</a>
+          <a href="/category-text.html" class="footer-link">✍️ Text Tools</a>
+          <a href="/category-image.html" class="footer-link">🖼️ Image Tools</a>
+          <a href="/category-video.html" class="footer-link">🎬 Video Tools</a>
+          <a href="/category-developer.html" class="footer-link">🧑💻 Developer Tools</a>
+          <a href="/category-converter.html" class="footer-link">🔄 Converter Tools</a>
+        </div>
+      </div>
+      <div>
+                <div class="footer-col-title">Quick Links</div>
+        <div class="footer-links">
+          <a href="/about.html" class="footer-link">About</a>
+          <a href="/privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="/terms.html" class="footer-link">Terms of Service</a>
+          <a href="/contact.html" class="footer-link">Contact</a>
+          <a href="/sitemap.html" class="footer-link">Sitemap</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 DevToolKit. All rights reserved.
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from './js/3d-background.js';
+    import { loadPageContent } from './js/cms.js';
+
+    initBackground('bg-container');
+
+    loadPageContent('category-developer').then(() => {
+      const dynamicSections = document.getElementById('dynamic-sections-container');
+      if (dynamicSections && dynamicSections.children.length > 0) {
+        console.log("Category-DEVELOPER CMS layout blocks found: hiding fallback grids.");
+        document.getElementById('static-tools-grid').style.display = 'none';
+        document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
+        const staticHero = document.querySelector('.cat-hero');
+        if (staticHero) staticHero.style.display = 'none';
+      }
+    });
+  </script>
+
+  <script>
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+
+</body>
+</html>

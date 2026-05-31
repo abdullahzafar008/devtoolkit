@@ -1,0 +1,11 @@
+{
+  "hero_heading": "🎬 Video Tools",
+  "hero_subheading": "Extract tags, grab thumbnails, and convert media on the fly",
+  "seo_title": "Free Video Helpers & Downloaders Online - DevToolKit",
+  "seo_description": "Use our high-performance video utilities to fetch HD thumbnails, generate viral hashtags, or convert files easily.",
+  "overview_text": "Video tools provide key helpers for social creators and digital marketers. Generate relevant hashtags for YouTube, grab high-resolution video thumbnails, or download watermarked video clips.",
+  "faqs": [
+    {"question": "How do I download a YouTube thumbnail?", "answer": "Simply paste the YouTube video URL, select the quality resolution (HD/Medium/Standard), and click download."},
+    {"question": "Does it cost anything to use these tools?", "answer": "All video tools are completely free to use without any usage quotas or limits."}
+  ]
+}

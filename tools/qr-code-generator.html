@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>QR Code Generator - Free Online | DevToolkit</title>
+  <meta name="description" content="Generate high quality QR Codes online. Custom sizes from 128px to 512px. Set foreground and background colors. Instant PNG download. No signup required.">
+  <meta name="keywords" content="qr code generator free, custom qr code builder, online qr code creator, free dynamic qr tags, download qr code png">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/tools/qr-code-generator.html">
+  <meta property="og:title" content="QR Code Generator - Free Online | DevToolkit">
+  <meta property="og:description" content="Create customizable QR Codes instantly. Set custom colors and sizes. Free client-side PNG downloads.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- QRCode.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <!-- FAQ JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is QR Code Generator free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, 100% free with no registration or subscriptions."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I custom format colors?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. You can select custom foreground (dark) and background (light) colors using the palette color pickers."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does the QR code expire?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The generated QR codes encode raw text or URLs statically, meaning they will work permanently and never expire."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "QR Code Generator",
+    "url": "https://www.devtoolkit.com/tools/qr-code-generator.html",
+    "description": "Convert links, contacts or plain texts into matrix bar QR symbols dynamically using custom width sizes and base colors.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Section 1: Hero Scene */
+    .tool-hero {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .hero-3d-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: relative;
+      z-index: 2;
+      padding: 24px;
+      max-width: 800px;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .tool-title {
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tool-tagline {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin: 0 0 24px 0;
+    }
+
+    .btn-scroll-down {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 20px;
+      color: #00CCFF;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .btn-scroll-down:hover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.2);
+    }
+
+    /* Section 2: Workspace */
+    .tool-workspace {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 60px 24px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    .workspace-layout {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .workspace-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Inputs side */
+    .inputs-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-input, .form-select {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 14px;
+      color: #fff;
+      outline: none;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: #00CCFF;
+      background: rgba(5, 5, 16, 0.85);
+      box-shadow: 0 0 10px rgba(0, 204, 255, 0.25);
+    }
+
+    .form-select option {
+      background: #050510;
+      color: #fff;
+    }
+
+    .color-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .color-picker-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 8px;
+      padding: 8px 12px;
+    }
+
+    .color-picker-input {
+      background: transparent;
+      border: none;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      padding: 0;
+      outline: none;
+    }
+
+    .color-label {
+      font-size: 13px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* Output Preview side */
+    .preview-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      border-left: 1px solid rgba(255,255,255,0.05);
+      padding-left: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .preview-wrap {
+        border-left: none;
+        padding-left: 0;
+        padding-top: 24px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+      }
+    }
+
+    .qr-container-box {
+      background: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 256px;
+      min-width: 256px;
+      box-sizing: content-box;
+    }
+
+    .qr-container-box img, .qr-container-box canvas {
+      display: block;
+      max-width: 100%;
+    }
+
+    .actions-row {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      max-width: 288px;
+    }
+
+    .ctrl-btn {
+      flex: 1;
+      padding: 12px;
+      font-weight: 700;
+      font-size: 13px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      background: rgba(0, 102, 255, 0.15);
+      color: #00CCFF;
+      transition: all 0.3s ease;
+    }
+
+    .ctrl-btn:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+    }
+
+    .ctrl-btn-outline {
+      background: transparent;
+      border-color: rgba(255,255,255,0.2);
+      color: #fff;
+    }
+
+    .ctrl-btn-outline:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: #fff;
+      color: #fff;
+    }
+
+    /* Section 3-10 Styles */
+    .article-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    /* Steps grid */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .step-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #00CCFF;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    .paragraphs-wrap p {
+      font-size: 14px;
+      color: var(--text-gray);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+    }
+
+    /* Comparison Table */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .comparison-table th {
+      color: #00CCFF;
+      font-weight: 700;
+      padding: 12px;
+      border-bottom: 2px solid rgba(0,102,255,0.2);
+    }
+
+    .comparison-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Use cases */
+    .use-cases-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .use-cases-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .use-case-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .use-case-header {
+      font-weight: 700;
+      color: #00CCFF;
+      font-size: 15px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .use-case-body {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    /* FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 200px;
+      padding: 16px 20px;
+    }
+
+    /* Blog Teaser */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .blog-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-thumb {
+      height: 140px;
+      background: linear-gradient(135deg, #0066FF, #7B2FFF);
+    }
+
+    .blog-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .blog-desc {
+      font-size: 12px;
+      color: var(--text-gray);
+      line-height: 1.4;
+    }
+
+    .blog-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: auto;
+    }
+
+    .blog-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.4), rgba(123, 47, 255, 0.4));
+      border-top: 1px solid var(--card-border);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cta-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .btn-cta {
+      padding: 12px 24px;
+      background: #0066FF;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-cta:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating background particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <!-- Section 1: Hero -->
+  <section class="tool-hero">
+    <div class="hero-3d-scene" id="tool-hero-3d"></div>
+    <div class="hero-overlay">
+      <div class="breadcrumbs">
+        <a href="/index.html">Home</a>
+        <span class="separator">&gt;</span>
+        <a href="/category-developer.html">Developer Tools</a>
+        <span class="separator">&gt;</span>
+        <span>QR Code Generator</span>
+      </div>
+      <h1 class="tool-title">QR Code Generator</h1>
+      <p class="tool-tagline">Create customizable, high-resolution QR codes for links, text, and parameters instantly.</p>
+      <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
+    </div>
+  </section>
+
+  
+
+  <!-- Section 2: Workspace -->
+  <main class="tool-workspace" id="workspace">
+    <div class="glass-card">
+      <div class="workspace-layout">
+        
+        <!-- Left Side: Inputs -->
+        <div class="inputs-wrap">
+          <div class="form-group">
+            <label class="form-label" for="qr-text">Text or URL Value</label>
+            <input class="form-input" type="text" id="qr-text" placeholder="e.g. https://www.devtoolkit.com">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="qr-size">QR Code Dimensions</label>
+            <select class="form-select" id="qr-size">
+              <option value="128">128 x 128 px (Small)</option>
+              <option value="256" selected>256 x 256 px (Medium)</option>
+              <option value="512">512 x 512 px (Large)</option>
+            </select>
+          </div>
+
+          <!-- Color Customizations -->
+          <div class="form-group">
+            <label class="form-label">Colors Setup</label>
+            <div class="color-row">
+              <div class="color-picker-wrap">
+                <input class="color-picker-input" type="color" id="qr-color-dark" value="#000000">
+                <span class="color-label">Foreground</span>
+              </div>
+              <div class="color-picker-wrap">
+                <input class="color-picker-input" type="color" id="qr-color-light" value="#ffffff">
+                <span class="color-label">Background</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Preview & Download -->
+        <div class="preview-wrap">
+          <div class="qr-container-box" id="qrcode"></div>
+          <div class="actions-row">
+            <button class="ctrl-btn ctrl-btn-outline" id="btn-reset">Reset</button>
+            <button class="ctrl-btn" id="btn-download">Download PNG</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  
+
+  <!-- Section 3: How to Use -->
+  <section class="article-section">
+    <h2>How to Use QR Code Generator</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-emoji">🔗</div>
+        <div class="step-title">1. Insert Text or Link</div>
+        <div class="step-desc">Type or paste target text details or URLs into the text field. The QR code updates dynamically.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">🎨</div>
+        <div class="step-title">2. Style Colors & Size</div>
+        <div class="step-desc">Adjust width sizes and choose contrasting colors for the matrix foreground and background elements.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">💾</div>
+        <div class="step-title">3. Download Code Image</div>
+        <div class="step-desc">Click 'Download PNG' to save the generated code to your computer, ready to use on print or web assets.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: What is this tool -->
+  <section class="article-section">
+    <h2>What is QR Code Generator?</h2>
+    <div class="paragraphs-wrap">
+      <p>A qr code generator free utility converts alphanumeric characters and web links into scannable 2D matrix bar symbols. Widely used on product packages, advertisement flyers, and mobile displays, QR codes let users access web pages instantly with their smartphone cameras.</p>
+      <p>Our client-side builder supports custom sizes up to 512px and custom color pickers. This allows creators to style barcodes to match brand assets while maintaining scan readability thresholds.</p>
+      <p>As a fully secure browser tool, the encoded text is processed directly inside your browser cache. No URL metrics are sent across networks, offering absolute data privacy for internal project tests.</p>
+    </div>
+  </section>
+
+  <!-- Section 5: Key Features -->
+  <section class="article-section">
+    <h2>Key Features of Our QR Code Generator</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-head">✅ Free Forever</div>
+        <div class="feature-desc">Generate unlimited QR codes for any text or link with zero hidden fees.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">⚡ Instant Results</div>
+        <div class="feature-desc">QR matrix shapes regenerate instantly as you type in characters.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">📱 Mobile Friendly</div>
+        <div class="feature-desc">Optimized interface designed to easily generate codes on mobile device screens.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🔒 100% Private</div>
+        <div class="feature-desc">No external API calls are made. Calculations execute locally in your browser.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">📋 High Res Outputs</div>
+        <div class="feature-desc">Download clean high-resolution PNG files that remain crisp on print media.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🌐 Browser Based</div>
+        <div class="feature-desc">No software downloads or installations are required. Runs completely in the browser.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Why Use DevToolkit -->
+  <section class="article-section">
+    <h2>Why Use DevToolkit QR Code Generator?</h2>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>DevToolkit</th>
+          <th>Other Tools</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Free</td>
+          <td>✅ Always</td>
+          <td>⚠️ Paywalls for high-res</td>
+        </tr>
+        <tr>
+          <td>No Login</td>
+          <td>✅ Yes</td>
+          <td>❌ Required for downloading</td>
+        </tr>
+        <tr>
+          <td>Custom colors</td>
+          <td>✅ Live pickers</td>
+          <td>⚠️ Basic black and white only</td>
+        </tr>
+        <tr>
+          <td>No Ads redirects</td>
+          <td>✅ Direct download</td>
+          <td>❌ Ad links redirect pages</td>
+        </tr>
+        <tr>
+          <td>Speed</td>
+          <td>✅ Instant</td>
+          <td>⚠️ Long render delays</td>
+        </tr>
+        <tr>
+          <td>Privacy</td>
+          <td>✅ 100% Private</td>
+          <td>⚠️ Stored on remote databases</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Section 7: Use Cases -->
+  <section class="article-section">
+    <h2>Who Uses QR Code Generator?</h2>
+    <div class="use-cases-grid">
+      <div class="use-case-card">
+        <div class="use-case-header">🏢 Small Businesses</div>
+        <div class="use-case-body">Generate codes linking to product menus, order portals, or restaurant seating.</div>
+      </div>
+      <div class="use-case-card">
+        <div class="use-case-header">📣 Marketing Designers</div>
+        <div class="use-case-body">Embed styled codes on posters, flyers, banners, and print advertisements.</div>
+      </div>
+      <div class="use-case-card">
+        <div class="use-case-header">🧑💻 Web Developers</div>
+        <div class="use-case-body">Generate mock codes during client portal prototyping and responsive validation steps.</div>
+      </div>
+      <div class="use-case-card">
+        <div class="use-case-header">🎟️ Event Organizers</div>
+        <div class="use-case-body">Create tickets with static check-in targets or links to coordinate schedules.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 8: Related Tools -->
+  <section class="article-section">
+    <h2>You Might Also Like</h2>
+    <div class="blog-grid" id="related-tools-grid">
+      <!-- Injected dynamically -->
+    </div>
+  </section>
+
+  <!-- Section 9: FAQ -->
+  <section class="article-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-wrapper">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Do you charge to download high resolution QR codes? <span>▼</span></div>
+        <div class="faq-answer">No, high-resolution PNG downloads are completely free with no restrictions.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Are these QR codes dynamic? <span>▼</span></div>
+        <div class="faq-answer">These are static QR codes. They directly encode your text or URL. They will work forever without expiration, but cannot be modified once generated.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">What happens if my URL is too long? <span>▼</span></div>
+        <div class="faq-answer">Our generator automatically adjusts error-correction matrix densities (CorrectLevel H) to accommodate longer string properties.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Which colors are recommended for styling? <span>▼</span></div>
+        <div class="faq-answer">Always keep high contrast. We recommend using a dark color for the foreground and light color for the background so scanners can read it easily.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Can I link to contact details or Wi-Fi settings? <span>▼</span></div>
+        <div class="faq-answer">Yes. Any standard plain text formatting (like WIFI:S:MyNetwork;P:MyPassword;;) can be encoded instantly.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Is there a limit on how many QR codes I can make? <span>▼</span></div>
+        <div class="faq-answer">No. You can generate unlimited codes with no limitations.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Do I need to install any browser plugins? <span>▼</span></div>
+        <div class="faq-answer">No. The QR Code generator works entirely within standard modern web browsers.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Is my data secure? <span>▼</span></div>
+        <div class="faq-answer">Yes. Because generation runs client-side in browser memory, no URLs or text parameters are sent to external databases.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 10: Blog Teaser -->
+  <section class="article-section">
+    <h2>Learn More About Digital Design</h2>
+    <div class="blog-grid">
+      <div class="blog-card">
+        <div class="blog-thumb"></div>
+        <div class="blog-info">
+          <div class="blog-title">QR Code Color Contrast Guide</div>
+          <div class="blog-desc">Designing scannable barcodes with harmony and branding considerations.</div>
+          <a href="#" class="blog-link">Read More →</a>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="blog-thumb"></div>
+        <div class="blog-info">
+          <div class="blog-title">Static vs Dynamic QR Codes</div>
+          <div class="blog-desc">Understand when to use static values vs redirected links in projects.</div>
+          <a href="#" class="blog-link">Read More →</a>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="blog-thumb"></div>
+        <div class="blog-info">
+          <div class="blog-title">Encoding WIFI Details inside QR</div>
+          <div class="blog-desc">Creating offline access nodes for offices and event spaces.</div>
+          <a href="#" class="blog-link">Read More →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 11: Footer CTA Banner -->
+  <section class="cta-banner">
+    <h2 class="cta-title">Ready to explore more free tools?</h2>
+    <p class="cta-subtitle">DevToolkit has 40+ utility modules waiting for you.</p>
+    <a href="/index.html" class="btn-cta">Explore All Tools →</a>
+  </section>
+
+  <!-- Ads Slot Bottom -->
+  
+
+  <!-- Standard Footer -->
+  <footer>
+    <div style="text-align: center; font-size:12px; color:rgba(255,255,255,0.4);">
+      &copy; 2026 DevToolKit. All rights reserved. | <a href="/index.html" style="color:var(--cyan); text-decoration:none;">Home</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from '../js/3d-background.js';
+    import { logToolUsage } from '../js/tools-tracker.js';
+
+    // Start background particle animation
+    initBackground('bg-container');
+
+    // Local 3D Hero Scene: Floating code brackets
+    function initHero3D() {
+      const container = document.getElementById('tool-hero-3d');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000);
+      camera.position.z = 250;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0x00CCFF, 0.8);
+      dirLight.position.set(10, 20, 15);
+      scene.add(dirLight);
+
+      // Create textured canvases for brackets
+      const brackets = ['{', '}', '[', ']', '<', '>', '(', ')', ';', 'code'];
+      const meshes = [];
+      const speeds = [];
+
+      brackets.forEach((char, idx) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 128;
+        canvas.height = 128;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'rgba(0,0,0,0)';
+        ctx.fillRect(0, 0, 128, 128);
+        ctx.fillStyle = idx % 2 === 0 ? '#0066FF' : '#7B2FFF';
+        ctx.font = 'bold 72px Inter, Courier, monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(char, 64, 64);
+
+        const texture = new THREE.CanvasTexture(canvas);
+        const geom = new THREE.PlaneGeometry(16, 16);
+        const mat = new THREE.MeshBasicMaterial({
+          map: texture,
+          transparent: true,
+          opacity: 0.8,
+          side: THREE.DoubleSide
+        });
+
+        const mesh = new THREE.Mesh(geom, mat);
+        mesh.position.set(
+          (Math.random() - 0.5) * 150,
+          (Math.random() - 0.5) * 100,
+          (Math.random() - 0.5) * 50
+        );
+
+        scene.add(mesh);
+        meshes.push(mesh);
+        speeds.push(Math.random() * 0.12 + 0.08);
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        meshes.forEach((mesh, idx) => {
+          mesh.position.y += speeds[idx];
+          mesh.rotation.y += 0.008;
+          mesh.rotation.z += 0.004;
+
+          // Wrap boundaries
+          if (mesh.position.y > 60) {
+            mesh.position.y = -60;
+            mesh.position.x = (Math.random() - 0.5) * 150;
+          }
+        });
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      });
+    }
+    initHero3D();
+
+    // Related Tools Injected Dynamically
+    const related = [
+      { name: 'JSON Formatter & Validator', emoji: '💽', slug: 'json-formatter', cat: 'developer', desc: 'Validate and beautify JSON objects' },
+      { name: 'Base64 Encoder/Decoder', emoji: '🗝️', slug: 'base64-encoder', cat: 'developer', desc: 'Encode base64 strings or images' },
+      { name: 'URL Encoder/Decoder', emoji: '🔗', slug: 'url-encoder', cat: 'developer', desc: 'Safe-encode query parameters' },
+      { name: 'MD5/SHA256 Hash Generator', emoji: '🔒', slug: 'hash-generator', cat: 'developer', desc: 'Generate secure hashing checksums' }
+    ];
+
+    const relatedGrid = document.getElementById('related-tools-grid');
+    related.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <div class="blog-thumb" style="display:flex; align-items:center; justify-content:center; font-size:32px;">${t.emoji}</div>
+        <div class="blog-info">
+          <div class="blog-title">${t.name}</div>
+          <div class="blog-desc">${t.desc}</div>
+          <a href="/tools/${t.slug}.html" class="blog-link">Use Tool →</a>
+        </div>
+      `;
+      card.querySelector('.blog-link').addEventListener('click', async () => {
+        await logToolUsage(t.name, t.cat, t.slug);
+      });
+      relatedGrid.appendChild(card);
+    });
+
+    // QR Code execution logic
+    const textInput = document.getElementById('qr-text');
+    const sizeSelect = document.getElementById('qr-size');
+    const colorDark = document.getElementById('qr-color-dark');
+    const colorLight = document.getElementById('qr-color-light');
+    const qrBox = document.getElementById('qrcode');
+
+    let qrcodeInstance = null;
+
+    function generateQRCode() {
+      const textVal = textInput.value.trim() || "https://www.devtoolkit.com";
+      const sizeVal = parseInt(sizeSelect.value);
+      const darkColorVal = colorDark.value;
+      const lightColorVal = colorLight.value;
+
+      qrBox.innerHTML = ''; // Clear container
+
+      // Instantiate qrcode.js
+      qrcodeInstance = new QRCode(qrBox, {
+        text: textVal,
+        width: sizeVal,
+        height: sizeVal,
+        colorDark: darkColorVal,
+        colorLight: lightColorVal,
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+
+    // Input listeners
+    [textInput, sizeSelect, colorDark, colorLight].forEach(el => {
+      el.addEventListener('input', generateQRCode);
+    });
+
+    // Reset controls
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      textInput.value = '';
+      sizeSelect.value = '256';
+      colorDark.value = '#000000';
+      colorLight.value = '#ffffff';
+      generateQRCode();
+    });
+
+    // Download PNG
+    document.getElementById('btn-download').addEventListener('click', () => {
+      // Find rendered canvas or image element
+      const canvas = qrBox.querySelector('canvas');
+      const img = qrBox.querySelector('img');
+
+      if (canvas) {
+        const url = canvas.toDataURL('image/png');
+        downloadUrl(url);
+      } else if (img) {
+        downloadUrl(img.src);
+      } else {
+        alert("Unable to generate download link. Please enter some text.");
+      }
+    });
+
+    function downloadUrl(dataUrl) {
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = 'devtoolkit-qrcode.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // Initial render
+    generateQRCode();
+  </script>
+
+  <script>
+    // FAQ collapse toggler
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

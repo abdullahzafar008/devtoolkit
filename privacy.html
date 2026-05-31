@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Privacy Policy - DevToolKit | Free Developer & Content Creator Tools</title>
+  <meta name="description" content="Read the DevToolKit privacy policy. Learn how we handle your user account data, keep tool usage fully client-side, and secure records.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/privacy.html">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .privacy-hero {
+      height: 260px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+      padding: 24px;
+      position: relative;
+    }
+
+    .privacy-hero h1 {
+      font-size: 42px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .privacy-hero p {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin: 0;
+    }
+
+    /* Content Layout */
+    .content-wrapper {
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    .policy-section {
+      margin-bottom: 32px;
+    }
+
+    .policy-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .policy-section h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #00CCFF;
+      margin-top: 0;
+      margin-bottom: 14px;
+      border-left: 3px solid #7B2FFF;
+      padding-left: 10px;
+    }
+
+    .policy-section p {
+      font-size: 14.5px;
+      color: var(--text-gray);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .policy-section a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .policy-section a:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer styles */
+    footer {
+      border-top: 1px solid rgba(0, 102, 255, 0.2);
+      background: rgba(5, 5, 16, 0.95);
+      padding: 48px 24px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-logo span {
+      color: #0066FF;
+      -webkit-text-fill-color: #0066FF;
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      color: var(--text-gray);
+      max-width: 300px;
+    }
+
+    .footer-col-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0066FF;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-link {
+      font-size: 13px;
+      color: var(--text-gray);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #00CCFF;
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 40px auto 0 auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating 3D Background Container -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="./js/navbar.js" type="module"></script>
+
+  <!-- Hero Section -->
+  <section class="privacy-hero">
+    <h1>Privacy Policy</h1>
+    <p>Last updated: January 2026</p>
+  </section>
+
+  <!-- Content Section -->
+  <main class="content-wrapper">
+    <div id="dynamic-sections-container"></div>
+    <div id="static-privacy-card" class="glass-card">
+      
+      <div class="policy-section">
+        <h2>Information We Collect</h2>
+        <p>We collect only the information you provide when creating an account: email address and username. No personal data is collected from users who use tools without an account.</p>
+      </div>
+
+      <div class="policy-section">
+        <h2>How We Use Your Information</h2>
+        <p>Your email is used only for: account authentication, password reset emails, and important service updates. We never sell or share your data with third parties.</p>
+      </div>
+
+      <div class="policy-section">
+        <h2>Cookies</h2>
+        <p>DevToolKit uses minimal cookies only for keeping you logged in. We do not use tracking cookies. Google AdSense (when enabled) may use cookies to show relevant ads. You can opt out via Google Ad Settings.</p>
+      </div>
+
+      <div class="policy-section">
+        <h2>Data Storage</h2>
+        <p>All tool inputs and outputs are processed entirely in your browser. No tool data is ever sent to our servers. Your account data is securely stored using Supabase with encryption.</p>
+      </div>
+
+      <div class="policy-section">
+        <h2>Third Party Services</h2>
+        <p>We use Supabase for secure authentication and data storage. We may use Google AdSense for advertising. These services have their own privacy policies.</p>
+      </div>
+
+      <div class="policy-section">
+        <h2>Your Rights</h2>
+        <p>You have the right to: access your data, update your profile, delete your account at any time, and request data removal. Use the <a href="/contact.html">Contact</a> page for requests.</p>
+      </div>
+
+      <div class="policy-section">
+        <h2>Children's Privacy</h2>
+        <p>DevToolKit is not intended for children under 13. We do not knowingly collect data from children.</p>
+      </div>
+
+      <div class="policy-section">
+        <h2>Changes to This Policy</h2>
+        <p>We may update this policy occasionally. Changes will be posted on this page with the updated date.</p>
+      </div>
+
+      <div class="policy-section">
+        <h2>Contact Us</h2>
+        <p>For privacy questions contact: <a href="mailto:privacy@devtoolkit.com">privacy@devtoolkit.com</a></p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/index.html" class="footer-logo">Tool<span>Nest</span></a>
+        <p class="footer-tagline">All Tools. One Place. Zero Cost.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Categories</div>
+        <div class="footer-links">
+          <a href="/category-seo.html" class="footer-link">🔍 SEO Tools</a>
+          <a href="/category-text.html" class="footer-link">✍️ Text Tools</a>
+          <a href="/category-image.html" class="footer-link">🖼️ Image Tools</a>
+          <a href="/category-video.html" class="footer-link">🎬 Video Tools</a>
+          <a href="/category-developer.html" class="footer-link">🧑💻 Developer Tools</a>
+          <a href="/category-converter.html" class="footer-link">🔄 Converter Tools</a>
+        </div>
+      </div>
+      <div>
+                <div class="footer-col-title">Quick Links</div>
+        <div class="footer-links">
+          <a href="/about.html" class="footer-link">About</a>
+          <a href="/privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="/terms.html" class="footer-link">Terms of Service</a>
+          <a href="/contact.html" class="footer-link">Contact</a>
+          <a href="/sitemap.html" class="footer-link">Sitemap</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 DevToolKit. All rights reserved.
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from './js/3d-background.js';
+    import { loadPageContent } from './js/cms.js';
+    
+    initBackground('bg-container');
+
+    loadPageContent('privacy').then(() => {
+      const dynamicSections = document.getElementById('dynamic-sections-container');
+      if (dynamicSections && dynamicSections.children.length > 0) {
+        console.log("Privacy CMS layout blocks found: hiding fallback card.");
+        document.getElementById('static-privacy-card').style.display = 'none';
+        const staticHero = document.querySelector('.privacy-hero');
+        if (staticHero) staticHero.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>

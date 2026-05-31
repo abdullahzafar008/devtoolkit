@@ -1,0 +1,17 @@
+{
+  "site_name": "DevToolKit",
+  "tagline": "All Tools. One Place. Zero Cost.",
+  "contact_email": "mr.abdullah1119@gmail.com",
+  "stats": [
+    {"icon": "🔧", "value": "40+", "label": "Free Tools"},
+    {"icon": "👥", "value": "10K+", "label": "Happy Users"},
+    {"icon": "⚡", "value": "1M+", "label": "Monthly Uses"},
+    {"icon": "📂", "value": "6", "label": "Categories"}
+  ],
+  "social": {
+    "twitter": "",
+    "facebook": "",
+    "instagram": "",
+    "youtube": ""
+  }
+}

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Visual Sitemap - DevToolKit | Complete Directory Map</title>
+  <meta name="description" content="View the full visual index map of DevToolKit pages. Links to all 40 free tools and main directory indexes.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/sitemap.html">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .sitemap-hero {
+      height: 240px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+      padding: 24px;
+      position: relative;
+    }
+
+    .sitemap-hero h1 {
+      font-size: 42px;
+      font-weight: 800;
+      margin: 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sitemap-hero p {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin-top: 10px;
+    }
+
+    /* Content wrapper */
+    .content-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    /* Sitemap sections */
+    .sitemap-section {
+      margin-bottom: 40px;
+    }
+
+    .sitemap-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .sitemap-section h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #00CCFF;
+      margin-top: 0;
+      margin-bottom: 16px;
+      border-left: 4px solid #7B2FFF;
+      padding-left: 12px;
+    }
+
+    .main-pages-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .main-page-link {
+      background: rgba(0, 102, 255, 0.1);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      padding: 10px 20px;
+      border-radius: 8px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .main-page-link:hover {
+      background: rgba(0, 204, 255, 0.2);
+      border-color: #00CCFF;
+      transform: translateY(-2px);
+    }
+
+    .sitemap-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .sitemap-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sitemap-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      text-decoration: none;
+      color: #fff;
+      font-size: 13.5px;
+      transition: all 0.2s ease;
+    }
+
+    .sitemap-item:hover {
+      background: rgba(0, 102, 255, 0.1);
+      border-color: rgba(0, 102, 255, 0.3);
+      padding-left: 20px;
+    }
+
+    .sitemap-item span.emoji {
+      font-size: 18px;
+    }
+
+    /* Footer styles */
+    footer {
+      border-top: 1px solid rgba(0, 102, 255, 0.2);
+      background: rgba(5, 5, 16, 0.95);
+      padding: 48px 24px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-logo span {
+      color: #0066FF;
+      -webkit-text-fill-color: #0066FF;
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      color: var(--text-gray);
+      max-width: 300px;
+    }
+
+    .footer-col-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0066FF;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-link {
+      font-size: 13px;
+      color: var(--text-gray);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #00CCFF;
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 40px auto 0 auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating 3D Background Container -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="./js/navbar.js" type="module"></script>
+
+  <!-- Hero Section -->
+  <section class="sitemap-hero">
+    <h1>Sitemap</h1>
+    <p>Complete visual directory indexing of all main pages and 40 free interactive tools.</p>
+  </section>
+
+  <!-- Content wrapper -->
+  <main class="content-wrapper">
+    
+    <!-- Main Pages Section -->
+    <section class="glass-card sitemap-section">
+      <h2>Main Pages</h2>
+      <div class="main-pages-links">
+        <a href="/index.html" class="main-page-link">🏠 Home</a>
+        <a href="/about.html" class="main-page-link">ℹ️ About</a>
+        <a href="/contact.html" class="main-page-link">📞 Contact</a>
+        <a href="/privacy.html" class="main-page-link">🔒 Privacy Policy</a>
+        <a href="/terms.html" class="main-page-link">⚖️ Terms of Service</a>
+      </div>
+    </section>
+
+    <!-- SEO Tools Section -->
+    <section class="glass-card sitemap-section">
+      <h2>SEO Tools</h2>
+      <div class="sitemap-grid">
+        <a href="/tools/meta-tag-generator.html" class="sitemap-item"><span class="emoji">🏷️</span> Meta Tag Generator</a>
+        <a href="/tools/seo-score-checker.html" class="sitemap-item"><span class="emoji">💯</span> Website SEO Score Checker</a>
+        <a href="/tools/keyword-density.html" class="sitemap-item"><span class="emoji">📊</span> Keyword Density Checker</a>
+        <a href="/tools/robots-txt-generator.html" class="sitemap-item"><span class="emoji">🤖</span> Robots.txt Generator</a>
+        <a href="/tools/sitemap-generator.html" class="sitemap-item"><span class="emoji">🗺️</span> Sitemap Generator</a>
+        <a href="/tools/domain-age-checker.html" class="sitemap-item"><span class="emoji">⏳</span> Domain Age Checker</a>
+        <a href="/tools/da-pa-checker.html" class="sitemap-item"><span class="emoji">📈</span> DA PA Checker</a>
+        <a href="/tools/backlink-checker.html" class="sitemap-item"><span class="emoji">🔗</span> Backlink Checker</a>
+        <a href="/tools/google-index-checker.html" class="sitemap-item"><span class="emoji">🔍</span> Google Index Checker</a>
+        <a href="/tools/http-headers-checker.html" class="sitemap-item"><span class="emoji">🌐</span> HTTP Headers Checker</a>
+      </div>
+    </section>
+
+    <!-- Text Tools Section -->
+    <section class="glass-card sitemap-section">
+      <h2>Text Tools</h2>
+      <div class="sitemap-grid">
+        <a href="/tools/plagiarism-checker.html" class="sitemap-item"><span class="emoji">🔍</span> Plagiarism Checker</a>
+        <a href="/tools/grammar-checker.html" class="sitemap-item"><span class="emoji">📝</span> Grammar Checker</a>
+        <a href="/tools/readability-checker.html" class="sitemap-item"><span class="emoji">📖</span> Readability Checker</a>
+        <a href="/tools/article-rewriter.html" class="sitemap-item"><span class="emoji">🔄</span> Article Rewriter</a>
+        <a href="/tools/word-counter.html" class="sitemap-item"><span class="emoji">🔢</span> Word Counter</a>
+        <a href="/tools/text-case-converter.html" class="sitemap-item"><span class="emoji">🔠</span> Text Case Converter</a>
+        <a href="/tools/remove-duplicate-lines.html" class="sitemap-item"><span class="emoji">➖</span> Remove Duplicate Lines</a>
+        <a href="/tools/word-combiner.html" class="sitemap-item"><span class="emoji">🔀</span> Word Combiner</a>
+        <a href="/tools/text-to-binary.html" class="sitemap-item"><span class="emoji">💻</span> Text to Binary</a>
+        <a href="/tools/lorem-ipsum.html" class="sitemap-item"><span class="emoji">📜</span> Lorem Ipsum Generator</a>
+      </div>
+    </section>
+
+    <!-- Image Tools Section -->
+    <section class="glass-card sitemap-section">
+      <h2>Image Tools</h2>
+      <div class="sitemap-grid">
+        <a href="/tools/image-compressor.html" class="sitemap-item"><span class="emoji">📉</span> Image Compressor</a>
+        <a href="/tools/image-resizer.html" class="sitemap-item"><span class="emoji">📐</span> Image Resizer</a>
+        <a href="/tools/jpg-to-png.html" class="sitemap-item"><span class="emoji">🔁</span> JPG to PNG Converter</a>
+        <a href="/tools/favicon-generator.html" class="sitemap-item"><span class="emoji">✨</span> Favicon Generator</a>
+        <a href="/tools/image-to-text.html" class="sitemap-item"><span class="emoji">👁️</span> Image to Text (OCR)</a>
+        <a href="/tools/color-picker.html" class="sitemap-item"><span class="emoji">🎨</span> Color Picker & Converter</a>
+      </div>
+    </section>
+
+    <!-- Video Tools Section -->
+    <section class="glass-card sitemap-section">
+      <h2>Video Tools</h2>
+      <div class="sitemap-grid">
+        <a href="/tools/youtube-thumbnail-downloader.html" class="sitemap-item"><span class="emoji">🖼️</span> YouTube Thumbnail Downloader</a>
+        <a href="/tools/youtube-hashtag-generator.html" class="sitemap-item"><span class="emoji">🏷️</span> YouTube Hashtag Generator</a>
+        <a href="/tools/youtube-to-mp3.html" class="sitemap-item"><span class="emoji">🎵</span> YouTube to MP3 Converter</a>
+        <a href="/tools/tiktok-downloader.html" class="sitemap-item"><span class="emoji">🎥</span> TikTok Video Downloader</a>
+      </div>
+    </section>
+
+    <!-- Developer Tools Section -->
+    <section class="glass-card sitemap-section">
+      <h2>Developer Tools</h2>
+      <div class="sitemap-grid">
+        <a href="/tools/json-formatter.html" class="sitemap-item"><span class="emoji">💽</span> JSON Formatter & Validator</a>
+        <a href="/tools/base64-encoder.html" class="sitemap-item"><span class="emoji">🗝️</span> Base64 Encoder/Decoder</a>
+        <a href="/tools/url-encoder.html" class="sitemap-item"><span class="emoji">🔗</span> URL Encoder/Decoder</a>
+        <a href="/tools/hash-generator.html" class="sitemap-item"><span class="emoji">🔒</span> MD5/SHA256 Hash Generator</a>
+        <a href="/tools/qr-code-generator.html" class="sitemap-item"><span class="emoji">📱</span> QR Code Generator</a>
+        <a href="/tools/password-generator.html" class="sitemap-item"><span class="emoji">🔐</span> Password Generator</a>
+      </div>
+    </section>
+
+    <!-- Converter Tools Section -->
+    <section class="glass-card sitemap-section">
+      <h2>Converter Tools</h2>
+      <div class="sitemap-grid">
+        <a href="/tools/binary-converter.html" class="sitemap-item"><span class="emoji">🧮</span> Binary/Hex/Decimal Converter</a>
+        <a href="/tools/age-calculator.html" class="sitemap-item"><span class="emoji">📅</span> Age Calculator</a>
+        <a href="/tools/unit-converter.html" class="sitemap-item"><span class="emoji">⚖️</span> Unit Converter</a>
+        <a href="/tools/scientific-calculator.html" class="sitemap-item"><span class="emoji">➗</span> Scientific Calculator</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/index.html" class="footer-logo">Tool<span>Nest</span></a>
+        <p class="footer-tagline">All Tools. One Place. Zero Cost.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Categories</div>
+        <div class="footer-links">
+          <a href="/category-seo.html" class="footer-link">🔍 SEO Tools</a>
+          <a href="/category-text.html" class="footer-link">✍️ Text Tools</a>
+          <a href="/category-image.html" class="footer-link">🖼️ Image Tools</a>
+          <a href="/category-video.html" class="footer-link">🎬 Video Tools</a>
+          <a href="/category-developer.html" class="footer-link">🧑💻 Developer Tools</a>
+          <a href="/category-converter.html" class="footer-link">🔄 Converter Tools</a>
+        </div>
+      </div>
+      <div>
+                <div class="footer-col-title">Quick Links</div>
+        <div class="footer-links">
+          <a href="/about.html" class="footer-link">About</a>
+          <a href="/privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="/terms.html" class="footer-link">Terms of Service</a>
+          <a href="/contact.html" class="footer-link">Contact</a>
+          <a href="/sitemap.html" class="footer-link">Sitemap</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 DevToolKit. All rights reserved.
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from './js/3d-background.js';
+    initBackground('bg-container');
+  </script>
+
+</body>
+</html>

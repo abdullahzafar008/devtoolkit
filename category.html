@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Category Tools - Free Online | DevToolkit</title>
+  <meta name="description" content="Explore DevToolkit utility categories. Fast, responsive, and secure client-side tools.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/category.html">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px 80px 24px;
+    }
+
+    /* Breadcrumbs styling */
+    .breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Category Title & subtitle */
+    .category-header {
+      margin-bottom: 40px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 20px;
+    }
+
+    .category-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin: 0 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .category-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin: 0;
+    }
+
+    /* Tools Grid */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Tool Card Design */
+    .tool-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 24px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-6px);
+      border-color: #00CCFF;
+      box-shadow: 0 10px 25px var(--card-glow);
+    }
+
+    .card-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-seo { background: rgba(0, 204, 255, 0.15); color: #00CCFF; }
+    .badge-text { background: rgba(123, 47, 255, 0.15); color: #7B2FFF; }
+    .badge-image { background: rgba(0, 102, 255, 0.15); color: #0066FF; }
+    .badge-video { background: rgba(255, 0, 102, 0.15); color: #FF0066; }
+    .badge-developer { background: rgba(0, 255, 102, 0.15); color: #00FF66; }
+    .badge-converter { background: rgba(255, 153, 0, 0.15); color: #FF9900; }
+
+    .card-emoji {
+      font-size: 36px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin: 0;
+      line-height: 1.4;
+      min-height: 36px;
+    }
+
+    .card-btn {
+      margin-top: auto;
+      font-size: 13px;
+      font-weight: 600;
+      color: #00CCFF;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s ease;
+    }
+
+    .tool-card:hover .card-btn {
+      color: #7B2FFF;
+    }
+
+    /* Footer styles */
+    footer {
+      border-top: 1px solid rgba(0, 102, 255, 0.2);
+      background: rgba(5, 5, 16, 0.95);
+      padding: 48px 24px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-logo span {
+      color: #0066FF;
+      -webkit-text-fill-color: #0066FF;
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      color: var(--text-gray);
+      max-width: 300px;
+    }
+
+    .footer-col-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0066FF;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-link {
+      font-size: 13px;
+      color: var(--text-gray);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #00CCFF;
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 40px auto 0 auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  
+
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs" id="breadcrumbs-lbl">
+      <a href="/index.html">Home</a>
+      <span class="separator">&gt;</span>
+      <span id="breadcrumb-current">-</span>
+    </div>
+
+    <!-- Category Header -->
+    <div class="category-header">
+      <h2 class="category-title" id="title-lbl">-</h2>
+      <p class="category-subtitle" id="subtitle-lbl">-</p>
+    </div>
+
+    <!-- Tools Grid -->
+    <main class="tools-grid" id="tools-grid">
+      <!-- Will be populated dynamically -->
+    </main>
+  </div>
+
+  
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/index.html" class="footer-logo">DevTool<span>Kit</span></a>
+        <p class="footer-tagline">All Tools. One Place. Zero Cost.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Categories</div>
+        <div class="footer-links">
+          <a href="/category-seo.html" class="footer-link">🔍 SEO Tools</a>
+          <a href="/category-text.html" class="footer-link">✍️ Text Tools</a>
+          <a href="/category-image.html" class="footer-link">🖼️ Image Tools</a>
+          <a href="/category-video.html" class="footer-link">🎬 Video Tools</a>
+          <a href="/category-developer.html" class="footer-link">🧑💻 Developer Tools</a>
+          <a href="/category-converter.html" class="footer-link">🔄 Converter Tools</a>
+        </div>
+      </div>
+      <div>
+                <div class="footer-col-title">Quick Links</div>
+        <div class="footer-links">
+          <a href="/about.html" class="footer-link">About</a>
+          <a href="/privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="/terms.html" class="footer-link">Terms of Service</a>
+          <a href="/contact.html" class="footer-link">Contact</a>
+          <a href="/sitemap.html" class="footer-link">Sitemap</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 DevToolKit. All rights reserved.
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from './js/3d-background.js';
+    import { logToolUsage } from './js/tools-tracker.js';
+
+    // Start background
+    initBackground('bg-container');
+
+    // All tools dataset
+    const tools = [
+      { name: 'Meta Tag Generator', emoji: '🏷️', slug: 'meta-tag-generator', cat: 'seo', desc: 'Create search-friendly meta tags' },
+      { name: 'Website SEO Score Checker', emoji: '💯', slug: 'seo-score-checker', cat: 'seo', desc: 'Analyze technical web score' },
+      { name: 'Keyword Density Checker', emoji: '📊', slug: 'keyword-density', cat: 'seo', desc: 'Analyze text keyword usage' },
+      { name: 'Robots.txt Generator', emoji: '🤖', slug: 'robots-txt-generator', cat: 'seo', desc: 'Create robots.txt directives' },
+      { name: 'Sitemap Generator', emoji: '🗺️', slug: 'sitemap-generator', cat: 'seo', desc: 'Generate complete XML sitemaps' },
+      { name: 'Domain Age Checker', emoji: '⏳', slug: 'domain-age-checker', cat: 'seo', desc: 'Check domains registration age' },
+      { name: 'DA PA Checker', emoji: '📈', slug: 'da-pa-checker', cat: 'seo', desc: 'Estimate Domain & Page Authority' },
+      { name: 'Backlink Checker', emoji: '🔗', slug: 'backlink-checker', cat: 'seo', desc: 'Analyze backlink profile' },
+      { name: 'Google Index Checker', emoji: '🔍', slug: 'google-index-checker', cat: 'seo', desc: 'Verify index status on Google' },
+      { name: 'HTTP Headers Checker', emoji: '🌐', slug: 'http-headers-checker', cat: 'seo', desc: 'Inspect request/response headers' },
+
+      { name: 'Plagiarism Checker', emoji: '🔍', slug: 'plagiarism-checker', cat: 'text', desc: 'Scan for duplicate contents' },
+      { name: 'Word Counter', emoji: '🔢', slug: 'word-counter', cat: 'text', desc: 'Check words and character stats' },
+      { name: 'Grammar Checker', emoji: '📝', slug: 'grammar-checker', cat: 'text', desc: 'Correct spelling and grammars' },
+      { name: 'Article Rewriter', emoji: '🔄', slug: 'article-rewriter', cat: 'text', desc: 'Rewrite copy with synonyms' },
+      { name: 'Text Case Converter', emoji: '🔠', slug: 'text-case-converter', cat: 'text', desc: 'Convert upper, lower, title cases' },
+      { name: 'Remove Duplicate Lines', emoji: '➖', slug: 'remove-duplicate-lines', cat: 'text', desc: 'Clean duplicate list rows' },
+      { name: 'Word Combiner', emoji: '🔀', slug: 'word-combiner', cat: 'text', desc: 'Combine lists of terms' },
+      { name: 'Text to Binary', emoji: '💻', slug: 'text-to-binary', cat: 'text', desc: 'Encode textual data to binary' },
+      { name: 'Readability Checker', emoji: '📖', slug: 'readability-checker', cat: 'text', desc: 'Calculate Flesch score' },
+      { name: 'Lorem Ipsum Generator', emoji: '📜', slug: 'lorem-ipsum', cat: 'text', desc: 'Generate dummy filler content' },
+
+      { name: 'Image Compressor', emoji: '📉', slug: 'image-compressor', cat: 'image', desc: 'Reduce weight of image files' },
+      { name: 'Image to Text (OCR)', emoji: '👁️', slug: 'image-to-text', cat: 'image', desc: 'Extract text contents from images' },
+      { name: 'Image Resizer', emoji: '📐', slug: 'image-resizer', cat: 'image', desc: 'Resize image dimension canvas' },
+      { name: 'JPG to PNG Converter', emoji: '🔁', slug: 'jpg-to-png', cat: 'image', desc: 'Convert formats easily' },
+      { name: 'Favicon Generator', emoji: '✨', slug: 'favicon-generator', cat: 'image', desc: 'Create favicon.ico files' },
+      { name: 'Color Picker & Converter', emoji: '🎨', slug: 'color-picker', cat: 'image', desc: 'Find color hex & harmonies' },
+
+      { name: 'YouTube Thumbnail Downloader', emoji: '🖼️', slug: 'youtube-thumbnail-downloader', cat: 'video', desc: 'Get HD YouTube thumbnails' },
+      { name: 'YouTube Hashtag Generator', emoji: '🏷️', slug: 'youtube-hashtag-generator', cat: 'video', desc: 'Generate relevant hashtags' },
+      { name: 'TikTok Video Downloader', emoji: '🎥', slug: 'tiktok-downloader', cat: 'video', desc: 'Download without watermark' },
+      { name: 'YouTube to MP3 Converter', emoji: '🎵', slug: 'youtube-to-mp3', cat: 'video', desc: 'Convert video URL to audio track' },
+
+      { name: 'JSON Formatter & Validator', emoji: '💽', slug: 'json-formatter', cat: 'developer', desc: 'Validate and beautify JSON objects' },
+      { name: 'Base64 Encoder/Decoder', emoji: '🗝️', slug: 'base64-encoder', cat: 'developer', desc: 'Encode base64 strings or images' },
+      { name: 'URL Encoder/Decoder', emoji: '🔗', slug: 'url-encoder', cat: 'developer', desc: 'Safe-encode query parameters' },
+      { name: 'MD5/SHA256 Hash Generator', emoji: '🔒', slug: 'hash-generator', cat: 'developer', desc: 'Generate secure hashing checksums' },
+      { name: 'QR Code Generator', emoji: '📱', slug: 'qr-code-generator', cat: 'developer', desc: 'Create customizable QR codes' },
+      { name: 'Password Generator', emoji: '🔐', slug: 'password-generator', cat: 'developer', desc: 'Generate cryptographically strong keys' },
+
+      { name: 'Binary/Hex/Decimal Converter', emoji: '🧮', slug: 'binary-converter', cat: 'converter', desc: 'Interconvert base systems live' },
+      { name: 'Age Calculator', emoji: '📅', slug: 'age-calculator', cat: 'converter', desc: 'Determine chronological exact age' },
+      { name: 'Unit Converter', emoji: '⚖️', slug: 'unit-converter', cat: 'converter', desc: 'Convert metric weight, volume, length' },
+      { name: 'Scientific Calculator', emoji: '➗', slug: 'scientific-calculator', cat: 'converter', desc: 'Perform multi-base computations' }
+    ];
+
+    const categories = {
+      seo: { name: 'SEO Tools', emoji: '🔍', subtitle: 'Boost your search rankings' },
+      text: { name: 'Text Tools', emoji: '✍️', subtitle: 'Write better, faster' },
+      image: { name: 'Image Tools', emoji: '🖼️', subtitle: 'Edit and optimize images' },
+      video: { name: 'Video Tools', emoji: '🎬', subtitle: 'Download and convert videos' },
+      developer: { name: 'Developer Tools', emoji: '🧑💻', subtitle: 'Code smarter and faster' },
+      converter: { name: 'Converter Tools', emoji: '🔄', subtitle: 'Convert anything instantly' }
+    };
+
+    // Load category info based on query param
+    const params = new URLSearchParams(window.location.search);
+    const catParam = params.get('cat') || 'seo';
+    const activeCat = categories[catParam] || categories['seo'];
+
+    // Update Head Title & Meta tags for SEO dynamically
+    document.title = `${activeCat.name} - Free Online | DevToolkit`;
+    
+    // Update labels in UI
+    document.getElementById('breadcrumb-current').textContent = activeCat.name;
+    document.getElementById('title-lbl').textContent = `${activeCat.emoji} ${activeCat.name}`;
+    document.getElementById('subtitle-lbl').textContent = activeCat.subtitle;
+
+    // Filter tools for this category
+    const categorySlug = categories[catParam] ? catParam : 'seo';
+    const filteredTools = tools.filter(t => t.cat === categorySlug);
+    const toolsGrid = document.getElementById('tools-grid');
+
+    if (filteredTools.length > 0) {
+      toolsGrid.innerHTML = '';
+      filteredTools.forEach(t => {
+        const card = document.createElement('div');
+        card.className = 'tool-card';
+        card.innerHTML = `
+          <span class="card-badge badge-${t.cat}">${t.cat}</span>
+          <span class="card-emoji">${t.emoji}</span>
+          <h3 class="card-title">${t.name}</h3>
+          <p class="card-desc">${t.desc}</p>
+          <span class="card-btn">Use Tool →</span>
+        `;
+        
+        card.addEventListener('click', async () => {
+          await logToolUsage(t.name, t.cat, t.slug);
+          window.location.href = `/tools/${t.slug}.html`;
+        });
+        
+        toolsGrid.appendChild(card);
+      });
+    } else {
+      toolsGrid.innerHTML = `<div style="grid-column: span 3; text-align:center; color:rgba(255,255,255,0.4); padding: 40px 0;">No tools found for this category.</div>`;
+    }
+  </script>
+</body>
+</html>

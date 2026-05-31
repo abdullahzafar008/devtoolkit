@@ -1,0 +1,14 @@
+{
+  "heading": "Privacy Policy",
+  "last_updated": "2026-05-31",
+  "sections": [
+    {
+      "heading": "Information We Collect",
+      "content": "DevToolKit is committed to protecting your privacy. We do not collect or store any personal information unless you explicitly sign up for an account. All our utility tools run entirely client-side in your browser, ensuring that your data never leaves your computer."
+    },
+    {
+      "heading": "Cookies and Analytics",
+      "content": "We use essential cookies to keep you signed in if you have created an account. We also use light analytics to understand web traffic and monitor server usage, which does not associate any personal details with you."
+    }
+  ]
+}

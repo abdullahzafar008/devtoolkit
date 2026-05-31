@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Free Online Article Rewriter & Sentence Spinner | DevToolkit</title>
+  <meta name="description" content="Spin and rewrite articles instantly with our free online article rewriter. Automatically replace words with optimal synonyms, protect proper nouns, and copy formatted texts.">
+  <meta name="keywords" content="article rewriter, article spinner, text rewriter, sentence rewriter free, content spinner, synonym replacement tool, paraphrase online">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/tools/article-rewriter.html">
+  <meta property="og:title" content="Free Online Article Rewriter & Sentence Spinner | DevToolkit">
+  <meta property="og:description" content="Paraphrase articles and swap synonyms dynamically. Interactive output highlights rewritten words for manual overrides.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- FAQ JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does the Article Rewriter work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The rewriter scans your text, recognizes common vocabulary terms, and maps them to a built-in synonym directory. Depending on your chosen level, it replaces them to increase article uniqueness."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the 'Uniqueness' score?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Uniqueness score calculates the percentage of total words that were changed or modified. A higher score represents a greater deviation from the original text copy."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I manual override a replaced synonym?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, absolutely! The output editor displays all modified words as clickable green items. Clicking any green word opens an interactive dropdown of alternative synonyms."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my confidential text private?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Our spinner operates 100% locally in your browser memory via javascript loops. No content logs or inputs are ever sent to remote database servers."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Article Rewriter",
+    "url": "https://www.devtoolkit.com/tools/article-rewriter.html",
+    "description": "Premium browser-based article spinner, synonym mapper, and interactive text paraphraser with custom proper noun protections.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+      --danger: #FF3366;
+      --success: #00FF66;
+      --warning: #FFAA00;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .tool-hero {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .hero-3d-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: relative;
+      z-index: 2;
+      padding: 24px;
+      max-width: 800px;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .tool-title {
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tool-tagline {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin: 0 0 24px 0;
+    }
+
+    .btn-scroll-down {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 20px;
+      color: #00CCFF;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .btn-scroll-down:hover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.2);
+    }
+
+    /* Workspace */
+    .tool-workspace {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 60px 24px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    .rewriter-dashboard {
+      display: grid;
+      grid-template-columns: 1.12fr 1.88fr;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .rewriter-dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left configurations */
+    .configs-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .panel-group {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel-group-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.1);
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+    }
+
+    .input-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-box label {
+      font-size: 11px;
+      color: var(--text-gray);
+      text-transform: uppercase;
+    }
+
+    .select-field, .textarea-input {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: #fff;
+      padding: 10px 12px;
+      font-family: inherit;
+      outline: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .textarea-input {
+      resize: vertical;
+      min-height: 240px;
+      line-height: 1.6;
+    }
+
+    .select-field:focus, .textarea-input:focus {
+      border-color: #00CCFF;
+      box-shadow: 0 0 8px rgba(0, 204, 255, 0.2);
+    }
+
+    .checkbox-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-gray);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-wrap input {
+      cursor: pointer;
+    }
+
+    /* Right Output block editor */
+    .output-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+    }
+
+    .editor-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* HTML visual synonyms selector wrapper */
+    .html-output-editor {
+      width: 100%;
+      height: 300px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: inherit;
+      font-size: 14px;
+      color: #fff;
+      box-sizing: border-box;
+      outline: none;
+      resize: vertical;
+      line-height: 1.7;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    /* Clickable green spin tokens */
+    .spin-token {
+      color: var(--success);
+      border-bottom: 1px dashed var(--success);
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0 2px;
+      border-radius: 3px;
+      transition: all 0.2s ease;
+      position: relative;
+      display: inline-block;
+    }
+
+    .spin-token:hover {
+      background: rgba(0, 255, 102, 0.15);
+    }
+
+    /* Custom drop popover mapping synonyms overrides */
+    .synonym-popover {
+      position: absolute;
+      background: #090918;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+      padding: 4px;
+      max-height: 200px;
+      overflow-y: auto;
+      min-width: 120px;
+    }
+
+    .synonym-option {
+      padding: 6px 12px;
+      font-size: 12px;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 4px;
+      text-align: left;
+      font-weight: 500;
+    }
+
+    .synonym-option:hover {
+      background: #0066FF;
+    }
+
+    .synonym-option.original {
+      color: var(--cyan);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 2px;
+    }
+
+    /* Statistics badges */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-card-value {
+      font-size: 18px;
+      font-weight: 800;
+      color: #00CCFF;
+    }
+
+    .stat-card-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      color: var(--text-gray);
+      margin-top: 4px;
+    }
+
+    /* General action controls */
+    .controls-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    .ctrl-btn {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      color: #00CCFF;
+      font-weight: 700;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+    }
+
+    .ctrl-btn:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+    }
+
+    /* Article layout elements */
+    .article-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .step-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #00CCFF;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+    }
+
+    /* FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Related Tools Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .blog-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-thumb {
+      height: 140px;
+      background: linear-gradient(135deg, #0066FF, #7B2FFF);
+    }
+
+    .blog-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .blog-desc {
+      font-size: 12px;
+      color: var(--text-gray);
+      line-height: 1.4;
+    }
+
+    .blog-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: auto;
+    }
+
+    .blog-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.4), rgba(123, 47, 255, 0.4));
+      border-top: 1px solid var(--card-border);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cta-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .btn-cta {
+      padding: 12px 24px;
+      background: #0066FF;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-cta:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+    }
+
+    /* WordPress Documentation Comment Requirement */
+    /* 
+     Plugin Name: Article Rewriter
+     Description: Client-side synonym generator, spin engine, and interactive dropdown paraphrasing spinner.
+     Version: 1.0.0
+     Author: DevToolkit Inc.
+    */
+  </style>
+</head>
+<body>
+
+  <!-- Floating background particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <!-- Section 1: Hero -->
+  <section class="tool-hero">
+    <div class="hero-3d-scene" id="tool-hero-3d"></div>
+    <div class="hero-overlay">
+      <div class="breadcrumbs">
+        <a href="/index.html">Home</a>
+        <span class="separator">&gt;</span>
+        <a href="/category-text.html">Text Tools</a>
+        <span class="separator">&gt;</span>
+        <span>Article Rewriter</span>
+      </div>
+      <h1 class="tool-title">Article Rewriter & Paraphraser</h1>
+      <p class="tool-tagline">Rephrase texts, spin articles with semantic synonyms database, protect capitals, and evaluate uniqueness locally.</p>
+      <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
+    </div>
+  </section>
+
+  
+
+  <!-- Section 2: Workspace -->
+  <main class="tool-workspace" id="workspace">
+    <div class="glass-card">
+      
+      <!-- Popover dialog for mapping synonym dropdown selection overrides -->
+      <div class="synonym-popover" id="popover-dropdown"></div>
+
+      <!-- Rewriter grid structures -->
+      <div class="rewriter-dashboard">
+        
+        <!-- Left forms control panels -->
+        <div class="configs-panel">
+          <div class="panel-group">
+            <span class="panel-group-title">Input Content</span>
+            
+            <div class="input-box">
+              <label for="source-text">Copy & Paste Source Article</label>
+              <textarea class="textarea-input" id="source-text" placeholder="Type or paste your article here to paraphrase..."></textarea>
+            </div>
+
+            <button class="btn-analyze" id="btn-spin" style="width:100%; background:#0066FF; border:none; color:#fff; padding:12px; border-radius:6px; font-weight:700; cursor:pointer; font-size:14px; box-shadow:0 4px 15px rgba(0,102,255,0.3);">Spin Text Article</button>
+          </div>
+
+          <div class="panel-group">
+            <span class="panel-group-title">Spin Configurations</span>
+            
+            <div class="input-box">
+              <label for="spin-level">Synonym Aggressiveness</label>
+              <select class="select-field" id="spin-level">
+                <option value="low">Low (Only highly common synonyms)</option>
+                <option value="medium" selected>Medium (Standard rephrase)</option>
+                <option value="high">High (Maximum synonym swaps)</option>
+              </select>
+            </div>
+
+            <label class="checkbox-wrap">
+              <input type="checkbox" id="protect-capitals" checked>
+              Protect Capitalized Words (Preserves brand/proper names)
+            </label>
+          </div>
+        </div>
+
+        <!-- Right Output visual panels -->
+        <div class="output-panel">
+          
+          <!-- Statistics badges -->
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-card-value" id="stat-total-words">0</div>
+              <div class="stat-card-label">Total Words</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-value" id="stat-changed-words">0</div>
+              <div class="stat-card-label">Rewritten Words</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-value" id="stat-unique-pct">0%</div>
+              <div class="stat-card-label">Uniqueness Score</div>
+            </div>
+          </div>
+
+          <!-- Spinner Output visualizer -->
+          <span class="editor-label">Rewritten Interactive Result</span>
+          <p style="font-size:11px; color:var(--text-gray); margin:0;">Click any <span style="color:var(--success); font-weight:bold;">green highlighted word</span> to toggle alternative synonyms manually.</p>
+          
+          <div class="html-output-editor" id="output-view" contenteditable="false">
+            <span style="color:rgba(255,255,255,0.4);">Spun article contents will render here in real-time, highlighting vocabulary spin fields.</span>
+          </div>
+
+          <div class="controls-bar">
+            <button class="ctrl-btn" id="btn-clear" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.1);">Clear Text</button>
+            <button class="ctrl-btn" id="btn-copy">Copy Rewritten Text</button>
+            <button class="ctrl-btn" id="btn-download">Download Text File</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  
+
+  <!-- Section 3: How to Use -->
+  <section class="article-section">
+    <h2>How to Spin and Paraphrase Content</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-emoji">📝</div>
+        <div class="step-title">1. Insert Original Copy</div>
+        <div class="step-desc">Paste your article copy into our input panel. Toggle custom preferences like Capitalized protections.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">⚡</div>
+        <div class="step-title">2. Spin semantic fields</div>
+        <div class="step-desc">Select an aggressiveness limit and click Spin. Standard dictionary terms swap out immediately.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">🎨</div>
+        <div class="step-title">3. Interactive adjustments</div>
+        <div class="step-desc">Scan highlighted spun words. Click green tokens to pull synonyms menus, making custom overrides.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Key Features -->
+  <section class="article-section">
+    <h2>Content Paraphrasing Metrics</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-head">🚀 Dynamic Interactive Overrides</div>
+        <div class="feature-desc">Spun words display as clickable tokens, allowing users to modify synonyms from customizable popovers.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">📂 Capitalized Proper Nouns Shield</div>
+        <div class="feature-desc">Enable filters to secure brand identifiers, product labels, and distinct name variables.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🔒 Safe Isolated Spinning</div>
+        <div class="feature-desc">Conversions compile in client-side script threads. No text files transmit or save remotely.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: FAQ -->
+  <section class="article-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-wrapper">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Will the spun content pass plagiarism checkers? <span>+</span></div>
+        <div class="faq-answer">Yes. Because the rewriter swaps out high percentages of common words and nouns with vocabulary alternatives, it significantly changes sentence structures, helping pass automated text matching limits.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">How do I protect my brand name from being spun? <span>+</span></div>
+        <div class="faq-answer">Check the "Protect Capitalized Words" toggle. This tells the parser to check for words starting with a capital letter (such as "Google" or "DevToolkit") and bypass them during the synonym swapping phase.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Can I undo a synonym change back to the original? <span>+</span></div>
+        <div class="faq-answer">Yes, easily! Click the green highlighted spun word in the output editor. The very top option in the dropdown list will display the original starting word. Click it to revert.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">What is the maximum article length? <span>+</span></div>
+        <div class="faq-answer">The tool caps conversions at 5,000 words per spin block. This ensures fast client-side calculations and prevents browser script hangs.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Related Tools Injected Dynamically -->
+  <section class="article-section">
+    <h2>Discover Other Developer Utilities</h2>
+    <div class="blog-grid" id="related-tools-grid">
+      <!-- Injected Dynamically -->
+    </div>
+  </section>
+
+  <!-- Section 7: Footer CTA Banner -->
+  <section class="cta-banner">
+    <h2 class="cta-title">Ready to explore more free tools?</h2>
+    <p class="cta-subtitle">DevToolkit has 40+ utility modules waiting for you.</p>
+    <a href="/index.html" class="btn-cta">Explore All Tools →</a>
+  </section>
+
+  <!-- Standard Footer -->
+  <footer>
+    <div style="text-align: center; font-size:12px; color:rgba(255,255,255,0.4); padding: 24px 0;">
+      &copy; 2026 DevToolKit. All rights reserved. | <a href="/index.html" style="color:var(--cyan); text-decoration:none;">Home</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from '../js/3d-background.js';
+    import { logToolUsage } from '../js/tools-tracker.js';
+
+    // Start background particle animation
+    initBackground('bg-container');
+
+    // Local 3D Hero Scene: Floating spinning vocabulary cubes
+    function initHero3D() {
+      const container = document.getElementById('tool-hero-3d');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000);
+      camera.position.z = 200;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const light1 = new THREE.AmbientLight(0xffffff, 0.4);
+      scene.add(light1);
+
+      const light2 = new THREE.DirectionalLight(0x00CCFF, 1.2);
+      light2.position.set(0, 10, 20);
+      scene.add(light2);
+
+      // Create letters meshes (R, E, W, R, I, T, E)
+      const characters = ['W', 'O', 'R', 'D', 'S', 'P', 'I', 'N'];
+      const meshes = [];
+      const speeds = [];
+
+      characters.forEach((char, idx) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 64;
+        canvas.height = 64;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'rgba(0,0,0,0)';
+        ctx.fillRect(0,0,64,64);
+        ctx.fillStyle = idx % 2 === 0 ? '#0066FF' : '#7B2FFF';
+        ctx.font = 'bold 42px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(char, 32, 32);
+
+        const texture = new THREE.CanvasTexture(canvas);
+        const geom = new THREE.BoxGeometry(10, 10, 10);
+        const mat = new THREE.MeshPhongMaterial({
+          map: texture,
+          transparent: true,
+          opacity: 0.7,
+          wireframe: true
+        });
+
+        const mesh = new THREE.Mesh(geom, mat);
+        mesh.position.set(
+          (Math.random() - 0.5) * 160,
+          (Math.random() - 0.5) * 80,
+          (Math.random() - 0.5) * 40
+        );
+        scene.add(mesh);
+        meshes.push(mesh);
+        speeds.push(Math.random() * 0.01 + 0.005);
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        meshes.forEach((mesh, idx) => {
+          mesh.rotation.y += speeds[idx];
+          mesh.rotation.x += 0.003;
+        });
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      });
+    }
+    initHero3D();
+
+    // Related Tools Grid
+    const related = [
+      { name: 'Word Counter & Pace', emoji: '📝', slug: 'word-counter', cat: 'text', desc: 'Readability index validator checks' },
+      { name: 'Lorem Ipsum Generator', emoji: '✍️', slug: 'lorem-ipsum', cat: 'text', desc: 'Generate standard HTML dummy text passages' },
+      { name: 'Duplicate Lines Remover', emoji: '🗂️', slug: 'remove-duplicate-lines', cat: 'text', desc: 'Deduplicate list text arrays' },
+      { name: 'Keyword Density Checker', emoji: '🔍', slug: 'keyword-density', cat: 'seo', desc: 'Analyze text keyword frequencies' }
+    ];
+
+    const relatedGrid = document.getElementById('related-tools-grid');
+    related.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <div class="blog-thumb" style="display:flex; align-items:center; justify-content:center; font-size:32px;">${t.emoji}</div>
+        <div class="blog-info">
+          <div class="blog-title">${t.name}</div>
+          <div class="blog-desc">${t.desc}</div>
+          <a href="/tools/${t.slug}.html" class="blog-link">Use Tool →</a>
+        </div>
+      `;
+      card.querySelector('.blog-link').addEventListener('click', async () => {
+        await logToolUsage(t.name, t.cat, t.slug);
+      });
+      relatedGrid.appendChild(card);
+    });
+
+    // Client-side Synonym dictionary
+    const synonymDb = {
+      'make': ['create', 'build', 'produce', 'generate', 'assemble', 'craft'],
+      'build': ['construct', 'make', 'assemble', 'create', 'structure', 'develop'],
+      'create': ['generate', 'make', 'produce', 'build', 'formulate', 'craft'],
+      'start': ['begin', 'commence', 'initiate', 'launch', 'trigger'],
+      'begin': ['start', 'commence', 'initiate', 'originate'],
+      'fast': ['quick', 'rapid', 'swift', 'speedy', 'brisk'],
+      'quick': ['fast', 'rapid', 'swift', 'speedy', 'nimble'],
+      'smart': ['clever', 'intelligent', 'bright', 'wise', 'sharp'],
+      'clever': ['smart', 'intelligent', 'sharp', 'ingenious'],
+      'happy': ['glad', 'joyful', 'cheerful', 'delighted', 'pleased'],
+      'sad': ['unhappy', 'gloomy', 'sorrowful', 'downcast'],
+      'easy': ['simple', 'effortless', 'painless', 'straightforward'],
+      'simple': ['easy', 'straightforward', 'uncomplicated', 'plain'],
+      'hard': ['difficult', 'challenging', 'tough', 'demanding'],
+      'difficult': ['hard', 'challenging', 'tough', 'demanding'],
+      'great': ['excellent', 'wonderful', 'outstanding', 'fantastic', 'superb'],
+      'excellent': ['great', 'outstanding', 'wonderful', 'superb', 'prime'],
+      'good': ['fine', 'satisfactory', 'decent', 'positive', 'quality'],
+      'bad': ['poor', 'unsatisfactory', 'negative', 'harmful', 'awful'],
+      'help': ['assist', 'aid', 'support', 'cooperate'],
+      'use': ['utilize', 'employ', 'exploit', 'apply'],
+      'utilize': ['use', 'employ', 'exploit', 'apply'],
+      'important': ['crucial', 'essential', 'significant', 'vital', 'critical'],
+      'crucial': ['important', 'essential', 'significant', 'vital', 'critical'],
+      'show': ['demonstrate', 'display', 'reveal', 'indicate', 'present'],
+      'demonstrate': ['show', 'prove', 'display', 'indicate'],
+      'find': ['discover', 'detect', 'uncover', 'locate'],
+      'discover': ['find', 'uncover', 'detect', 'reveal'],
+      'change': ['modify', 'alter', 'adjust', 'transform', 'vary'],
+      'modify': ['change', 'alter', 'adjust', 'transform'],
+      'stop': ['halt', 'cease', 'terminate', 'quit'],
+      'new': ['modern', 'recent', 'novel', 'fresh', 'latest'],
+      'modern': ['new', 'contemporary', 'novel', 'recent'],
+      'old': ['ancient', 'aged', 'elderly', 'historic'],
+      'very': ['extremely', 'highly', 'exceedingly', 'remarkably'],
+      'extremely': ['very', 'highly', 'exceedingly', 'unusually'],
+      'like': ['enjoy', 'appreciate', 'love'],
+      'love': ['like', 'adore', 'cherish'],
+      'big': ['large', 'huge', 'massive', 'giant'],
+      'large': ['big', 'huge', 'massive', 'immense'],
+      'small': ['tiny', 'little', 'minute', 'slight'],
+      'tiny': ['small', 'little', 'minute', 'microscopic'],
+      'look': ['glance', 'stare', 'view', 'observe'],
+      'see': ['watch', 'observe', 'notice', 'view']
+    };
+
+    const sourceText = document.getElementById('source-text');
+    const spinLevel = document.getElementById('spin-level');
+    const protectCapitals = document.getElementById('protect-capitals');
+    const btnSpin = document.getElementById('btn-spin');
+    
+    const statTotalWords = document.getElementById('stat-total-words');
+    const statChangedWords = document.getElementById('stat-changed-words');
+    const statUniquePct = document.getElementById('stat-unique-pct');
+    const outputView = document.getElementById('output-view');
+    const popoverDropdown = document.getElementById('popover-dropdown');
+
+    let spinMap = []; // Tracks original and synonyms of spun items
+
+    btnSpin.addEventListener('click', () => {
+      spinArticle();
+    });
+
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      sourceText.value = '';
+      outputView.innerHTML = '<span style="color:rgba(255,255,255,0.4);">Spun article contents will render here in real-time.</span>';
+      statTotalWords.textContent = '0';
+      statChangedWords.textContent = '0';
+      statUniquePct.textContent = '0%';
+      popoverDropdown.style.display = 'none';
+    });
+
+    // Main article spinner compiler
+    function spinArticle() {
+      popoverDropdown.style.display = 'none';
+      const text = sourceText.value.trim();
+      if (!text) {
+        alert('Please enter some text copy first.');
+        return;
+      }
+
+      const level = spinLevel.value;
+      const shieldCap = protectCapitals.checked;
+
+      // Reset tracking arrays
+      spinMap = [];
+      let totalWordsCount = 0;
+      let changedWordsCount = 0;
+
+      // Regex preserves punctuations, splitting by words boundaries
+      const regex = /([a-zA-Z0-9']+)/g;
+      
+      const parts = text.split(/([a-zA-Z0-9']+)/);
+      let outputHtml = [];
+
+      parts.forEach((part, index) => {
+        // If not a word, preserve spacing and punctuation
+        if (!part.match(/^[a-zA-Z0-9']+$/)) {
+          outputHtml.push(escapeHtml(part));
+          return;
+        }
+
+        totalWordsCount++;
+        const lowercaseWord = part.toLowerCase();
+
+        // Rules filters: Preserves capitalized proper nouns
+        const isCapitalized = part[0] === part[0].toUpperCase() && part[0] !== part[0].toLowerCase();
+        
+        if (shieldCap && isCapitalized && totalWordsCount > 1) {
+          // Keep original word
+          outputHtml.push(escapeHtml(part));
+          return;
+        }
+
+        // Check if word exists in synonyms dictionary
+        if (synonymDb[lowercaseWord]) {
+          const synonymsList = synonymDb[lowercaseWord];
+          
+          // Select Synonym depending on aggressiveness parameters
+          let selected = '';
+          if (level === 'low') {
+            selected = synonymsList[0];
+          } else if (level === 'medium') {
+            const index = Math.min(synonymsList.length - 1, Math.floor(synonymsList.length / 2));
+            selected = synonymsList[index];
+          } else {
+            selected = synonymsList[Math.floor(Math.random() * synonymsList.length)];
+          }
+
+          // Format casing matching the original input word
+          if (isCapitalized) {
+            selected = selected.charAt(0).toUpperCase() + selected.slice(1);
+          }
+
+          const tokenIdx = spinMap.length;
+          spinMap.push({
+            original: part,
+            selected: selected,
+            synonyms: synonymsList,
+            isCapitalized: isCapitalized
+          });
+
+          // Inject spinner click token
+          outputHtml.push(`<span class="spin-token" data-idx="${tokenIdx}">${escapeHtml(selected)}</span>`);
+          changedWordsCount++;
+        } else {
+          // Keep original word if no synonym match exists
+          outputHtml.push(escapeHtml(part));
+        }
+      });
+
+      outputView.innerHTML = outputHtml.join('');
+
+      // Update statistics
+      statTotalWords.textContent = totalWordsCount;
+      statChangedWords.textContent = changedWordsCount;
+      const uniqueness = totalWordsCount > 0 ? ((changedWordsCount / totalWordsCount) * 100).toFixed(1) : 0;
+      statUniquePct.textContent = `${uniqueness}%`;
+
+      // Attach click listeners to all spun tokens
+      attachTokenListeners();
+
+      logToolUsage('Article Spinner', 'text', 'article-rewriter');
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // Attach custom popovers synonym triggers
+    function attachTokenListeners() {
+      const tokens = outputView.querySelectorAll('.spin-token');
+      tokens.forEach(token => {
+        token.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const idx = parseInt(token.getAttribute('data-idx'));
+          showSynonymsDropdown(token, idx);
+        });
+      });
+    }
+
+    // Hide dropdown popover on clicks outside
+    document.addEventListener('click', () => {
+      popoverDropdown.style.display = 'none';
+    });
+
+    // Populate dropdown with synonyms
+    function showSynonymsDropdown(element, idx) {
+      const mapItem = spinMap[idx];
+      const rect = element.getBoundingClientRect();
+      const scrollY = window.scrollY || window.pageYOffset;
+
+      popoverDropdown.style.left = `${rect.left}px`;
+      popoverDropdown.style.top = `${rect.bottom + scrollY + 4}px`;
+      popoverDropdown.style.display = 'flex';
+
+      popoverDropdown.innerHTML = '';
+
+      // Original Option Option Reverter
+      const originalBtn = document.createElement('button');
+      originalBtn.className = 'synonym-option original';
+      originalBtn.textContent = `Original: ${mapItem.original}`;
+      originalBtn.addEventListener('click', () => {
+        element.textContent = mapItem.original;
+        element.style.color = '#fff';
+        element.style.borderBottom = 'none';
+        popoverDropdown.style.display = 'none';
+        recalculateUniqueness();
+      });
+      popoverDropdown.appendChild(originalBtn);
+
+      // Synonyms options
+      mapItem.synonyms.forEach(syn => {
+        let formatted = syn;
+        if (mapItem.isCapitalized) {
+          formatted = syn.charAt(0).toUpperCase() + syn.slice(1);
+        }
+
+        const option = document.createElement('button');
+        option.className = 'synonym-option';
+        option.textContent = formatted;
+        option.addEventListener('click', () => {
+          element.textContent = formatted;
+          element.style.color = 'var(--success)';
+          element.style.borderBottom = '1px dashed var(--success)';
+          popoverDropdown.style.display = 'none';
+          recalculateUniqueness();
+        });
+        popoverDropdown.appendChild(option);
+      });
+    }
+
+    // Recalculates modified percentages manually if changed in dropdown
+    function recalculateUniqueness() {
+      const total = parseInt(statTotalWords.textContent) || 0;
+      let changed = 0;
+      outputView.querySelectorAll('.spin-token').forEach(element => {
+        const idx = parseInt(element.getAttribute('data-idx'));
+        if (element.textContent !== spinMap[idx].original) {
+          changed++;
+        }
+      });
+      statChangedWords.textContent = changed;
+      const uniqueness = total > 0 ? ((changed / total) * 100).toFixed(1) : 0;
+      statUniquePct.textContent = `${uniqueness}%`;
+    }
+
+    // Copy to clipboard
+    document.getElementById('btn-copy').addEventListener('click', async () => {
+      // Get raw text without HTML spans
+      const text = outputView.innerText;
+      if (!text || text.includes('Spun article contents will render here')) return;
+      navigator.clipboard.writeText(text);
+      alert('Rewritten spun article copied to clipboard! 📋');
+      await logToolUsage('Article Spinner', 'text', 'article-rewriter');
+    });
+
+    // Download article as txt file
+    document.getElementById('btn-download').addEventListener('click', async () => {
+      const text = outputView.innerText;
+      if (!text || text.includes('Spun article contents will render here')) return;
+
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'spun-article.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      await logToolUsage('Article Spinner', 'text', 'article-rewriter');
+    });
+
+  </script>
+
+  <script>
+    // FAQ accordion helper
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

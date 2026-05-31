@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>My History - DevToolkit</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px 80px 24px;
+    }
+
+    .page-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 600px) {
+      .page-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin: 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-export {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.2);
+      border: 1px solid rgba(0, 102, 255, 0.4);
+      color: #00CCFF;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-export:hover {
+      background: #00CCFF;
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.3);
+    }
+
+    /* Filters Box */
+    .filter-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .filter-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .filter-tab {
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-gray);
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .filter-tab:hover, .filter-tab.active {
+      color: #00CCFF;
+      background: rgba(0, 102, 255, 0.1);
+      border-color: #0066FF;
+    }
+
+    .search-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: #fff;
+      outline: none;
+      width: 250px;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .search-box:focus {
+      border-color: #00CCFF;
+      background: rgba(5, 5, 16, 0.8);
+      width: 280px;
+    }
+
+    @media (max-width: 768px) {
+      .search-box {
+        width: 100%;
+      }
+      .search-box:focus {
+        width: 100%;
+      }
+    }
+
+    /* History Table Card */
+    .table-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      color: #00CCFF;
+      font-weight: 700;
+      padding: 16px 12px;
+      border-bottom: 2px solid rgba(0, 102, 255, 0.2);
+    }
+
+    td {
+      padding: 16px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 12px;
+      letter-spacing: 0.5px;
+      display: inline-block;
+    }
+
+    .badge-seo { background: rgba(0, 204, 255, 0.15); color: #00CCFF; }
+    .badge-text { background: rgba(123, 47, 255, 0.15); color: #7B2FFF; }
+    .badge-image { background: rgba(0, 102, 255, 0.15); color: #0066FF; }
+    .badge-video { background: rgba(255, 0, 102, 0.15); color: #FF0066; }
+    .badge-developer { background: rgba(0, 255, 102, 0.15); color: #00FF66; }
+    .badge-converter { background: rgba(255, 153, 0, 0.15); color: #FF9900; }
+
+    .btn-again {
+      padding: 6px 12px;
+      background: rgba(0, 102, 255, 0.2);
+      border: 1px solid rgba(0, 102, 255, 0.4);
+      color: #00CCFF;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 4px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-again:hover {
+      background: #00CCFF;
+      color: #fff;
+    }
+
+    /* Pagination controls */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .pag-btn {
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .pag-btn:hover:not(:disabled) {
+      border-color: #00CCFF;
+      color: #00CCFF;
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .pag-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .pag-info {
+      font-size: 13px;
+      color: var(--text-gray);
+      font-weight: 500;
+    }
+
+    /* Empty state */
+    .empty-state {
+      padding: 80px 24px;
+      text-align: center;
+      color: var(--text-gray);
+      font-size: 15px;
+    }
+
+    .empty-emoji {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <div class="container">
+    <div class="page-title-row">
+      <h2 class="page-title">My Tool History</h2>
+      <button class="btn-export" id="export-btn">📊 Export CSV</button>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="filter-wrapper">
+      <div class="filter-tabs">
+        <div class="filter-tab active" data-cat="all">All</div>
+        <div class="filter-tab" data-cat="seo">SEO</div>
+        <div class="filter-tab" data-cat="text">Text</div>
+        <div class="filter-tab" data-cat="image">Image</div>
+        <div class="filter-tab" data-cat="video">Video</div>
+        <div class="filter-tab" data-cat="developer">Developer</div>
+        <div class="filter-tab" data-cat="converter">Converter</div>
+      </div>
+      <input type="text" class="search-box" id="search-input" placeholder="Search by tool name...">
+    </div>
+
+    <!-- Table Card -->
+    <div class="table-card" id="table-card">
+      <table id="history-table">
+        <thead>
+          <tr>
+            <th style="width: 50px; text-align: center;">Icon</th>
+            <th>Tool Name</th>
+            <th>Category</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th style="text-align: right;">Action</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <!-- Rows will be injected dynamically -->
+        </tbody>
+      </table>
+
+      <!-- Empty state placeholder -->
+      <div class="empty-state" id="empty-lbl" style="display: none;">
+        <div class="empty-emoji">📜</div>
+        No history yet. Start using tools to see it here!
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination-controls">
+      <button class="pag-btn" id="btn-prev">Previous</button>
+      <span class="pag-info" id="pag-lbl">Page 1 of 1</span>
+      <button class="pag-btn" id="btn-next">Next</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { checkAuth } from './js/auth.js';
+    import { initBackground } from './js/3d-background.js';
+    import { getFullHistory, exportCSV, logToolUsage } from './js/tools-tracker.js';
+
+    // Start 3D background
+    initBackground('bg-container');
+
+    // Protect checking
+    const user = await checkAuth(true);
+    let fullHistory = [];
+    let displayedHistory = [];
+    let currentPage = 1;
+    const itemsPerPage = 10;
+    let selectedCat = 'all';
+
+    // Tools dictionary to resolve emojis
+    const tools = [
+      { name: 'Meta Tag Generator', emoji: '🏷️', slug: 'meta-tag-generator', cat: 'seo' },
+      { name: 'Website SEO Score Checker', emoji: '💯', slug: 'seo-score-checker', cat: 'seo' },
+      { name: 'Keyword Density Checker', emoji: '📊', slug: 'keyword-density', cat: 'seo' },
+      { name: 'Robots.txt Generator', emoji: '🤖', slug: 'robots-txt-generator', cat: 'seo' },
+      { name: 'Sitemap Generator', emoji: '🗺️', slug: 'sitemap-generator', cat: 'seo' },
+      { name: 'Domain Age Checker', emoji: '⏳', slug: 'domain-age-checker', cat: 'seo' },
+      { name: 'DA PA Checker', emoji: '📈', slug: 'da-pa-checker', cat: 'seo' },
+      { name: 'Backlink Checker', emoji: '🔗', slug: 'backlink-checker', cat: 'seo' },
+      { name: 'Google Index Checker', emoji: '🔍', slug: 'google-index-checker', cat: 'seo' },
+      { name: 'HTTP Headers Checker', emoji: '🌐', slug: 'http-headers-checker', cat: 'seo' },
+
+      { name: 'Plagiarism Checker', emoji: '🔍', slug: 'plagiarism-checker', cat: 'text' },
+      { name: 'Word Counter', emoji: '🔢', slug: 'word-counter', cat: 'text' },
+      { name: 'Grammar Checker', emoji: '📝', slug: 'grammar-checker', cat: 'text' },
+      { name: 'Article Rewriter', emoji: '🔄', slug: 'article-rewriter', cat: 'text' },
+      { name: 'Text Case Converter', emoji: '🔠', slug: 'text-case-converter', cat: 'text' },
+      { name: 'Remove Duplicate Lines', emoji: '➖', slug: 'remove-duplicate-lines', cat: 'text' },
+      { name: 'Word Combiner', emoji: '🔀', slug: 'word-combiner', cat: 'text' },
+      { name: 'Text to Binary', emoji: '💻', slug: 'text-to-binary', cat: 'text' },
+      { name: 'Readability Checker', emoji: '📖', slug: 'readability-checker', cat: 'text' },
+      { name: 'Lorem Ipsum Generator', emoji: '📜', slug: 'lorem-ipsum', cat: 'text' },
+
+      { name: 'Image Compressor', emoji: '📉', slug: 'image-compressor', cat: 'image' },
+      { name: 'Image to Text (OCR)', emoji: '👁️', slug: 'image-to-text', cat: 'image' },
+      { name: 'Image Resizer', emoji: '📐', slug: 'image-resizer', cat: 'image' },
+      { name: 'JPG to PNG Converter', emoji: '🔁', slug: 'jpg-to-png', cat: 'image' },
+      { name: 'Favicon Generator', emoji: '✨', slug: 'favicon-generator', cat: 'image' },
+      { name: 'Color Picker & Converter', emoji: '🎨', slug: 'color-picker', cat: 'image' },
+
+      { name: 'YouTube Thumbnail Downloader', emoji: '🖼️', slug: 'youtube-thumbnail-downloader', cat: 'video' },
+      { name: 'YouTube Hashtag Generator', emoji: '🏷️', slug: 'youtube-hashtag-generator', cat: 'video' },
+      { name: 'TikTok Video Downloader', emoji: '🎥', slug: 'tiktok-downloader', cat: 'video' },
+      { name: 'YouTube to MP3 Converter', emoji: '🎵', slug: 'youtube-to-mp3', cat: 'video' },
+
+      { name: 'JSON Formatter & Validator', emoji: '💽', slug: 'json-formatter', cat: 'developer' },
+      { name: 'Base64 Encoder/Decoder', emoji: '🗝️', slug: 'base64-encoder', cat: 'developer' },
+      { name: 'URL Encoder/Decoder', emoji: '🔗', slug: 'url-encoder', cat: 'developer' },
+      { name: 'MD5/SHA256 Hash Generator', emoji: '🔒', slug: 'hash-generator', cat: 'developer' },
+      { name: 'QR Code Generator', emoji: '📱', slug: 'qr-code-generator', cat: 'developer' },
+      { name: 'Password Generator', emoji: '🔐', slug: 'password-generator', cat: 'developer' },
+
+      { name: 'Binary/Hex/Decimal Converter', emoji: '🧮', slug: 'binary-converter', cat: 'converter' },
+      { name: 'Age Calculator', emoji: '📅', slug: 'age-calculator', cat: 'converter' },
+      { name: 'Unit Converter', emoji: '⚖️', slug: 'unit-converter', cat: 'converter' },
+      { name: 'Scientific Calculator', emoji: '➗', slug: 'scientific-calculator', cat: 'converter' }
+    ];
+
+    if (user) {
+      loadHistory();
+    }
+
+    const tableBody = document.getElementById('table-body');
+    const tableHeader = document.querySelector('thead');
+    const emptyLbl = document.getElementById('empty-lbl');
+    const searchInput = document.getElementById('search-input');
+    
+    const pagLbl = document.getElementById('pag-lbl');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const pagControls = document.getElementById('pagination-controls');
+
+    async function loadHistory() {
+      fullHistory = await getFullHistory();
+      applyFilters();
+    }
+
+    // Apply category & search term filters
+    function applyFilters() {
+      const q = searchInput.value.toLowerCase().trim();
+
+      displayedHistory = fullHistory.filter(item => {
+        const matchesCat = (selectedCat === 'all' || item.tool_category === selectedCat);
+        const matchesSearch = (item.tool_name.toLowerCase().includes(q));
+        return matchesCat && matchesSearch;
+      });
+
+      currentPage = 1;
+      renderTable();
+    }
+
+    // Render current pagination frame
+    function renderTable() {
+      tableBody.innerHTML = '';
+      
+      if (displayedHistory.length === 0) {
+        tableHeader.style.display = 'none';
+        emptyLbl.style.display = 'block';
+        pagControls.style.display = 'none';
+        return;
+      }
+
+      tableHeader.style.display = 'table-header-group';
+      emptyLbl.style.display = 'none';
+      pagControls.style.display = 'flex';
+
+      const totalPages = Math.ceil(displayedHistory.length / itemsPerPage);
+      const start = (currentPage - 1) * itemsPerPage;
+      const end = Math.min(start + itemsPerPage, displayedHistory.length);
+
+      const frame = displayedHistory.slice(start, end);
+
+      frame.forEach(row => {
+        const tInfo = tools.find(t => t.slug === row.tool_slug);
+        const emoji = tInfo ? tInfo.emoji : '🛠️';
+        
+        const dateObj = new Date(row.used_at);
+        const dateStr = dateObj.toLocaleDateString();
+        const timeStr = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="text-align: center; font-size: 18px;">${emoji}</td>
+          <td style="font-weight: 700;">${row.tool_name}</td>
+          <td><span class="badge badge-${row.tool_category}">${row.tool_category}</span></td>
+          <td>${dateStr}</td>
+          <td>${timeStr}</td>
+          <td style="text-align: right;">
+            <button class="btn-again" data-name="${row.tool_name}" data-cat="${row.tool_category}" data-slug="${row.tool_slug}">Use Again</button>
+          </td>
+        `;
+
+        tr.querySelector('.btn-again').addEventListener('click', async () => {
+          await logToolUsage(row.tool_name, row.tool_category, row.tool_slug);
+          window.location.href = `/tools/${row.tool_slug}.html`;
+        });
+
+        tableBody.appendChild(tr);
+      });
+
+      // Update Pagination state
+      pagLbl.textContent = `Page ${currentPage} of ${totalPages}`;
+      btnPrev.disabled = (currentPage === 1);
+      btnNext.disabled = (currentPage === totalPages);
+    }
+
+    // Filters Interactivity
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        selectedCat = tab.getAttribute('data-cat');
+        applyFilters();
+      });
+    });
+
+    searchInput.addEventListener('input', applyFilters);
+
+    // Prev / Next actions
+    btnPrev.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTable();
+      }
+    });
+
+    btnNext.addEventListener('click', () => {
+      const totalPages = Math.ceil(displayedHistory.length / itemsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderTable();
+      }
+    });
+
+    // Export CSV click event
+    document.getElementById('export-btn').addEventListener('click', exportCSV);
+  </script>
+</body>
+</html>

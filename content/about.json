@@ -1,0 +1,9 @@
+{
+  "heading": "About DevToolKit",
+  "story": "DevToolKit was founded with one mission: to make professional-grade online tools free and accessible to everyone. We believe powerful tools should not cost money or require a subscription.\n\nOur team of developers and designers work tirelessly to build, maintain and improve every tool on this platform.\n\nToday DevToolKit offers 40+ free tools across 6 categories with thousands of users visiting every day.",
+  "mission_cards": [
+    {"icon": "🆓", "title": "Always Free", "description": "Every tool is and always will be completely free to use."},
+    {"icon": "🔒", "title": "Privacy First", "description": "We never collect or store your data. Everything runs in your browser."},
+    {"icon": "⚡", "title": "Always Improving", "description": "We add new tools and improve existing ones based on user feedback."}
+  ]
+}

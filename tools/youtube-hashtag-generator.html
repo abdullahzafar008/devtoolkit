@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Free YouTube Hashtag Generator - Tag Optimization Niche | DevToolkit</title>
+  <meta name="description" content="Generate trending, highly relevant YouTube hashtags for your videos. Enter seed keywords, select niches, extract optimal tags, and monitor descriptions tag limits.">
+  <meta name="keywords" content="youtube hashtag generator, yt hashtags tool, find trending tags, video description hashtags, viral youtube hashtags, gaming recipe hashtags">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/tools/youtube-hashtag-generator.html">
+  <meta property="og:title" content="Free YouTube Hashtag Generator - Tag Optimization Niche | DevToolkit">
+  <meta property="og:description" content="Create high-relevance YouTube video hashtags. Features live descriptions warnings, category selectors, and copy-paste exports.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- FAQ JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a YouTube Hashtag Generator?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It is a utility tool that creates relevant, high-traffic hashtags (words starting with #) to place in your YouTube video description or title to improve categorization, search indexing, and viral growth."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many hashtags should I add to my YouTube video?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "YouTube permits up to 50 hashtags in a video's description. However, Google officially warns that if you include more than 15 hashtags on a single video, it will ignore all of them. Keeping your list between 3 and 8 highly focused tags is the optimal strategy."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where should I place the hashtags?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can add them directly to your video description (commonly at the very bottom). The first three hashtags you add there will automatically show up above your video's title, making them highly visible."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this tool completely free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, 100% free and fully client-side. The hashtag compilations calculate instantly in your local browser sandbox."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "YouTube Hashtag Generator",
+    "url": "https://www.devtoolkit.com/tools/youtube-hashtag-generator.html",
+    "description": "Premium browser-based creator utility, generating optimized video description hashtags with live warning parameters.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+      --danger: #FF3366;
+      --success: #00FF66;
+      --warning: #FFAA00;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .tool-hero {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .hero-3d-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: relative;
+      z-index: 2;
+      padding: 24px;
+      max-width: 800px;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .tool-title {
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tool-tagline {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin: 0 0 24px 0;
+    }
+
+    .btn-scroll-down {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 20px;
+      color: #00CCFF;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .btn-scroll-down:hover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.2);
+    }
+
+    /* Workspace */
+    .tool-workspace {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 60px 24px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    .tag-generator-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 1.85fr;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .tag-generator-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left side panel config */
+    .configs-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .panel-group {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel-group-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.1);
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+    }
+
+    .input-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-box label {
+      font-size: 11px;
+      color: var(--text-gray);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .text-input, .select-field {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: #fff;
+      padding: 10px 12px;
+      font-family: inherit;
+      outline: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .text-input:focus, .select-field:focus {
+      border-color: #00CCFF;
+      box-shadow: 0 0 8px rgba(0, 204, 255, 0.2);
+    }
+
+    .btn-generate {
+      width: 100%;
+      background: #0066FF;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+    }
+
+    .btn-generate:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.4);
+    }
+
+    /* Right side panel layout output */
+    .output-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Statistics count bar */
+    .stats-bar {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .stat-badge {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: var(--text-gray);
+    }
+
+    .stat-badge span {
+      color: #00CCFF;
+      font-weight: 800;
+    }
+
+    /* Alert block limit warning */
+    .warning-alert {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 170, 0, 0.08);
+      border: 1px solid rgba(255, 170, 0, 0.25);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--warning);
+    }
+
+    .warning-alert.optimal {
+      background: rgba(0, 255, 102, 0.08);
+      border: 1px solid rgba(0, 255, 102, 0.25);
+      color: var(--success);
+    }
+
+    .warning-alert.danger {
+      background: rgba(255, 51, 102, 0.08);
+      border: 1px solid rgba(255, 51, 102, 0.25);
+      color: var(--danger);
+    }
+
+    /* Dynamic tags grid checkboxes wrapper */
+    .tags-output-container {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      min-height: 180px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-content: flex-start;
+      max-height: 350px;
+      overflow-y: auto;
+    }
+
+    .tag-checkbox-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      color: #fff;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .tag-checkbox-badge input {
+      display: none;
+    }
+
+    .tag-checkbox-badge:hover {
+      border-color: #0066FF;
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .tag-checkbox-badge.checked {
+      background: rgba(0, 204, 255, 0.15);
+      border-color: #00CCFF;
+      color: #00CCFF;
+      font-weight: 700;
+      box-shadow: 0 0 10px rgba(0, 204, 255, 0.15);
+    }
+
+    /* Controls copy download */
+    .controls-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+    }
+
+    .ctrl-btn {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      color: #00CCFF;
+      font-weight: 700;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+    }
+
+    .ctrl-btn:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+    }
+
+    /* Article layout elements */
+    .article-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .step-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #00CCFF;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+    }
+
+    /* FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Related Tools Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .blog-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-thumb {
+      height: 140px;
+      background: linear-gradient(135deg, #0066FF, #7B2FFF);
+    }
+
+    .blog-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .blog-desc {
+      font-size: 12px;
+      color: var(--text-gray);
+      line-height: 1.4;
+    }
+
+    .blog-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: auto;
+    }
+
+    .blog-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.4), rgba(123, 47, 255, 0.4));
+      border-top: 1px solid var(--card-border);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cta-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .btn-cta {
+      padding: 12px 24px;
+      background: #0066FF;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-cta:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+    }
+
+    /* WordPress Documentation Comment Requirement */
+    /* 
+     Plugin Name: YouTube Hashtag Generator
+     Description: Client-side dynamic YouTube hashtag generator with niche presets and live 15-tag warning limits.
+     Version: 1.0.0
+     Author: DevToolkit Inc.
+    */
+  </style>
+</head>
+<body>
+
+  <!-- Floating background particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <!-- Section 1: Hero -->
+  <section class="tool-hero">
+    <div class="hero-3d-scene" id="tool-hero-3d"></div>
+    <div class="hero-overlay">
+      <div class="breadcrumbs">
+        <a href="/index.html">Home</a>
+        <span class="separator">&gt;</span>
+        <a href="/category-developer.html">Developer Tools</a>
+        <span class="separator">&gt;</span>
+        <span>YT Hashtag Generator</span>
+      </div>
+      <h1 class="tool-title">YouTube Hashtag Generator</h1>
+      <p class="tool-tagline">Boost video discoverability with highly optimized hashtags. Check description limits and extract viral category tags instantly.</p>
+      <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
+    </div>
+  </section>
+
+  
+
+  <!-- Section 2: Workspace -->
+  <main class="tool-workspace" id="workspace">
+    <div class="glass-card">
+      
+      <div class="tag-generator-layout">
+        
+        <!-- Left Side: Configs panel -->
+        <div class="configs-panel">
+          <div class="panel-group">
+            <span class="panel-group-title">Niche Presets & Keywords</span>
+            
+            <div class="input-box">
+              <label for="niche-preset">Video Niche Preset</label>
+              <select class="select-field" id="niche-preset">
+                <option value="gaming">Gaming & eSports</option>
+                <option value="cooking">Cooking, Food & Recipes</option>
+                <option value="tech">Tech Review & Coding</option>
+                <option value="fitness">Fitness, Gym & Health</option>
+                <option value="vlogs">Lifestyle & Travel Vlogs</option>
+                <option value="education">Education & Science</option>
+                <option value="finance">Finance & Passive Income</option>
+                <option value="beauty">Beauty, Makeup & Fashion</option>
+              </select>
+            </div>
+
+            <div class="input-box">
+              <label for="keyword-seeds">Seed Niche Keywords (Comma separated)</label>
+              <input type="text" class="text-input" id="keyword-seeds" placeholder="e.g. gameplay, minecraft, walkthrough">
+            </div>
+
+            <button class="btn-generate" id="btn-compile">Compile Optimised Hashtags</button>
+          </div>
+        </div>
+
+        <!-- Right Side: Outputs tags checkbox list -->
+        <div class="output-panel">
+          <div class="editor-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+            <span class="editor-label">Generated Hashtags List</span>
+            
+            <div class="stats-bar">
+              <div class="stat-badge">Selected: <span id="stat-selected-count">0</span></div>
+              <div class="stat-badge">Characters: <span id="stat-chars-count">0</span></div>
+            </div>
+          </div>
+
+          <!-- Alert box checks sitemap/description constraints -->
+          <div id="warning-box" class="warning-alert optimal">
+            <span>✓ Optimal hashtag counts selected. Ready to copy.</span>
+          </div>
+
+          <div class="tags-output-container" id="tags-wrapper">
+            <span style="color:rgba(255,255,255,0.4); text-align:center; width:100%; padding-top:60px;">Select Niche Category and keywords to generate metadata hashtags.</span>
+          </div>
+
+          <div class="controls-bar">
+            <button class="ctrl-btn" id="btn-select-all" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.1);">Select All</button>
+            <button class="ctrl-btn" id="btn-copy">Copy Selected Tags</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  
+
+  <!-- Section 3: How to Use -->
+  <section class="article-section">
+    <h2>How to Optimize Video Description Hashtags</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-emoji">🛠️</div>
+        <div class="step-title">1. Set Niche presets</div>
+        <div class="step-desc">Pick your video category and input specific comma-separated keywords (e.g. "fortnite").</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">🔥</div>
+        <div class="step-title">2. Choose trending tags</div>
+        <div class="step-desc">Our mixer builds a list of primary, secondary, and viral general hashtags. Click badges to select them.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">📈</div>
+        <div class="step-title">3. Avoid 15+ over-limits</div>
+        <div class="step-desc">Check the selection counter warning, copy optimized tags, and paste directly in description lists.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Key Features -->
+  <section class="article-section">
+    <h2>Creators Tag Optimization Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-head">🚀 Smart Hashtags Mixer</div>
+        <div class="feature-desc">Dynamically blends seed terms with niche registries to output custom trending tags instantly.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🛑 Live 15-Tag Safety Alert</div>
+        <div class="feature-desc">Built-in warning engine changes alert status to prevent Google ignoring descriptions with 15+ tags.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🔒 Safe Browser Workflows</div>
+        <div class="feature-desc">Compiles all outputs locally in isolated browser volatile script blocks with absolute privacy.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: FAQ -->
+  <section class="article-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-wrapper">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">What happens if I use more than 15 hashtags on a video? <span>+</span></div>
+        <div class="faq-answer">YouTube has a strict policy regarding over-tagging. If a single video includes more than 15 hashtags on its description or title, the platform's algorithm ignores all hashtags on that video, and it might flag your video for metadata spam.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">How are these hashtags chosen? <span>+</span></div>
+        <div class="faq-answer">The tool matches your category preset with trending datasets (like #Gaming, #recipe) and combines your custom seed words to produce niche variations, alongside general viral growth tags like #shorts and #youtube.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Will hashtags improve my video search rank? <span>+</span></div>
+        <div class="faq-answer">Yes. Hashtags make it easier for YouTube's search and recommendation systems to index what your video is about, boosting visibility in related video feeds and search categories.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Do I need to put '#' symbol in seed keywords input? <span>+</span></div>
+        <div class="faq-answer">No, there is no need. The system sanitizes spaces, symbols, and commas, automatically prefixing every generated tag with a '#' sign.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Related Tools Injected Dynamically -->
+  <section class="article-section">
+    <h2>Discover Other Developer Utilities</h2>
+    <div class="blog-grid" id="related-tools-grid">
+      <!-- Injected Dynamically -->
+    </div>
+  </section>
+
+  <!-- Section 7: Footer CTA Banner -->
+  <section class="cta-banner">
+    <h2 class="cta-title">Ready to explore more free tools?</h2>
+    <p class="cta-subtitle">DevToolkit has 40+ utility modules waiting for you.</p>
+    <a href="/index.html" class="btn-cta">Explore All Tools →</a>
+  </section>
+
+  <!-- Standard Footer -->
+  <footer>
+    <div style="text-align: center; font-size:12px; color:rgba(255,255,255,0.4); padding: 24px 0;">
+      &copy; 2026 DevToolKit. All rights reserved. | <a href="/index.html" style="color:var(--cyan); text-decoration:none;">Home</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from '../js/3d-background.js';
+    import { logToolUsage } from '../js/tools-tracker.js';
+
+    // Start background particle animation
+    initBackground('bg-container');
+
+    // Local 3D Hero Scene: Revolving Hashtags Play Button Core
+    function initHero3D() {
+      const container = document.getElementById('tool-hero-3d');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000);
+      camera.position.z = 160;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const light1 = new THREE.AmbientLight(0xffffff, 0.4);
+      scene.add(light1);
+
+      const light2 = new THREE.DirectionalLight(0xFF3366, 1.2);
+      light2.position.set(10, 10, 10);
+      scene.add(light2);
+
+      const playGroup = new THREE.Group();
+      scene.add(playGroup);
+
+      // Central core triangle (YouTube Play Button visual representation)
+      const geom = new THREE.ConeGeometry(12, 20, 3);
+      const mat = new THREE.MeshPhongMaterial({
+        color: 0xFF3366,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.6
+      });
+      const playCore = new THREE.Mesh(geom, mat);
+      playCore.rotation.z = -Math.PI / 2; // Point right
+      playGroup.add(playCore);
+
+      // Orbiting hashtag cubes representation
+      const count = 5;
+      const cubes = [];
+      const speeds = [];
+
+      for (let i = 0; i < count; i++) {
+        const cubeGeom = new THREE.BoxGeometry(4, 4, 4);
+        const cubeMat = new THREE.MeshPhongMaterial({
+          color: i % 2 === 0 ? 0x00CCFF : 0x7B2FFF
+        });
+        const cube = new THREE.Mesh(cubeGeom, cubeMat);
+        playGroup.add(cube);
+        cubes.push(cube);
+        speeds.push(0.015 + i * 0.005);
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        playCore.rotation.y += 0.008;
+
+        const time = Date.now() * 0.001;
+        cubes.forEach((cube, idx) => {
+          const angle = time * speeds[idx] * 2 + idx;
+          cube.position.set(Math.cos(angle) * 28, Math.sin(angle) * 12, Math.sin(angle) * 28);
+          cube.rotation.y += 0.02;
+          cube.rotation.x += 0.01;
+        });
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      });
+    }
+    initHero3D();
+
+    // Related Tools Grid
+    const related = [
+      { name: 'Word Counter & Readability', emoji: '📝', slug: 'word-counter', cat: 'text', desc: 'Verify reading accessibility level index' },
+      { name: 'YouTube Thumbnail Grabber', emoji: '🖼️', slug: 'youtube-thumbnail-downloader', cat: 'converter', desc: 'Grab Youtube video thumbnails instantly' },
+      { name: 'Keywords Density Auditor', emoji: '🔍', slug: 'keyword-density', cat: 'seo', desc: 'Scrape copy texts for keyword stuffing' },
+      { name: 'Robots.txt Rules Builder', emoji: '🤖', slug: 'robots-txt-generator', cat: 'seo', desc: 'Generate optimized crawler text maps' }
+    ];
+
+    const relatedGrid = document.getElementById('related-tools-grid');
+    related.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <div class="blog-thumb" style="display:flex; align-items:center; justify-content:center; font-size:32px;">${t.emoji}</div>
+        <div class="blog-info">
+          <div class="blog-title">${t.name}</div>
+          <div class="blog-desc">${t.desc}</div>
+          <a href="/tools/${t.slug}.html" class="blog-link">Use Tool →</a>
+        </div>
+      `;
+      card.querySelector('.blog-link').addEventListener('click', async () => {
+        await logToolUsage(t.name, t.cat, t.slug);
+      });
+      relatedGrid.appendChild(card);
+    });
+
+    // Hashtag database categories mapping
+    const hashtagsDb = {
+      'gaming': ['gaming', 'gamer', 'gameplay', 'shorts', 'youtube', 'games', 'videogames', 'pcgaming', 'ps5', 'xbox', 'nintendo', 'twitch', 'gamingcommunity', 'gamerlife', 'playstation', 'letsplay', 'walkthrough'],
+      'cooking': ['cooking', 'food', 'recipe', 'recipeoftheday', 'foodblogger', 'healthyfood', 'homecooking', 'tasty', 'cookingtips', 'baking', 'instafood', 'yummy', 'easyrecipes', 'chef', 'foodie', 'dinnerideas'],
+      'tech': ['tech', 'technology', 'coding', 'programmer', 'software', 'gadgets', 'developer', 'computerscience', 'techreview', 'review', 'science', 'artificialintelligence', 'webdevelopment', 'ai', 'innovation', 'engineering'],
+      'fitness': ['fitness', 'gym', 'workout', 'health', 'fitnessmotivation', 'motivation', 'exercise', 'training', 'healthy', 'bodybuilding', 'cardio', 'yoga', 'diettips', 'fitfam', 'strength', 'active'],
+      'vlogs': ['vlog', 'dailyvlog', 'travel', 'lifestyle', 'travelblogger', 'adventure', 'wanderlust', 'vlogger', 'blogger', 'youtubechannel', 'creativity', 'dailyroutine', 'explore', 'friends', 'storytime'],
+      'education': ['education', 'learning', 'science', 'facts', 'history', 'knowledge', 'study', 'teacher', 'studytips', 'curiosity', 'interestingfacts', 'explained', 'tutorial', 'school', 'learn', 'onlineclasses'],
+      'finance': ['finance', 'passiveincome', 'money', 'investment', 'stocks', 'crypto', 'savings', 'personalfinance', 'wealth', 'realestate', 'budgeting', 'financialfreedom', 'business', 'entrepreneur', 'sidehustle'],
+      'beauty': ['beauty', 'makeup', 'fashion', 'skincare', 'haircare', 'makeuptutorial', 'cosmetics', 'glow', 'style', 'makeupartist', 'beautyhacks', 'routine', 'dress', 'lifestyle', 'glam', 'wellness']
+    };
+
+    const generalViralTags = ['youtube', 'shorts', 'trending', 'viral', 'subscribe', 'youtubegrowth', 'foryou', 'explore', 'video', 'creator'];
+
+    const nichePreset = document.getElementById('niche-preset');
+    const keywordSeeds = document.getElementById('keyword-seeds');
+    const btnCompile = document.getElementById('btn-compile');
+    const tagsWrapper = document.getElementById('tags-wrapper');
+    
+    const statSelectedCount = document.getElementById('stat-selected-count');
+    const statCharsCount = document.getElementById('stat-chars-count');
+    const warningBox = document.getElementById('warning-box');
+    const btnSelectAll = document.getElementById('btn-select-all');
+
+    btnCompile.addEventListener('click', generateTags);
+    btnSelectAll.addEventListener('click', toggleSelectAll);
+
+    // Initial load
+    generateTags();
+
+    // Compile dynamic tags
+    function generateTags() {
+      const niche = nichePreset.value;
+      const seedsText = keywordSeeds.value.trim();
+
+      // Clean inputs seeds
+      const seeds = seedsText ? seedsText.split(',').map(s => s.trim().toLowerCase().replace(/[^a-z0-9]/gi, '')).filter(s => s.length > 0) : [];
+
+      let tagsSet = new Set();
+
+      // 1. Process seed keyword tags
+      seeds.forEach(s => {
+        tagsSet.add(`#${s}`);
+        // Combine with category suffix
+        tagsSet.add(`#${s}tips`);
+        tagsSet.add(`#${s}gaming`);
+      });
+
+      // 2. Fetch niche preset tags
+      if (hashtagsDb[niche]) {
+        hashtagsDb[niche].slice(0, 14).forEach(t => {
+          tagsSet.add(`#${t}`);
+        });
+      }
+
+      // 3. Blend general growth tags
+      generalViralTags.slice(0, 6).forEach(g => {
+        tagsSet.add(`#${g}`);
+      });
+
+      const tags = Array.from(tagsSet);
+      
+      // Render badges
+      tagsWrapper.innerHTML = '';
+      if (tags.length === 0) {
+        tagsWrapper.innerHTML = '<span style="color:rgba(255,255,255,0.4); text-align:center; width:100%; padding-top:60px;">No tags compiled.</span>';
+        return;
+      }
+
+      tags.forEach(t => {
+        const badge = document.createElement('label');
+        badge.className = 'tag-checkbox-badge checked'; // Default selected on build
+        badge.innerHTML = `
+          <input type="checkbox" checked value="${t}">
+          <span>${t}</span>
+        `;
+
+        badge.querySelector('input').addEventListener('change', (e) => {
+          if (e.target.checked) {
+            badge.classList.add('checked');
+          } else {
+            badge.classList.remove('checked');
+          }
+          recalculateSelected();
+        });
+
+        tagsWrapper.appendChild(badge);
+      });
+
+      recalculateSelected();
+      logToolUsage('YT Hashtag Generator', 'developer', 'youtube-hashtag-generator');
+    }
+
+    function recalculateSelected() {
+      const checkedBoxes = Array.from(tagsWrapper.querySelectorAll('input:checked'));
+      const count = checkedBoxes.length;
+      
+      statSelectedCount.textContent = count;
+      
+      const values = checkedBoxes.map(cb => cb.value).join(' ');
+      statCharsCount.textContent = values.length;
+
+      // Check optimization warnings 15-tag limit
+      if (count === 0) {
+        warningBox.className = 'warning-alert';
+        warningBox.querySelector('span').textContent = '⚠️ Warning: No hashtags selected. Select badges to copy.';
+      } else if (count > 15) {
+        warningBox.className = 'warning-alert danger';
+        warningBox.querySelector('span').textContent = `🛑 Warning: You have selected ${count} hashtags. Google officially ignores all description hashtags if you exceed 15. Keep selected badges below 15!`;
+      } else if (count >= 3 && count <= 8) {
+        warningBox.className = 'warning-alert optimal';
+        warningBox.querySelector('span').textContent = `✓ SEO Perfect: Selected ${count} hashtags. This is the optimal range for video description indexing.`;
+      } else {
+        warningBox.className = 'warning-alert';
+        warningBox.querySelector('span').textContent = `✓ Selected ${count} hashtags. Ensure they are placed in description bottom spacing.`;
+      }
+    }
+
+    let allSelected = true;
+    function toggleSelectAll() {
+      const checkboxes = tagsWrapper.querySelectorAll('input');
+      allSelected = !allSelected;
+
+      checkboxes.forEach(cb => {
+        cb.checked = allSelected;
+        const badge = cb.parentElement;
+        if (allSelected) {
+          badge.classList.add('checked');
+        } else {
+          badge.classList.remove('checked');
+        }
+      });
+
+      btnSelectAll.textContent = allSelected ? 'Deselect All' : 'Select All';
+      recalculateSelected();
+    }
+
+    // Copy to clipboard
+    document.getElementById('btn-copy').addEventListener('click', async () => {
+      const checkedBoxes = Array.from(tagsWrapper.querySelectorAll('input:checked'));
+      if (checkedBoxes.length === 0) return;
+
+      const formatted = checkedBoxes.map(cb => cb.value).join(' ');
+      navigator.clipboard.writeText(formatted);
+      alert('Selected YouTube hashtags copied! 📋');
+
+      await logToolUsage('YT Hashtag Generator', 'developer', 'youtube-hashtag-generator');
+    });
+
+  </script>
+
+  <script>
+    // FAQ accordion helper
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

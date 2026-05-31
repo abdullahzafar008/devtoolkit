@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Free XML Sitemap Generator - Build Site Map Files | DevToolkit</title>
+  <meta name="description" content="Generate XML sitemaps for Google, Bing, and search engines. Bulk extract URLs, customize change frequency, priority, and last modified tags, and download sitemap.xml.">
+  <meta name="keywords" content="xml sitemap generator, sitemap creator, sitemap builder, google sitemap xml, site map generator, seo sitemap tool">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/tools/sitemap-generator.html">
+  <meta property="og:title" content="Free XML Sitemap Generator - Build Site Map Files | DevToolkit">
+  <meta property="og:description" content="Build search engine friendly XML, HTML, or text sitemaps instantly. Customize priority, changefreq, and download locally.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- FAQ JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is an XML Sitemap?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "An XML sitemap is a file that lists a website's essential URLs, making it easier for search engine bots (like Googlebot) to discover, crawl, and index all your web pages."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many URLs can an XML sitemap contain?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A single XML sitemap file is limited to 50,000 URLs and cannot exceed 50MB in file size. If your site has more pages, you should use a Sitemap Index file."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What do the Priority and Changefreq tags mean?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Priority (0.0 to 1.0) signals the relative importance of a page compared to other pages on your site. Change Frequency hints to bots how often the content is likely to change (e.g. daily, weekly)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does Google use Priority and Changefreq?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Googlebot largely ignores priority and changefreq settings nowadays, relying on its own signals. However, other search engines (like Bing) still check them, and it is a best practice to include them."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "XML Sitemap Generator",
+    "url": "https://www.devtoolkit.com/tools/sitemap-generator.html",
+    "description": "Premium browser-based sitemap compiler with bulk text URL extractors, adjustable meta parameters, and XML/HTML/text exports.",
+    "applicationCategory": "SEOApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+      --danger: #FF3366;
+      --success: #00FF66;
+      --warning: #FFAA00;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .tool-hero {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .hero-3d-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: relative;
+      z-index: 2;
+      padding: 24px;
+      max-width: 800px;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .tool-title {
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tool-tagline {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin: 0 0 24px 0;
+    }
+
+    .btn-scroll-down {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 20px;
+      color: #00CCFF;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .btn-scroll-down:hover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.2);
+    }
+
+    /* Workspace */
+    .tool-workspace {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 60px 24px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    .generator-dashboard {
+      display: grid;
+      grid-template-columns: 1.2fr 1.8fr;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .generator-dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left panel forms */
+    .configs-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .panel-group {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel-group-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.1);
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+    }
+
+    .input-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-box label {
+      font-size: 11px;
+      color: var(--text-gray);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .text-input, .select-field, .textarea-input {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: #fff;
+      padding: 10px 12px;
+      font-family: inherit;
+      outline: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .textarea-input {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .text-input:focus, .select-field:focus, .textarea-input:focus {
+      border-color: #00CCFF;
+      box-shadow: 0 0 8px rgba(0, 204, 255, 0.2);
+    }
+
+    /* Grid layout list of URLs */
+    .urls-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 250px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .url-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr auto;
+      gap: 6px;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      padding: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .url-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+    }
+
+    .grid-input {
+      background: rgba(5, 5, 16, 0.8);
+      border: 1px solid rgba(0, 102, 255, 0.2);
+      border-radius: 4px;
+      color: #fff;
+      padding: 6px 8px;
+      font-size: 12px;
+      outline: none;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .grid-input:focus {
+      border-color: #00CCFF;
+    }
+
+    .btn-delete {
+      background: rgba(255, 51, 102, 0.1);
+      border: 1px solid rgba(255, 51, 102, 0.3);
+      color: var(--danger);
+      border-radius: 4px;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .btn-delete:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .btn-add {
+      align-self: flex-start;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      color: #00CCFF;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+    }
+
+    .btn-add:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+    }
+
+    /* Right Output block */
+    .output-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .editor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .format-selector {
+      display: flex;
+      gap: 4px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(0, 102, 255, 0.2);
+      padding: 4px;
+      border-radius: 6px;
+    }
+
+    .format-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-gray);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .format-btn.active {
+      background: #0066FF;
+      color: #fff;
+    }
+
+    .output-textarea {
+      width: 100%;
+      height: 380px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      color: var(--success);
+      box-sizing: border-box;
+      outline: none;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    /* Stats */
+    .stats-bar {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .stat-badge {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: var(--text-gray);
+    }
+
+    .stat-badge span {
+      color: #00CCFF;
+      font-weight: 800;
+    }
+
+    .validation-alert {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 255, 102, 0.08);
+      border: 1px solid rgba(0, 255, 102, 0.25);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--success);
+      margin-bottom: 12px;
+    }
+
+    .validation-alert.warning {
+      background: rgba(255, 170, 0, 0.08);
+      border: 1px solid rgba(255, 170, 0, 0.25);
+      color: var(--warning);
+    }
+
+    .validation-alert.danger {
+      background: rgba(255, 51, 102, 0.08);
+      border: 1px solid rgba(255, 51, 102, 0.25);
+      color: var(--danger);
+    }
+
+    .controls-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .ctrl-btn {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      color: #00CCFF;
+      font-weight: 700;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+    }
+
+    .ctrl-btn:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+    }
+
+    /* Article layout elements */
+    .article-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .step-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #00CCFF;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+    }
+
+    /* FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Related Tools Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .blog-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-thumb {
+      height: 140px;
+      background: linear-gradient(135deg, #0066FF, #7B2FFF);
+    }
+
+    .blog-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .blog-desc {
+      font-size: 12px;
+      color: var(--text-gray);
+      line-height: 1.4;
+    }
+
+    .blog-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: auto;
+    }
+
+    .blog-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.4), rgba(123, 47, 255, 0.4));
+      border-top: 1px solid var(--card-border);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cta-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .btn-cta {
+      padding: 12px 24px;
+      background: #0066FF;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-cta:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+    }
+
+    /* WordPress Documentation Comment Requirement */
+    /* 
+     Plugin Name: XML Sitemap Generator
+     Description: Client-side XML/HTML Sitemap creator with bulk page selectors, last modifications, changefreqs, and priority weight tags.
+     Version: 1.0.0
+     Author: DevToolkit Inc.
+    */
+  </style>
+</head>
+<body>
+
+  <!-- Floating background particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <!-- Section 1: Hero -->
+  <section class="tool-hero">
+    <div class="hero-3d-scene" id="tool-hero-3d"></div>
+    <div class="hero-overlay">
+      <div class="breadcrumbs">
+        <a href="/index.html">Home</a>
+        <span class="separator">&gt;</span>
+        <a href="/category-seo.html">SEO Tools</a>
+        <span class="separator">&gt;</span>
+        <span>Sitemap Generator</span>
+      </div>
+      <h1 class="tool-title">XML Sitemap Generator</h1>
+      <p class="tool-tagline">Quickly extract URLs, assign priority mappings, define update frequencies, and build index structures for index engines.</p>
+      <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
+    </div>
+  </section>
+
+  
+
+  <!-- Section 2: Workspace -->
+  <main class="tool-workspace" id="workspace">
+    <div class="glass-card">
+      
+      <!-- Generator dashboard -->
+      <div class="generator-dashboard">
+        
+        <!-- Left configuration options -->
+        <div class="configs-panel">
+          
+          <!-- Bulk URL Importer -->
+          <div class="panel-group">
+            <span class="panel-group-title">1. Base Domain & URLs Import</span>
+            
+            <div class="input-box">
+              <label for="base-url">Base Website URL</label>
+              <input type="url" class="text-input" id="base-url" value="https://example.com" placeholder="https://example.com">
+            </div>
+
+            <div class="input-box">
+              <label for="bulk-urls">Bulk Paste Page Pathways (One per line)</label>
+              <textarea class="textarea-input" id="bulk-urls" placeholder="e.g.&#10;/&#10;/about&#10;/contact&#10;/blog/hello-world"></textarea>
+            </div>
+
+            <div style="display:flex; gap:10px;">
+              <button class="btn-add" id="btn-import-bulk" style="flex:1; justify-content:center;">Extract & Load Paths</button>
+              <button class="btn-delete" id="btn-clear-bulk" style="width:auto; padding:0 12px; font-size:12px; font-weight:700; height:auto; display:inline-flex; align-items:center; gap:6px;">Clear List</button>
+            </div>
+          </div>
+
+          <!-- Global parameters overrides -->
+          <div class="panel-group">
+            <span class="panel-group-title">2. Global Default Overrides</span>
+            
+            <div class="input-box">
+              <label for="global-lastmod">Last Modified Date</label>
+              <select class="select-field" id="global-lastmod">
+                <option value="today">Today's Date</option>
+                <option value="custom">Specific Date (Define)</option>
+                <option value="none">Exclude Lastmod Tag</option>
+              </select>
+            </div>
+
+            <div class="input-box" id="custom-date-box" style="display:none;">
+              <label for="global-custom-date">Define Date</label>
+              <input type="date" class="text-input" id="global-custom-date">
+            </div>
+
+            <div class="input-box">
+              <label for="global-changefreq">Change Frequency</label>
+              <select class="select-field" id="global-changefreq">
+                <option value="daily">Daily</option>
+                <option value="weekly" selected>Weekly</option>
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+                <option value="always">Always</option>
+                <option value="hourly">Hourly</option>
+                <option value="never">Never</option>
+              </select>
+            </div>
+
+            <div class="input-box">
+              <label for="global-priority">Priority</label>
+              <select class="select-field" id="global-priority">
+                <option value="1.0">1.0 (Home / Key landing)</option>
+                <option value="0.8" selected>0.8 (Main sections)</option>
+                <option value="0.5">0.5 (Blog posts / utility pages)</option>
+                <option value="0.3">0.3 (Low relevance archives)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Customizable URL items list -->
+          <div class="panel-group">
+            <span class="panel-group-title">3. Individual URL Overrides</span>
+            <div class="urls-container" id="urls-list-wrapper">
+              <!-- Dynamically populated list grid rows -->
+            </div>
+            
+            <button class="btn-add" id="btn-add-url">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              Add Custom Row
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Right Output Text block -->
+        <div class="output-panel">
+          <div class="editor-header">
+            <span class="editor-label">Sitemap Output Editor</span>
+            
+            <div class="format-selector">
+              <button class="format-btn active" data-format="xml">XML Format</button>
+              <button class="format-btn" data-format="html">HTML Format</button>
+              <button class="format-btn" data-format="txt">Text List</button>
+            </div>
+
+            <div class="stats-bar">
+              <div class="stat-badge">URLs: <span id="stat-url-count">0</span></div>
+              <div class="stat-badge">Size: <span id="stat-bytes">0 B</span></div>
+            </div>
+          </div>
+
+          <div id="validation-box" class="validation-alert">
+            <span>✓ Sitemap conforms to engine requirements.</span>
+          </div>
+
+          <textarea class="output-textarea" id="output-text" readonly></textarea>
+
+          <div class="controls-bar">
+            <button class="ctrl-btn" id="btn-copy">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy Map
+            </button>
+            <button class="ctrl-btn" id="btn-download">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2-2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download Map
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  
+
+  <!-- Section 3: How to Use -->
+  <section class="article-section">
+    <h2>How to Generate and Deploy an XML Sitemap</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-emoji">🖥️</div>
+        <div class="step-title">1. Define URLs list</div>
+        <div class="step-desc">Enter your website base domain and paste relative URL pathways. Click "Extract" to populate the configuration row fields.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">🛠️</div>
+        <div class="step-title">2. Modify Priorities</div>
+        <div class="step-desc">Customize values for changefreq and priority for key landing items. Check validation statuses for duplicate links.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">🚀</div>
+        <div class="step-title">3. Upload & Submit</div>
+        <div class="step-desc">Download as `sitemap.xml`, host at your root directory, and submit the link directly via Google Search Console.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Key Features -->
+  <section class="article-section">
+    <h2>Sitemap Optimization Metrics</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-head">📂 Multiple Layout Formats</div>
+        <div class="feature-desc">Export as search-ready XML sitemaps, user-readable nested HTML maps, or clean flat text files.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">⚡ Bulk URL Extractors</div>
+        <div class="feature-desc">Quickly parse unstructured content blocks to extract page paths, sanitizing special symbols.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🔒 Complete Browser Safety</div>
+        <div class="feature-desc">Assembles files locally using pure client JS modules, preventing server storage risk.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: FAQ -->
+  <section class="article-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-wrapper">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Where do I upload the sitemap.xml file? <span>+</span></div>
+        <div class="faq-answer">Upload the file directly into the top-level root public folder of your site's server. For example: `https://yourdomain.com/sitemap.xml`.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">What is the difference between an XML sitemap and HTML sitemap? <span>+</span></div>
+        <div class="faq-answer">XML sitemaps are formatted strictly in XML schema so search engine bots can easily digest them. HTML sitemaps are intended as regular web pages featuring navigational link hierarchies for actual human visitors.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Does a sitemap guarantee that search engines will index my pages? <span>+</span></div>
+        <div class="faq-answer">No. Sitemaps ensure that search engine crawlers can *find* all your pages. However, search engines decide whether to index pages based on quality, crawl budgets, uniqueness, and on-page authority metrics.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">How do I submit my sitemap to search engines? <span>+</span></div>
+        <div class="faq-answer">Submit your sitemap through Google Search Console (under Sitemaps menu) and Bing Webmaster Tools. You should also add a directive link in your robots.txt file, e.g. `Sitemap: https://yourdomain.com/sitemap.xml`.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Related Tools Injected Dynamically -->
+  <section class="article-section">
+    <h2>Discover Other Developer Utilities</h2>
+    <div class="blog-grid" id="related-tools-grid">
+      <!-- Injected Dynamically -->
+    </div>
+  </section>
+
+  <!-- Section 7: Footer CTA Banner -->
+  <section class="cta-banner">
+    <h2 class="cta-title">Ready to explore more free tools?</h2>
+    <p class="cta-subtitle">DevToolkit has 40+ utility modules waiting for you.</p>
+    <a href="/index.html" class="btn-cta">Explore All Tools →</a>
+  </section>
+
+  <!-- Standard Footer -->
+  <footer>
+    <div style="text-align: center; font-size:12px; color:rgba(255,255,255,0.4); padding: 24px 0;">
+      &copy; 2026 DevToolKit. All rights reserved. | <a href="/index.html" style="color:var(--cyan); text-decoration:none;">Home</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from '../js/3d-background.js';
+    import { logToolUsage } from '../js/tools-tracker.js';
+
+    // Start background particle animation
+    initBackground('bg-container');
+
+    // Local 3D Hero Scene: Hierarchical Tree Nodes (Website Structure Map)
+    function initHero3D() {
+      const container = document.getElementById('tool-hero-3d');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000);
+      camera.position.set(0, 10, 140);
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const light = new THREE.AmbientLight(0xffffff, 0.4);
+      scene.add(light);
+
+      const dirLight = new THREE.DirectionalLight(0x00CCFF, 1);
+      dirLight.position.set(10, 20, 15);
+      scene.add(dirLight);
+
+      // Create a structure tree with nodes and lines
+      const treeGroup = new THREE.Group();
+      scene.add(treeGroup);
+
+      const nodeCount = 15;
+      const nodes = [];
+      const positions = [];
+
+      // Generate nodes hierarchy
+      // Root Node
+      positions.push(new THREE.Vector3(0, 25, 0));
+      // Level 1 Nodes
+      positions.push(new THREE.Vector3(-30, 10, 0));
+      positions.push(new THREE.Vector3(0, 10, 0));
+      positions.push(new THREE.Vector3(30, 10, 0));
+      // Level 2 Nodes (Leafs)
+      for(let i=0; i<3; i++) positions.push(new THREE.Vector3(-45 + i*15, -10, 0));
+      for(let i=0; i<3; i++) positions.push(new THREE.Vector3(-15 + i*15, -10, 0));
+      for(let i=0; i<3; i++) positions.push(new THREE.Vector3(15 + i*15, -10, 0));
+      // Remaining random nodes
+      positions.push(new THREE.Vector3(-15, -25, 0));
+      positions.push(new THREE.Vector3(15, -25, 0));
+
+      const sphereGeom = new THREE.SphereGeometry(2.5, 16, 16);
+
+      // Create visual spheres
+      positions.forEach((pos, idx) => {
+        const mat = new THREE.MeshPhongMaterial({
+          color: idx === 0 ? 0x7B2FFF : (idx < 4 ? 0x0066FF : 0x00CCFF),
+          emissive: idx === 0 ? 0x3b006b : 0x000000,
+          shininess: 30
+        });
+        const sphere = new THREE.Mesh(sphereGeom, mat);
+        sphere.position.copy(pos);
+        treeGroup.add(sphere);
+        nodes.push(sphere);
+      });
+
+      // Connections lines material
+      const lineMat = new THREE.LineBasicMaterial({
+        color: 0x0066FF,
+        transparent: true,
+        opacity: 0.4
+      });
+
+      function createConnection(idxA, idxB) {
+        const points = [positions[idxA], positions[idxB]];
+        const geom = new THREE.BufferGeometry().setFromPoints(points);
+        const line = new THREE.Line(geom, lineMat);
+        treeGroup.add(line);
+      }
+
+      // Root -> Level 1
+      createConnection(0, 1);
+      createConnection(0, 2);
+      createConnection(0, 3);
+      // Level 1 -> Level 2
+      createConnection(1, 4); createConnection(1, 5); createConnection(1, 6);
+      createConnection(2, 7); createConnection(2, 8); createConnection(2, 9);
+      createConnection(3, 10); createConnection(3, 11); createConnection(3, 12);
+      // Level 2 -> Level 3
+      createConnection(8, 13);
+      createConnection(11, 14);
+
+      function animate() {
+        requestAnimationFrame(animate);
+        // Subtle rocking rotation
+        treeGroup.rotation.y = Math.sin(Date.now() * 0.0005) * 0.4;
+        treeGroup.rotation.x = Math.sin(Date.now() * 0.0003) * 0.1;
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      });
+    }
+    initHero3D();
+
+    // Related Tools Grid
+    const related = [
+      { name: 'Robots.txt Generator', emoji: '🤖', slug: 'robots-txt-generator', cat: 'seo', desc: 'Build crawler exclusion files' },
+      { name: 'SEO Tag Auditor', emoji: '🔍', slug: 'seo-score-checker', cat: 'seo', desc: 'Audit tag and structure errors' },
+      { name: 'Duplicate Lines Remover', emoji: '🗂️', slug: 'remove-duplicate-lines', cat: 'text', desc: 'Clear double list elements' },
+      { name: 'YouTube Thumbnail Saver', emoji: '🖼️', slug: 'youtube-thumbnail-downloader', cat: 'converter', desc: 'Grab Youtube video thumbnails' }
+    ];
+
+    const relatedGrid = document.getElementById('related-tools-grid');
+    related.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <div class="blog-thumb" style="display:flex; align-items:center; justify-content:center; font-size:32px;">${t.emoji}</div>
+        <div class="blog-info">
+          <div class="blog-title">${t.name}</div>
+          <div class="blog-desc">${t.desc}</div>
+          <a href="/tools/${t.slug}.html" class="blog-link">Use Tool →</a>
+        </div>
+      `;
+      card.querySelector('.blog-link').addEventListener('click', async () => {
+        await logToolUsage(t.name, t.cat, t.slug);
+      });
+      relatedGrid.appendChild(card);
+    });
+
+    // Form DOM Elements
+    const baseUrlInput = document.getElementById('base-url');
+    const bulkUrlsTextarea = document.getElementById('bulk-urls');
+    const btnImportBulk = document.getElementById('btn-import-bulk');
+    const btnClearBulk = document.getElementById('btn-clear-bulk');
+    const globalLastmod = document.getElementById('global-lastmod');
+    const customDateBox = document.getElementById('custom-date-box');
+    const globalCustomDate = document.getElementById('global-custom-date');
+    const globalChangefreq = document.getElementById('global-changefreq');
+    const globalPriority = document.getElementById('global-priority');
+    const urlsListWrapper = document.getElementById('urls-list-wrapper');
+    const btnAddUrl = document.getElementById('btn-add-url');
+    const outputText = document.getElementById('output-text');
+    const validationBox = document.getElementById('validation-box');
+
+    const statUrlCount = document.getElementById('stat-url-count');
+    const statBytes = document.getElementById('stat-bytes');
+
+    let currentFormat = 'xml';
+
+    // Lastmod display toggles
+    globalLastmod.addEventListener('change', () => {
+      if (globalLastmod.value === 'custom') {
+        customDateBox.style.display = 'block';
+        globalCustomDate.value = new Date().toISOString().split('T')[0];
+      } else {
+        customDateBox.style.display = 'none';
+      }
+      buildSitemap();
+    });
+
+    // Format buttons toggler
+    document.querySelectorAll('.format-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.format-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFormat = btn.getAttribute('data-format');
+        buildSitemap();
+      });
+    });
+
+    // Events triggers
+    [baseUrlInput, globalLastmod, globalCustomDate, globalChangefreq, globalPriority].forEach(el => {
+      el.addEventListener('input', buildSitemap);
+      el.addEventListener('change', buildSitemap);
+    });
+
+    // Clear import list trigger
+    btnClearBulk.addEventListener('click', () => {
+      bulkUrlsTextarea.value = '';
+      urlsListWrapper.innerHTML = '';
+      buildSitemap();
+    });
+
+    // Add Row URL
+    let urlIdCounter = 0;
+    function addUrlRow(path = '', lastmod = '', changefreq = '', priority = '') {
+      const id = ++urlIdCounter;
+      const row = document.createElement('div');
+      row.className = 'url-row';
+      row.id = `url-row-${id}`;
+      
+      const cf = changefreq || globalChangefreq.value;
+      const pri = priority || globalPriority.value;
+
+      row.innerHTML = `
+        <input type="text" class="grid-input row-path" placeholder="Path (e.g. /about)" value="${path}">
+        
+        <select class="grid-input row-changefreq">
+          <option value="always" ${cf === 'always' ? 'selected' : ''}>always</option>
+          <option value="hourly" ${cf === 'hourly' ? 'selected' : ''}>hourly</option>
+          <option value="daily" ${cf === 'daily' ? 'selected' : ''}>daily</option>
+          <option value="weekly" ${cf === 'weekly' ? 'selected' : ''}>weekly</option>
+          <option value="monthly" ${cf === 'monthly' ? 'selected' : ''}>monthly</option>
+          <option value="yearly" ${cf === 'yearly' ? 'selected' : ''}>yearly</option>
+          <option value="never" ${cf === 'never' ? 'selected' : ''}>never</option>
+        </select>
+        
+        <select class="grid-input row-priority">
+          <option value="1.0" ${pri === '1.0' ? 'selected' : ''}>1.0</option>
+          <option value="0.9" ${pri === '0.9' ? 'selected' : ''}>0.9</option>
+          <option value="0.8" ${pri === '0.8' ? 'selected' : ''}>0.8</option>
+          <option value="0.7" ${pri === '0.7' ? 'selected' : ''}>0.7</option>
+          <option value="0.6" ${pri === '0.6' ? 'selected' : ''}>0.6</option>
+          <option value="0.5" ${pri === '0.5' ? 'selected' : ''}>0.5</option>
+          <option value="0.4" ${pri === '0.4' ? 'selected' : ''}>0.4</option>
+          <option value="0.3" ${pri === '0.3' ? 'selected' : ''}>0.3</option>
+          <option value="0.2" ${pri === '0.2' ? 'selected' : ''}>0.2</option>
+          <option value="0.1" ${pri === '0.1' ? 'selected' : ''}>0.1</option>
+          <option value="0.0" ${pri === '0.0' ? 'selected' : ''}>0.0</option>
+        </select>
+
+        <input type="date" class="grid-input row-lastmod" value="${lastmod}">
+        
+        <button class="btn-delete" title="Delete Rule">🗑️</button>
+      `;
+
+      // Assign default lastmod value
+      const rowLastmod = row.querySelector('.row-lastmod');
+      if (lastmod) {
+        rowLastmod.value = lastmod;
+      } else {
+        const lastmodMode = globalLastmod.value;
+        if (lastmodMode === 'today') {
+          rowLastmod.value = new Date().toISOString().split('T')[0];
+        } else if (lastmodMode === 'custom') {
+          rowLastmod.value = globalCustomDate.value;
+        } else {
+          rowLastmod.value = '';
+        }
+      }
+
+      // Input change event triggers sitemap compiles
+      row.querySelectorAll('.grid-input').forEach(input => {
+        input.addEventListener('input', buildSitemap);
+        input.addEventListener('change', buildSitemap);
+      });
+
+      row.querySelector('.btn-delete').addEventListener('click', () => {
+        row.remove();
+        buildSitemap();
+      });
+
+      urlsListWrapper.appendChild(row);
+      buildSitemap();
+    }
+
+    btnAddUrl.addEventListener('click', () => {
+      addUrlRow('', '', '', '');
+    });
+
+    // Import paths action
+    btnImportBulk.addEventListener('click', () => {
+      const text = bulkUrlsTextarea.value.trim();
+      if (!text) return;
+
+      const lines = text.split('\n');
+      lines.forEach(line => {
+        let cleaned = line.trim();
+        if (!cleaned) return;
+        
+        // Remove domain if user pasted full URLs that match base domain
+        const base = baseUrlInput.value.trim();
+        if (cleaned.startsWith(base)) {
+          cleaned = cleaned.substring(base.length);
+        }
+
+        // Add to rows list
+        addUrlRow(cleaned, '', '', '');
+      });
+      bulkUrlsTextarea.value = '';
+    });
+
+    // Build Sitemap Logic
+    function buildSitemap() {
+      const base = baseUrlInput.value.trim().replace(/\/+$/, '');
+      const rows = Array.from(urlsListWrapper.querySelectorAll('.url-row'));
+
+      let outputs = [];
+      let size = 0;
+      let urlCount = 0;
+
+      if (currentFormat === 'xml') {
+        outputs.push('<?xml version="1.0" encoding="UTF-8"?>');
+        outputs.push('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
+        
+        rows.forEach(row => {
+          let path = row.querySelector('.row-path').value.trim();
+          // Ensure it starts with /
+          if (path && !path.startsWith('/') && !path.startsWith('http')) {
+            path = '/' + path;
+          }
+          const fullUrl = path.startsWith('http') ? path : `${base}${path}`;
+          const changefreq = row.querySelector('.row-changefreq').value;
+          const priority = row.querySelector('.row-priority').value;
+          const lastmod = row.querySelector('.row-lastmod').value;
+
+          outputs.push('  <url>');
+          outputs.push(`    <loc>${escapeXml(fullUrl)}</loc>`);
+          if (lastmod) {
+            outputs.push(`    <lastmod>${lastmod}</lastmod>`);
+          }
+          outputs.push(`    <changefreq>${changefreq}</changefreq>`);
+          outputs.push(`    <priority>${priority}</priority>`);
+          outputs.push('  </url>');
+          urlCount++;
+        });
+
+        outputs.push('</urlset>');
+      } 
+      else if (currentFormat === 'html') {
+        outputs.push('<!-- HTML Navigational Sitemap -->');
+        outputs.push('<div class="sitemap-container">');
+        outputs.push('  <h2>Sitemap Navigation</h2>');
+        outputs.push('  <ul>');
+
+        rows.forEach(row => {
+          let path = row.querySelector('.row-path').value.trim();
+          if (path && !path.startsWith('/') && !path.startsWith('http')) {
+            path = '/' + path;
+          }
+          const fullUrl = path.startsWith('http') ? path : `${base}${path}`;
+          const text = path === '/' || path === '' ? 'Homepage' : path.replace(/^\//, '').replace(/-/g, ' ');
+          outputs.push(`    <li><a href="${fullUrl}" target="_blank">${capitalize(text)}</a></li>`);
+          urlCount++;
+        });
+
+        outputs.push('  </ul>');
+        outputs.push('</div>');
+      } 
+      else if (currentFormat === 'txt') {
+        rows.forEach(row => {
+          let path = row.querySelector('.row-path').value.trim();
+          if (path && !path.startsWith('/') && !path.startsWith('http')) {
+            path = '/' + path;
+          }
+          const fullUrl = path.startsWith('http') ? path : `${base}${path}`;
+          outputs.push(fullUrl);
+          urlCount++;
+        });
+      }
+
+      const raw = outputs.join('\n');
+      outputText.value = raw;
+
+      // Stats
+      statUrlCount.textContent = urlCount;
+      statBytes.textContent = `${new Blob([raw]).size} B`;
+
+      validateSitemap(base, urlCount, rows);
+    }
+
+    function escapeXml(string) {
+      return string.replace(/[<>&'"]/g, (c) => {
+        switch (c) {
+          case '<': return '&lt;';
+          case '>': return '&gt;';
+          case '&': return '&amp;';
+          case '\'': return '&apos;';
+          case '"': return '&quot;';
+          default: return c;
+        }
+      });
+    }
+
+    function capitalize(str) {
+      return str.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    }
+
+    // Validation checks
+    function validateSitemap(base, urlCount, rows) {
+      if (!base) {
+        setValidationState('danger', '🛑 Error: Base website URL domain is required.');
+        return;
+      }
+
+      try {
+        new URL(base);
+      } catch (_) {
+        setValidationState('danger', '🛑 Error: Base website URL is not a valid absolute URL domain.');
+        return;
+      }
+
+      if (urlCount === 0) {
+        setValidationState('warning', '⚠️ Warning: The sitemap list is empty. Add or import URL paths.');
+        return;
+      }
+
+      if (urlCount > 50000) {
+        setValidationState('danger', '🛑 Limit Error: Sitemaps exceed maximum Google limit threshold of 50,000 URLs.');
+        return;
+      }
+
+      // Check duplicates
+      const paths = rows.map(r => r.querySelector('.row-path').value.trim());
+      const duplicates = paths.filter((item, index) => paths.indexOf(item) !== index && item !== '');
+      if (duplicates.length > 0) {
+        setValidationState('warning', `⚠️ Warning: Found duplicate paths in your sitemap (e.g. "${duplicates[0]}").`);
+        return;
+      }
+
+      setValidationState('success', '✓ Sitemap conforms to engine requirements.');
+    }
+
+    function setValidationState(type, message) {
+      validationBox.className = `validation-alert ${type}`;
+      validationBox.querySelector('span').textContent = message;
+    }
+
+    // Copy to clipboard
+    document.getElementById('btn-copy').addEventListener('click', async () => {
+      const val = outputText.value;
+      if (!val) return;
+      navigator.clipboard.writeText(val);
+      alert('Sitemap copied to clipboard! 📋');
+      await logToolUsage('Sitemap Generator', 'seo', 'sitemap-generator');
+    });
+
+    // Download file
+    document.getElementById('btn-download').addEventListener('click', async () => {
+      const val = outputText.value;
+      if (!val) return;
+
+      let filename = 'sitemap.xml';
+      let mime = 'application/xml';
+      if (currentFormat === 'html') {
+        filename = 'sitemap.html';
+        mime = 'text/html';
+      } else if (currentFormat === 'txt') {
+        filename = 'sitemap.txt';
+        mime = 'text/plain';
+      }
+
+      const blob = new Blob([val], { type: mime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      await logToolUsage('Sitemap Generator', 'seo', 'sitemap-generator');
+    });
+
+    // Initialize with standard items
+    addUrlRow('/', '', 'daily', '1.0');
+    addUrlRow('/about', '', 'weekly', '0.8');
+    addUrlRow('/contact', '', 'weekly', '0.8');
+    addUrlRow('/blog', '', 'daily', '0.8');
+
+  </script>
+
+  <script>
+    // FAQ accordion helper
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

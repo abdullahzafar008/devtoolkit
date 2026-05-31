@@ -1,0 +1,11 @@
+{
+  "hero_heading": "✍️ Text Tools",
+  "hero_subheading": "Write, format, and optimize your textual copy in seconds",
+  "seo_title": "Free Text & Writing Tools Online - DevToolKit",
+  "seo_description": "Free text utility tools including word counter, duplicate lines remover, case converter, and synonyms rewriter.",
+  "overview_text": "Text tools help copywriters, developers, and students quickly clean up, rewrite, analyze, or format lists of text blocks. All operations are run securely in-browser.",
+  "faqs": [
+    {"question": "Is my text data secure?", "answer": "Yes. Our text tools run entirely inside your browser's local sandbox; none of your text or files are uploaded to our servers."},
+    {"question": "How does the duplicate line remover work?", "answer": "Simply paste your list, click run, and it removes any duplicate row entries instantly."}
+  ]
+}

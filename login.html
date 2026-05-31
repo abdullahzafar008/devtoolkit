@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Login - DevToolkit</title>
+  <meta name="description" content="Log in to your DevToolkit account to track history and view usage statistics.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Container holding the navbar & main content */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      box-sizing: border-box;
+    }
+
+    .login-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      box-sizing: border-box;
+    }
+
+    .card-title {
+      font-size: 28px;
+      font-weight: 800;
+      margin-top: 0;
+      margin-bottom: 8px;
+      text-align: center;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .card-sub {
+      font-size: 14px;
+      color: var(--text-gray);
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: #fff;
+      outline: none;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+
+    .form-input:focus {
+      border-color: #00CCFF;
+      background: rgba(5, 5, 16, 0.8);
+      box-shadow: 0 0 10px rgba(0, 204, 255, 0.2);
+    }
+
+    .password-input {
+      padding-right: 48px;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 14px;
+      background: transparent;
+      border: none;
+      color: var(--text-gray);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px;
+    }
+
+    .toggle-password:hover {
+      color: #fff;
+    }
+
+    .flex-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+
+    .checkbox-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-wrap input {
+      cursor: pointer;
+    }
+
+    .forgot-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      border: 1px solid var(--primary);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-submit:hover {
+      background: #00CCFF;
+      border-color: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-msg {
+      color: #ff3333;
+      font-size: 13px;
+      margin-top: 12px;
+      text-align: center;
+      min-height: 18px;
+      font-weight: 500;
+    }
+
+    .signup-teaser {
+      font-size: 13px;
+      color: var(--text-gray);
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    .signup-teaser a {
+      color: #00CCFF;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .signup-teaser a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating 3D Particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar Placeholder (navbar.js automatically prepends itself) -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <main>
+    <div class="login-card">
+      <h2 class="card-title">Welcome Back</h2>
+      <p class="card-sub">Login to access your DevToolkit dashboard</p>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="login-email">Email Address</label>
+          <input class="form-input" type="email" id="login-email" required placeholder="name@example.com">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <div class="input-wrapper">
+            <input class="form-input password-input" type="password" id="login-password" required placeholder="••••••••">
+            <button type="button" class="toggle-password" id="toggle-pw-btn" aria-label="Toggle password visibility">👁️</button>
+          </div>
+        </div>
+
+        <div class="flex-row">
+          <label class="checkbox-wrap">
+            <input type="checkbox" id="remember-me">
+            Remember Me
+          </label>
+          <a href="#" class="forgot-link" id="forgot-pw-link">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submit-btn">
+          <span class="spinner" id="btn-spinner"></span>
+          <span>Login</span>
+        </button>
+
+        <div class="error-msg" id="error-lbl"></div>
+      </form>
+
+      <div class="signup-teaser">
+        Don't have an account? <a href="/signup.html">Sign Up</a>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { checkAuth, signIn, resetPassword, getErrorMessage } from './js/auth.js';
+    import { initBackground } from './js/3d-background.js';
+
+    // Start 3D particle background
+    initBackground('bg-container');
+
+    // Protect check: If already logged in, checkAuth redirects to dashboard.html
+    checkAuth(false);
+
+    const loginForm = document.getElementById('login-form');
+    const emailInput = document.getElementById('login-email');
+    const passwordInput = document.getElementById('login-password');
+    const togglePwBtn = document.getElementById('toggle-pw-btn');
+    const errorLbl = document.getElementById('error-lbl');
+    const submitBtn = document.getElementById('submit-btn');
+    const btnSpinner = document.getElementById('btn-spinner');
+    const forgotPwLink = document.getElementById('forgot-pw-link');
+
+    // Toggle password view
+    togglePwBtn.addEventListener('click', () => {
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        togglePwBtn.textContent = '🙈';
+      } else {
+        passwordInput.type = 'password';
+        togglePwBtn.textContent = '👁️';
+      }
+    });
+
+    // Handle Login submission
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorLbl.textContent = '';
+      
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      // Loading state
+      submitBtn.disabled = true;
+      btnSpinner.style.display = 'block';
+
+      try {
+        await signIn(email, password);
+      } catch (err) {
+        errorLbl.textContent = getErrorMessage(err);
+        submitBtn.disabled = false;
+        btnSpinner.style.display = 'none';
+      }
+    });
+
+    // Handle Forgot Password link
+    forgotPwLink.addEventListener('click', async (e) => {
+      e.preventDefault();
+      errorLbl.textContent = '';
+      
+      const email = emailInput.value.trim();
+      if (!email) {
+        errorLbl.textContent = 'Please enter your email address to reset password.';
+        return;
+      }
+
+      try {
+        await resetPassword(email);
+      } catch (err) {
+        errorLbl.textContent = getErrorMessage(err);
+      }
+    });
+  </script>
+</body>
+</html>

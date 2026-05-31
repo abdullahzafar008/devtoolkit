@@ -1,0 +1,11 @@
+{
+  "hero_heading": "🔄 Converter Tools",
+  "hero_subheading": "Instant conversion of base systems, metrics, and age calculators",
+  "seo_title": "Free Online System Converters - DevToolKit",
+  "seo_description": "Convert binary, hexadecimal, and decimal systems, estimate exact age metrics, or convert weight and volume units easily.",
+  "overview_text": "Converter tools allow users to transform data formats, measurement units, or base number systems with absolute precision. Perform complex scientific calculations, or execute decimal conversions live in your web client.",
+  "faqs": [
+    {"question": "How accurate is the age calculator?", "answer": "It computes down to the exact year, month, and day based on standard calendar intervals and leap years."},
+    {"question": "Are unit conversions updated?", "answer": "Yes, unit conversions map directly to standardized SI system metrics for highly accurate calculations."}
+  ]
+}

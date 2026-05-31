@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Free Text to Binary Converter - Encode & Decode Binary | DevToolkit</title>
+  <meta name="description" content="Convert plain text to binary code and translate binary strings back to ASCII text in real-time. Choose delimiters, custom bit sizes, prefixes, and download outputs instantly.">
+  <meta name="keywords" content="text to binary, binary to text, binary translator, encode binary code, decode binary string, ascii to binary, binary decoder">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/tools/text-to-binary.html">
+  <meta property="og:title" content="Free Text to Binary Converter - Encode & Decode Binary | DevToolkit">
+  <meta property="og:description" content="Encode text to binary strings or decode binary text dynamically. Features custom separators, prefixes, and live size metrics.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- FAQ JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does Text to Binary conversion work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The tool reads each character of your input string, determines its Unicode or ASCII numerical code, and converts that value into a standard 8-bit binary representation (e.g. 'A' becomes '01000001')."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What custom options are supported?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can select custom character encodings (ASCII, UTF-8, UTF-16), prepend binary prefixes like '0b', choose custom byte separators (such as spaces, commas, or none), and download outputs."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I convert binary string data back into readable text?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, absolutely. The tool features bi-directional conversion. Typing or pasting a binary string into the binary panel instantly decodes it back to plain text."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my text data safe?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The translator runs completely in your local browser sandbox memory, ensuring no inputs are transferred, saved, or uploaded to external servers."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Text to Binary Converter",
+    "url": "https://www.devtoolkit.com/tools/text-to-binary.html",
+    "description": "Premium browser-based bi-directional translator converting plain text to binary chains, supporting custom bit headers and spaces.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+      --danger: #FF3366;
+      --success: #00FF66;
+      --warning: #FFAA00;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .tool-hero {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .hero-3d-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: relative;
+      z-index: 2;
+      padding: 24px;
+      max-width: 800px;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .tool-title {
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tool-tagline {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin: 0 0 24px 0;
+    }
+
+    .btn-scroll-down {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 20px;
+      color: #00CCFF;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .btn-scroll-down:hover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.2);
+    }
+
+    /* Workspace */
+    .tool-workspace {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 60px 24px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    .translator-dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .translator-dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .editor-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .editor-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stat-text {
+      font-size: 11px;
+      color: var(--text-gray);
+      text-transform: none;
+      font-weight: normal;
+    }
+
+    .workspace-textarea {
+      width: 100%;
+      height: 280px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      color: #00FF66;
+      box-sizing: border-box;
+      outline: none;
+      resize: vertical;
+      line-height: 1.6;
+      transition: all 0.3s ease;
+    }
+
+    .workspace-textarea:focus {
+      border-color: #00CCFF;
+      background: rgba(5, 5, 16, 0.85);
+    }
+
+    /* Config parameters panel */
+    .configs-panel {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .configs-panel {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .configs-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .input-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-box label {
+      font-size: 11px;
+      color: var(--text-gray);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .select-field {
+      background: rgba(5, 5, 16, 0.9);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: #fff;
+      padding: 8px 12px;
+      outline: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    /* Alert validator boxes */
+    .validation-alert {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 51, 102, 0.08);
+      border: 1px solid rgba(255, 51, 102, 0.25);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--danger);
+      margin-bottom: 20px;
+    }
+
+    /* Controls */
+    .controls-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+    }
+
+    .ctrl-btn {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      color: #00CCFF;
+      font-weight: 700;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+    }
+
+    .ctrl-btn:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+    }
+
+    /* Article layout elements */
+    .article-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .step-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #00CCFF;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+    }
+
+    /* FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Related Tools Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .blog-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-thumb {
+      height: 140px;
+      background: linear-gradient(135deg, #0066FF, #7B2FFF);
+    }
+
+    .blog-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .blog-desc {
+      font-size: 12px;
+      color: var(--text-gray);
+      line-height: 1.4;
+    }
+
+    .blog-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: auto;
+    }
+
+    .blog-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.4), rgba(123, 47, 255, 0.4));
+      border-top: 1px solid var(--card-border);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cta-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .btn-cta {
+      padding: 12px 24px;
+      background: #0066FF;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-cta:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+    }
+
+    /* WordPress Documentation Comment Requirement */
+    /* 
+     Plugin Name: Text to Binary Converter
+     Description: Client-side dynamic plain text to binary string translator with configurable byte encodings.
+     Version: 1.0.0
+     Author: DevToolkit Inc.
+    */
+  </style>
+</head>
+<body>
+
+  <!-- Floating background particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <!-- Section 1: Hero -->
+  <section class="tool-hero">
+    <div class="hero-3d-scene" id="tool-hero-3d"></div>
+    <div class="hero-overlay">
+      <div class="breadcrumbs">
+        <a href="/index.html">Home</a>
+        <span class="separator">&gt;</span>
+        <a href="/category-converter.html">Converter Tools</a>
+        <span class="separator">&gt;</span>
+        <span>Text to Binary</span>
+      </div>
+      <h1 class="tool-title">Text to Binary Converter</h1>
+      <p class="tool-tagline">Encode text strings to binary digits, decode binary digits to plain text, customize separators, and parse parameters instantly.</p>
+      <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
+    </div>
+  </section>
+
+  
+
+  <!-- Section 2: Workspace -->
+  <main class="tool-workspace" id="workspace">
+    <div class="glass-card">
+      
+      <!-- Configurations row -->
+      <div class="configs-panel">
+        <div class="input-box">
+          <label for="char-encoding">Byte Encoding</label>
+          <select class="select-field" id="char-encoding">
+            <option value="ascii">ASCII / UTF-8 (8-bit)</option>
+            <option value="utf16">UTF-16 (16-bit)</option>
+          </select>
+        </div>
+
+        <div class="input-box">
+          <label for="byte-separator">Byte Separator</label>
+          <select class="select-field" id="byte-separator">
+            <option value="space">Space (" ")</option>
+            <option value="comma">Comma (",")</option>
+            <option value="none">None</option>
+          </select>
+        </div>
+
+        <div class="input-box">
+          <label for="binary-prefix">Binary Prefix</label>
+          <select class="select-field" id="binary-prefix">
+            <option value="none">None (e.g. 0100)</option>
+            <option value="0b">0b prefix (e.g. 0b0100)</option>
+          </select>
+        </div>
+
+        <div class="input-box">
+          <label for="bit-size">Standard Byte Size</label>
+          <select class="select-field" id="bit-size">
+            <option value="8">8-bit format (Standard)</option>
+            <option value="7">7-bit format</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Live validation block -->
+      <div class="validation-alert" id="validation-box" style="display:none;">
+        <span>🛑 Warning: Detected non-binary characters in the binary string input. Only 0, 1, and separators are allowed.</span>
+      </div>
+
+      <!-- Editors dashboard -->
+      <div class="translator-dashboard">
+        
+        <!-- Text Input -->
+        <div class="editor-group">
+          <div class="editor-label">
+            <span>Plain Text Input</span>
+            <span class="stat-text" id="stat-text-chars">Characters: 0</span>
+          </div>
+          <textarea class="workspace-textarea" id="text-input" placeholder="Type or paste plain text here to convert..."></textarea>
+        </div>
+
+        <!-- Binary Input/Output -->
+        <div class="editor-group">
+          <div class="editor-label">
+            <span>Binary Code Output</span>
+            <span class="stat-text" id="stat-bin-bytes">Bytes: 0</span>
+          </div>
+          <textarea class="workspace-textarea" id="binary-output" placeholder="Type or paste binary digits here to decode..."></textarea>
+        </div>
+
+      </div>
+
+      <!-- Action buttons controls -->
+      <div class="controls-bar">
+        <button class="ctrl-btn" id="btn-clear" style="background: rgba(255,255,255,0.03); color:#fff; border-color: rgba(255,255,255,0.1);">Clear Inputs</button>
+        <button class="ctrl-btn" id="btn-copy">Copy Output</button>
+        <button class="ctrl-btn" id="btn-download">Download Binary File</button>
+      </div>
+
+    </div>
+  </main>
+
+  
+
+  <!-- Section 3: How to Use -->
+  <section class="article-section">
+    <h2>How to Convert Text to Binary and Back</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-emoji">🔤</div>
+        <div class="step-title">1. Input plain text</div>
+        <div class="step-desc">Type or paste text content into the plain text box. The binary output parses instantly in real-time.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">⚙️</div>
+        <div class="step-title">2. Adjust encoding options</div>
+        <div class="step-desc">Toggle byte separators, 0b prefixes, and choose ASCII or UTF-16 configurations to change the layout.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">🤖</div>
+        <div class="step-title">3. Translate binary</div>
+        <div class="step-desc">Paste binary code (e.g. 01001000) directly into the right panel to instantly decode it back to English characters.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Key Features -->
+  <section class="article-section">
+    <h2>Text to Binary Translation Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-head">🚀 Bi-directional Conversions</div>
+        <div class="feature-desc">Translate ASCII to base-2 binary chains or decode base-2 strings to ASCII letters instantly.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🔢 Prefix & Spacer Control</div>
+        <div class="feature-desc">Customize output strings with 0b binary tags and format spacing using spaces, commas, or compact rows.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🔒 Safe Client Builders</div>
+        <div class="feature-desc">All conversions process in isolated client memory without saving or transmitting input logs.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: FAQ -->
+  <section class="article-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-wrapper">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">What is the binary representation of letter 'A'? <span>+</span></div>
+        <div class="faq-answer">In standard 8-bit ASCII encoding, the uppercase letter 'A' corresponds to decimal value 65. Calculated in base-2 binary code, it is represented as `01000001`.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Does this tool support non-English characters? <span>+</span></div>
+        <div class="faq-answer">Yes, by toggling Byte Encoding to "UTF-16", the converter dynamically maps emojis, accented vowels, and multi-byte global characters into standard 16-bit binary codes.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Why is a space separator used between binary bytes? <span>+</span></div>
+        <div class="faq-answer">Without separators, a binary string is a continuous chain of 0s and 1s which is extremely difficult for humans to read. Spacing or commas group the digits into standard 8-bit blocks representing individual characters.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Is there a file conversion limit? <span>+</span></div>
+        <div class="faq-answer">The text field supports up to 100,000 characters before browser rendering limits may cause input lag. Everything calculates immediately offline.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Related Tools Injected Dynamically -->
+  <section class="article-section">
+    <h2>Discover Other Developer Utilities</h2>
+    <div class="blog-grid" id="related-tools-grid">
+      <!-- Injected Dynamically -->
+    </div>
+  </section>
+
+  <!-- Section 7: Footer CTA Banner -->
+  <section class="cta-banner">
+    <h2 class="cta-title">Ready to explore more free tools?</h2>
+    <p class="cta-subtitle">DevToolkit has 40+ utility modules waiting for you.</p>
+    <a href="/index.html" class="btn-cta">Explore All Tools →</a>
+  </section>
+
+  <!-- Standard Footer -->
+  <footer>
+    <div style="text-align: center; font-size:12px; color:rgba(255,255,255,0.4); padding: 24px 0;">
+      &copy; 2026 DevToolKit. All rights reserved. | <a href="/index.html" style="color:var(--cyan); text-decoration:none;">Home</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from '../js/3d-background.js';
+    import { logToolUsage } from '../js/tools-tracker.js';
+
+    // Start background particle animation
+    initBackground('bg-container');
+
+    // Local 3D Hero Scene: Matrix digital rain (Floating 0s and 1s)
+    function initHero3D() {
+      const container = document.getElementById('tool-hero-3d');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000);
+      camera.position.z = 150;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const light = new THREE.AmbientLight(0xffffff, 0.5);
+      scene.add(light);
+
+      // Create falling green points
+      const count = 100;
+      const geom = new THREE.BufferGeometry();
+      const positions = [];
+      const speeds = [];
+
+      for (let i = 0; i < count; i++) {
+        positions.push(
+          (Math.random() - 0.5) * 200,
+          (Math.random() - 0.5) * 100 + 50,
+          (Math.random() - 0.5) * 60
+        );
+        speeds.push(0.3 + Math.random() * 0.7);
+      }
+
+      geom.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+
+      // Use dynamic texture for binary rain symbols
+      const canvas = document.createElement('canvas');
+      canvas.width = 32;
+      canvas.height = 32;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#00FF66';
+      ctx.font = 'bold 24px monospace';
+      ctx.fillText('1', 8, 24);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      const mat = new THREE.PointsMaterial({
+        color: 0x00FF66,
+        size: 5,
+        map: texture,
+        transparent: true,
+        opacity: 0.8
+      });
+
+      const points = new THREE.Points(geom, mat);
+      scene.add(points);
+
+      function animate() {
+        requestAnimationFrame(animate);
+        const positionsArr = points.geometry.attributes.position.array;
+        
+        for (let i = 0; i < count; i++) {
+          const idx = i * 3;
+          positionsArr[idx + 1] -= speeds[i]; // Fall down
+
+          // Reset if falls below screen
+          if (positionsArr[idx + 1] < -60) {
+            positionsArr[idx + 1] = 60;
+            positionsArr[idx] = (Math.random() - 0.5) * 200;
+          }
+        }
+        points.geometry.attributes.position.needsUpdate = true;
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      });
+    }
+    initHero3D();
+
+    // Related Tools Grid
+    const related = [
+      { name: 'Base Base64 Encoder', emoji: '🔑', slug: 'base64-encoder', cat: 'developer', desc: 'Securely translate character byte streams' },
+      { name: 'Hex System Converter', emoji: '🔢', slug: 'binary-converter', cat: 'developer', desc: 'Convert base numbers in 4 dimensions' },
+      { name: 'JSON Formatter Prettify', emoji: '⚙️', slug: 'json-formatter', cat: 'developer', desc: 'Indent complex JavaScript objects structures' },
+      { name: 'Secure Password Creator', emoji: '🔒', slug: 'password-generator', cat: 'developer', desc: 'Build random encryption code keys' }
+    ];
+
+    const relatedGrid = document.getElementById('related-tools-grid');
+    related.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <div class="blog-thumb" style="display:flex; align-items:center; justify-content:center; font-size:32px;">${t.emoji}</div>
+        <div class="blog-info">
+          <div class="blog-title">${t.name}</div>
+          <div class="blog-desc">${t.desc}</div>
+          <a href="/tools/${t.slug}.html" class="blog-link">Use Tool →</a>
+        </div>
+      `;
+      card.querySelector('.blog-link').addEventListener('click', async () => {
+        await logToolUsage(t.name, t.cat, t.slug);
+      });
+      relatedGrid.appendChild(card);
+    });
+
+    // Translator controls mapping
+    const textInput = document.getElementById('text-input');
+    const binaryOutput = document.getElementById('binary-output');
+    const charEncoding = document.getElementById('char-encoding');
+    const byteSeparator = document.getElementById('byte-separator');
+    const binaryPrefix = document.getElementById('binary-prefix');
+    const bitSizeSelect = document.getElementById('bit-size');
+    const validationBox = document.getElementById('validation-box');
+
+    const statTextChars = document.getElementById('stat-text-chars');
+    const statBinBytes = document.getElementById('stat-bin-bytes');
+
+    let activeDirection = 'encode'; // 'encode' or 'decode'
+
+    // Events triggers
+    textInput.addEventListener('input', () => {
+      activeDirection = 'encode';
+      translate();
+    });
+
+    binaryOutput.addEventListener('input', () => {
+      activeDirection = 'decode';
+      translate();
+    });
+
+    [charEncoding, byteSeparator, binaryPrefix, bitSizeSelect].forEach(el => {
+      el.addEventListener('change', () => {
+        translate();
+      });
+    });
+
+    // Clear action
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      textInput.value = '';
+      binaryOutput.value = '';
+      statTextChars.textContent = 'Characters: 0';
+      statBinBytes.textContent = 'Bytes: 0';
+      validationBox.style.display = 'none';
+    });
+
+    // Translate logic controller
+    function translate() {
+      validationBox.style.display = 'none';
+      const encoding = charEncoding.value;
+      const separator = byteSeparator.value === 'space' ? ' ' : (byteSeparator.value === 'comma' ? ',' : '');
+      const prefix = binaryPrefix.value === '0b' ? '0b' : '';
+      const bitSize = parseInt(bitSizeSelect.value);
+
+      if (activeDirection === 'encode') {
+        const text = textInput.value;
+        statTextChars.textContent = `Characters: ${text.length}`;
+
+        if (!text) {
+          binaryOutput.value = '';
+          statBinBytes.textContent = 'Bytes: 0';
+          return;
+        }
+
+        let binaryChain = [];
+
+        for (let i = 0; i < text.length; i++) {
+          const code = text.charCodeAt(i);
+          
+          if (encoding === 'utf16') {
+            // 16-bit splitting
+            const high = (code >> 8) & 0xFF;
+            const low = code & 0xFF;
+            binaryChain.push(prefix + high.toString(2).padStart(8, '0'));
+            binaryChain.push(prefix + low.toString(2).padStart(8, '0'));
+          } else {
+            // Standard 7-bit or 8-bit ASCII
+            let bin = code.toString(2);
+            if (bin.length < bitSize) {
+              bin = bin.padStart(bitSize, '0');
+            } else if (bin.length > bitSize) {
+              // Unicode character overflow warning if using 7-bit limits
+              bin = bin.slice(-bitSize);
+            }
+            binaryChain.push(prefix + bin);
+          }
+        }
+
+        binaryOutput.value = binaryChain.join(separator);
+        statBinBytes.textContent = `Bytes: ${binaryChain.length}`;
+      } 
+      else {
+        // Decoding direction
+        const binary = binaryOutput.value.trim();
+        if (!binary) {
+          textInput.value = '';
+          statTextChars.textContent = 'Characters: 0';
+          return;
+        }
+
+        // Validate character matches 0s and 1s only
+        const cleanBinary = binary.replace(/[\s,]/g, '');
+        if (/[^01]/g.test(cleanBinary)) {
+          validationBox.style.display = 'flex';
+          return;
+        }
+
+        // Split by separators or group by block bitSize
+        let blocks = [];
+        const sepValue = byteSeparator.value;
+
+        if (sepValue !== 'none') {
+          const regexSep = sepValue === 'comma' ? ',' : ' ';
+          // Split by custom user separation bounds
+          const rawBlocks = binary.split(regexSep);
+          rawBlocks.forEach(b => {
+            let cleaned = b.trim();
+            if (cleaned.startsWith('0b')) cleaned = cleaned.substring(2);
+            if (cleaned) blocks.push(cleaned);
+          });
+        } else {
+          // If no separator, slice string by bit size blocks
+          let cursor = 0;
+          let tempBin = binary;
+          if (tempBin.startsWith('0b')) tempBin = tempBin.replace(/0b/g, '');
+
+          while (cursor < tempBin.length) {
+            blocks.push(tempBin.substring(cursor, cursor + bitSize));
+            cursor += bitSize;
+          }
+        }
+
+        let decodedText = '';
+
+        if (encoding === 'utf16') {
+          // UTF-16 merges two 8-bit bytes
+          for (let i = 0; i < blocks.length; i += 2) {
+            const highStr = blocks[i];
+            const lowStr = blocks[i+1];
+            if (!highStr || !lowStr) break;
+
+            const highVal = parseInt(highStr, 2);
+            const lowVal = parseInt(lowStr, 2);
+            const code = (highVal << 8) | lowVal;
+            decodedText += String.fromCharCode(code);
+          }
+        } else {
+          // Standard ASCII
+          blocks.forEach(b => {
+            const val = parseInt(b, 2);
+            if (!isNaN(val)) decodedText += String.fromCharCode(val);
+          });
+        }
+
+        textInput.value = decodedText;
+        statTextChars.textContent = `Characters: ${decodedText.length}`;
+        statBinBytes.textContent = `Bytes: ${blocks.length}`;
+      }
+    }
+
+    // Copy to clipboard
+    document.getElementById('btn-copy').addEventListener('click', async () => {
+      const output = binaryOutput.value;
+      if (!output) return;
+      navigator.clipboard.writeText(output);
+      alert('Output copied to clipboard! 📋');
+      await logToolUsage('Text to Binary Converter', 'converter', 'text-to-binary');
+    });
+
+    // Download text as file
+    document.getElementById('btn-download').addEventListener('click', async () => {
+      const val = binaryOutput.value;
+      if (!val) return;
+
+      const blob = new Blob([val], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'binary-output.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      await logToolUsage('Text to Binary Converter', 'converter', 'text-to-binary');
+    });
+
+  </script>
+
+  <script>
+    // FAQ accordion helper
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

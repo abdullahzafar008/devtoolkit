@@ -1,0 +1,13 @@
+{
+  "heading": "Contact Us",
+  "subheading": "Have a question or suggestion? We would love to hear from you.",
+  "email": "mr.abdullah1119@gmail.com",
+  "response_time": "Within 24 hours",
+  "faqs": [
+    {"question": "How do I report a broken tool?", "answer": "Use the contact form above and describe the issue."},
+    {"question": "Can I suggest a new tool?", "answer": "Yes! We love suggestions. Use the contact form."},
+    {"question": "Is DevToolKit really free?", "answer": "Yes, 100% free forever."},
+    {"question": "Do you offer API access?", "answer": "Not currently but it is planned for the future."},
+    {"question": "How do I delete my account?", "answer": "Go to Profile page and scroll to Danger Zone."}
+  ]
+}

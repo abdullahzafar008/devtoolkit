@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Contact Us - DevToolKit | Free Developer & Content Creator Tools</title>
+  <meta name="description" content="Get in touch with the DevToolKit team. Submit inquiry forms, request new utility tools, report bugs, or read common technical FAQs.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/contact.html">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+      --success: #00FF66;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .contact-hero {
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+      padding: 24px;
+      position: relative;
+    }
+
+    .contact-hero h1 {
+      font-size: 42px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .contact-hero p {
+      font-size: 16px;
+      color: var(--text-gray);
+      max-width: 600px;
+      margin: 0;
+    }
+
+    /* Content wrapper */
+    .content-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    /* Form Styles */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-input {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: #fff;
+      padding: 12px 16px;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .form-input:focus {
+      border-color: #00CCFF;
+      box-shadow: 0 0 10px rgba(0, 204, 255, 0.25);
+    }
+
+    select.form-input {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2300CCFF%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 16px;
+      padding-right: 40px;
+    }
+
+    .btn-submit {
+      padding: 14px 28px;
+      font-size: 15px;
+      font-weight: 700;
+      background: var(--primary);
+      border: 1px solid var(--primary);
+      color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      align-self: flex-start;
+    }
+
+    .btn-submit:hover {
+      background: #00CCFF;
+      border-color: #00CCFF;
+      box-shadow: 0 4px 20px rgba(0, 204, 255, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .success-banner {
+      display: none;
+      background: rgba(0, 255, 102, 0.1);
+      border: 1px solid var(--success);
+      color: var(--success);
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Info Cards Row */
+    .info-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .info-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .info-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+      border-color: var(--card-border);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px var(--card-glow);
+    }
+
+    .info-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .info-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .info-detail {
+      font-size: 13.5px;
+      color: var(--text-gray);
+      margin: 0;
+    }
+
+    /* Accordion FAQ */
+    .faq-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Footer styles */
+    footer {
+      border-top: 1px solid rgba(0, 102, 255, 0.2);
+      background: rgba(5, 5, 16, 0.95);
+      padding: 48px 24px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-logo span {
+      color: #0066FF;
+      -webkit-text-fill-color: #0066FF;
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      color: var(--text-gray);
+      max-width: 300px;
+    }
+
+    .footer-col-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0066FF;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-link {
+      font-size: 13px;
+      color: var(--text-gray);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #00CCFF;
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 40px auto 0 auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating 3D Background Container -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="./js/navbar.js" type="module"></script>
+
+  <!-- Hero Section -->
+  <section class="contact-hero" data-section="hero" id="hero">
+    <h1>Contact Us</h1>
+    <p>Have questions, feedback, or a tool request? Reach out to us, and our team will be happy to help.</p>
+  </section>
+
+  <!-- Content Sections -->
+  <main class="content-wrapper">
+    <div id="dynamic-sections-container"></div>
+    
+    <div id="static-contact-cards">
+      <!-- Contact Form Card -->
+      <section class="glass-card">
+      <div id="success-message" class="success-banner">Thank you! We will respond within 24 hours.</div>
+      
+      <form class="contact-form" id="contact-form" onsubmit="handleContactSubmit(event)">
+        <div class="form-group">
+          <label for="contact-name">Your Name</label>
+          <input type="text" id="contact-name" class="form-input" placeholder="John Doe" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="contact-email">Email Address</label>
+          <input type="email" id="contact-email" class="form-input" placeholder="john@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="contact-subject">Subject</label>
+          <select id="contact-subject" class="form-input" required>
+            <option value="" disabled selected>Select subject...</option>
+            <option value="general">General Inquiry</option>
+            <option value="bug">Bug Report</option>
+            <option value="request">Tool Request</option>
+            <option value="partnership">Partnership</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="contact-message">Message</label>
+          <textarea id="contact-message" class="form-input" rows="6" placeholder="Write your message here..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Send Message</button>
+      </form>
+    </section>
+
+    <!-- Info Cards Row -->
+    <section class="info-row">
+      <div class="info-card">
+        <div class="info-icon">📧</div>
+        <div class="info-title">Email</div>
+        <p class="info-detail">support@devtoolkit.com</p>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🕐</div>
+        <div class="info-title">Response Time</div>
+        <p class="info-detail">Within 24 hours</p>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">💬</div>
+        <div class="info-title">For Quick Help</div>
+        <p class="info-detail">Check our FAQ section below</p>
+      </div>
+    </section>
+
+    <!-- Accordion FAQ section -->
+    <section class="glass-card faq-section" data-section="faq" id="faq">
+      <h2>Common Questions</h2>
+      <div class="faq-wrapper">
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">How do I report a broken tool? <span>+</span></div>
+          <div class="faq-answer">You can fill out the contact form above, selecting "Bug Report" as the subject. Please describe the error, what input you entered, and any browser console logs you observed.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Can I suggest a new tool? <span>+</span></div>
+          <div class="faq-answer">Absolutely! Select "Tool Request" in the form above and describe the features of the utility you need. Our development team regularly adds new modules based on user votes.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Is DevToolKit really free? <span>+</span></div>
+          <div class="faq-answer">Yes, 100% free! Every tool is executed fully in your local browser sandbox, requiring no remote API subscriptions or fees. You can use them as much as you like.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Do you offer API access? <span>+</span></div>
+          <div class="faq-answer">Currently, DevToolKit is designed as a browser-first interactive platform. Because computations occur client-side, we do not offer external remote API endpoints.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">How do I delete my account? <span>+</span></div>
+          <div class="faq-answer">Log in, click your username avatar dropdown, go to Profile settings, scroll to the bottom Danger Zone, and click the "Delete Account" button. All history records will be purged immediately.</div>
+        </div>
+      </div>
+    </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/index.html" class="footer-logo">Tool<span>Nest</span></a>
+        <p class="footer-tagline">All Tools. One Place. Zero Cost.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Categories</div>
+        <div class="footer-links">
+          <a href="/category-seo.html" class="footer-link">🔍 SEO Tools</a>
+          <a href="/category-text.html" class="footer-link">✍️ Text Tools</a>
+          <a href="/category-image.html" class="footer-link">🖼️ Image Tools</a>
+          <a href="/category-video.html" class="footer-link">🎬 Video Tools</a>
+          <a href="/category-developer.html" class="footer-link">🧑💻 Developer Tools</a>
+          <a href="/category-converter.html" class="footer-link">🔄 Converter Tools</a>
+        </div>
+      </div>
+      <div>
+                <div class="footer-col-title">Quick Links</div>
+        <div class="footer-links">
+          <a href="/about.html" class="footer-link">About</a>
+          <a href="/privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="/terms.html" class="footer-link">Terms of Service</a>
+          <a href="/contact.html" class="footer-link">Contact</a>
+          <a href="/sitemap.html" class="footer-link">Sitemap</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 DevToolKit. All rights reserved.
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from './js/3d-background.js';
+    import { loadPageContent } from './js/cms.js';
+
+    initBackground('bg-container');
+
+    loadPageContent('contact').then(() => {
+      const dynamicSections = document.getElementById('dynamic-sections-container');
+      if (dynamicSections && dynamicSections.children.length > 0) {
+        console.log("Contact CMS layout blocks found: hiding fallback grids.");
+        document.getElementById('static-contact-cards').style.display = 'none';
+        const staticHero = document.querySelector('.contact-hero');
+        if (staticHero) staticHero.style.display = 'none';
+      }
+    });
+  </script>
+
+  <script>
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      
+      // Show success alert
+      const successMsg = document.getElementById('success-message');
+      successMsg.style.display = 'block';
+      
+      // Reset form
+      document.getElementById('contact-form').reset();
+      
+      // Scroll to message
+      successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+
+</body>
+</html>

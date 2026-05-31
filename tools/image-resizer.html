@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Free Online Image Resizer - Resize JPG, PNG, WebP | DevToolkit</title>
+  <meta name="description" content="Resize your images online for free. Adjust dimensions in pixels or percentages, lock aspect ratios, choose output formats (JPG, PNG, WebP), and set compression qualities. Secure local client-side canvas.">
+  <meta name="keywords" content="image resizer, resize image online, change image dimensions, photo resizer, crop and resize picture, local browser resizer">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/tools/image-resizer.html">
+  <meta property="og:title" content="Free Online Image Resizer - Resize JPG, PNG, WebP | DevToolkit">
+  <meta property="og:description" content="Modify image dimensions in pixels or percentages locally. Free client-side resizing.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- FAQ JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does the local Image Resizer work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The tool loads your image into an HTML5 Image object, draws it onto an off-screen HTML5 Canvas with your customized dimensions, and exports it as a local downloadable Blob."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does this tool upload my photos to any server?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, never. The resizing calculation is completed entirely inside your local web browser sandbox context. Your images remain 100% private."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is Aspect Ratio?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Aspect ratio is the proportional relationship between the width and height of an image. Locking it ensures the image does not stretch or distort during resizing."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Image Resizer",
+    "url": "https://www.devtoolkit.com/tools/image-resizer.html",
+    "description": "Premium client-side image resizer, dimensions scaler, format converter, and quality optimizer.",
+    "applicationCategory": "GraphicsApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .tool-hero {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .hero-3d-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: relative;
+      z-index: 2;
+      padding: 24px;
+      max-width: 800px;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .tool-title {
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tool-tagline {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin: 0 0 24px 0;
+    }
+
+    .btn-scroll-down {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 20px;
+      color: #00CCFF;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .btn-scroll-down:hover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.2);
+    }
+
+    /* Workspace */
+    .tool-workspace {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 60px 24px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    /* Drop Zone */
+    .drop-zone {
+      width: 100%;
+      height: 160px;
+      border: 2px dashed rgba(0, 102, 255, 0.3);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 102, 255, 0.02);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      padding: 20px;
+      box-sizing: border-box;
+      margin-bottom: 24px;
+    }
+
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.05);
+    }
+
+    .drop-zone-emoji {
+      font-size: 36px;
+      margin-bottom: 8px;
+    }
+
+    .drop-zone-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .drop-zone-subtitle {
+      font-size: 11px;
+      color: var(--text-gray);
+    }
+
+    /* Dashboard Workspace layout (Hidden by default) */
+    .resizer-dashboard {
+      display: none; /* Injected dynamically */
+      grid-template-columns: 1.2fr 1.8fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .resizer-dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Controls Panel */
+    .controls-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .panel-group {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel-group-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.1);
+      padding-bottom: 6px;
+    }
+
+    .dimensions-input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .input-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-box label {
+      font-size: 11px;
+      color: var(--text-gray);
+      text-transform: uppercase;
+    }
+
+    .num-input {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: #fff;
+      padding: 8px 12px;
+      font-family: 'Courier New', Courier, monospace;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .num-input:focus {
+      border-color: #00CCFF;
+    }
+
+    .checkbox-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-gray);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-wrap input {
+      cursor: pointer;
+    }
+
+    /* Shortcuts scales buttons */
+    .shortcuts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .shortcut-btn {
+      padding: 8px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 4px;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .shortcut-btn:hover {
+      background: rgba(0, 102, 255, 0.15);
+      border-color: #00CCFF;
+      color: #00CCFF;
+    }
+
+    /* Select & Slider formats */
+    .select-field {
+      background: rgba(5, 5, 16, 0.9);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: #fff;
+      padding: 8px 12px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .quality-slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .quality-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-gray);
+      text-transform: uppercase;
+    }
+
+    .quality-slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.1);
+      outline: none;
+    }
+
+    .quality-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid #0066FF;
+      cursor: pointer;
+    }
+
+    /* Right Preview panel */
+    .preview-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .preview-box {
+      border: 1px solid rgba(0,102,255,0.2);
+      background: #000;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 250px;
+      max-height: 400px;
+      overflow: hidden;
+      position: relative;
+      padding: 12px;
+    }
+
+    .preview-box img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .preview-stats-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-gray);
+      background: rgba(0,0,0,0.4);
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .preview-stats-bar span {
+      font-weight: 700;
+      color: #00CCFF;
+    }
+
+    /* CTA triggers */
+    .action-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+    }
+
+    .ctrl-btn {
+      padding: 12px 24px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      color: #00CCFF;
+      font-weight: 700;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .ctrl-btn:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+    }
+
+    /* Article layout elements */
+    .article-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .step-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #00CCFF;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+    }
+
+    /* FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Related Tools Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .blog-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-thumb {
+      height: 140px;
+      background: linear-gradient(135deg, #0066FF, #7B2FFF);
+    }
+
+    .blog-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .blog-desc {
+      font-size: 12px;
+      color: var(--text-gray);
+      line-height: 1.4;
+    }
+
+    .blog-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: auto;
+    }
+
+    .blog-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.4), rgba(123, 47, 255, 0.4));
+      border-top: 1px solid var(--card-border);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cta-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .btn-cta {
+      padding: 12px 24px;
+      background: #0066FF;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-cta:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+    }
+
+    /* WordPress Documentation Comment Requirement */
+    /* 
+     Plugin Name: Image Resizer & Scaler
+     Description: Client-side graphic dimensions resizer powered by offscreen HTML5 canvas.
+     Version: 1.0.0
+     Author: DevToolkit Inc.
+    */
+  </style>
+</head>
+<body>
+
+  <!-- Floating background particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <!-- Section 1: Hero -->
+  <section class="tool-hero">
+    <div class="hero-3d-scene" id="tool-hero-3d"></div>
+    <div class="hero-overlay">
+      <div class="breadcrumbs">
+        <a href="/index.html">Home</a>
+        <span class="separator">&gt;</span>
+        <a href="/category-image.html">Image Tools</a>
+        <span class="separator">&gt;</span>
+        <span>Image Resizer</span>
+      </div>
+      <h1 class="tool-title">Secure Online Image Resizer</h1>
+      <p class="tool-tagline">Change image dimensions in pixels or percentages, lock aspect ratios, and export optimized assets. Powered entirely locally inside your browser.</p>
+      <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
+    </div>
+  </section>
+
+  
+
+  <!-- Section 2: Workspace -->
+  <main class="tool-workspace" id="workspace">
+    <div class="glass-card">
+      
+      <!-- Upload Box -->
+      <div class="drop-zone" id="drop-zone">
+        <div class="drop-zone-emoji">🖼️</div>
+        <div class="drop-zone-title">Click or drag & drop your image here</div>
+        <div class="drop-zone-subtitle">Supports JPG, JPEG, PNG, or WebP</div>
+        <input type="file" id="file-input" style="display: none;" accept="image/*">
+      </div>
+
+      <!-- Dashboard Workspace (Grid) -->
+      <div class="resizer-dashboard" id="dashboard">
+        
+        <!-- Left: Configuration panel -->
+        <div class="controls-panel">
+          
+          <!-- Dimensions group -->
+          <div class="panel-group">
+            <span class="panel-group-title">Configure Dimensions</span>
+            
+            <div class="dimensions-input-row">
+              <div class="input-box">
+                <label for="img-width">Width (px)</label>
+                <input type="number" class="num-input" id="img-width">
+              </div>
+              <div class="input-box">
+                <label for="img-height">Height (px)</label>
+                <input type="number" class="num-input" id="img-height">
+              </div>
+            </div>
+
+            <label class="checkbox-wrap">
+              <input type="checkbox" id="lock-ratio" checked>
+              Lock Aspect Ratio (Proportional)
+            </label>
+          </div>
+
+          <!-- Shortcuts scale -->
+          <div class="panel-group">
+            <span class="panel-group-title">Scale Shortcuts</span>
+            <div class="shortcuts-grid">
+              <button class="shortcut-btn" data-scale="25">25%</button>
+              <button class="shortcut-btn" data-scale="50">50%</button>
+              <button class="shortcut-btn" data-scale="75">75%</button>
+              <button class="shortcut-btn" data-scale="100">100%</button>
+              <button class="shortcut-btn" data-scale="150">150%</button>
+              <button class="shortcut-btn" data-scale="200">200%</button>
+            </div>
+          </div>
+
+          <!-- Output options -->
+          <div class="panel-group">
+            <span class="panel-group-title">Output Configuration</span>
+            
+            <div class="input-box">
+              <label for="out-format">Format</label>
+              <select class="select-field" id="out-format">
+                <option value="image/jpeg">JPEG (.jpg)</option>
+                <option value="image/png">PNG (.png)</option>
+                <option value="image/webp">WebP (.webp)</option>
+              </select>
+            </div>
+
+            <div class="quality-slider-group" id="quality-container">
+              <div class="quality-label">
+                <span>Quality</span>
+                <span id="quality-val">85%</span>
+              </div>
+              <input type="range" class="quality-slider" id="out-quality" min="10" max="100" value="85">
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Right: Preview and Info panel -->
+        <div class="preview-panel">
+          <div class="preview-box">
+            <img id="preview-img" alt="Resized Preview Image">
+          </div>
+
+          <div class="preview-stats-bar">
+            <div>Original size: <span id="stat-orig-size">-</span></div>
+            <div>Resized estimate: <span id="stat-new-size">-</span></div>
+          </div>
+
+          <div class="action-row">
+            <button class="ctrl-btn" id="btn-reset" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.1)">Reset</button>
+            <button class="ctrl-btn" id="btn-download">Resize & Download</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  
+
+  <!-- Section 3: How to Use -->
+  <section class="article-section">
+    <h2>How to Resize Images Locally</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-emoji">📂</div>
+        <div class="step-title">1. Drop Your Image</div>
+        <div class="step-desc">Drag and drop your JPG, PNG, or WebP file into the drop zone box, or select it from your device.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">📏</div>
+        <div class="step-title">2. Modify Properties</div>
+        <div class="step-desc">Enter your target dimensions, use percentage buttons to scale, and configure format or qualities sliders.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">💾</div>
+        <div class="step-title">3. Export Resized Image</div>
+        <div class="step-desc">Verify dimensions and sizes in the live preview box and click "Resize & Download" to save.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Key Features -->
+  <section class="article-section">
+    <h2>Outstanding Resizer Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-head">⚡ Pixel-Perfect Scales</div>
+        <div class="feature-desc">Locks aspect ratios automatically to prevent distortion and stretching of visual dimensions.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🔒 Safe Browser Processing</div>
+        <div class="feature-desc">All conversions occur inside offscreen canvases. No files are uploaded, guaranteeing absolute security.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">💾 Dual Format Transcoder</div>
+        <div class="feature-desc">Resizes and transcodes values between JPEG, PNG, and WebP, optimizing sizes on-the-fly.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: FAQ -->
+  <section class="article-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-wrapper">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Does resizing reduce image quality? <span>+</span></div>
+        <div class="faq-answer">Scaling down discards pixels to fit the new size, reducing file size. For JPEG/WebP formats, the quality slider controls compression ratios to minimize artifact noise.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Why is PNG quality slider disabled? <span>+</span></div>
+        <div class="faq-answer">PNG is a lossless compression format, meaning it does not lose detail when compressed. Therefore, the compression quality slider is not applicable for PNG.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Can I upscale small images? <span>+</span></div>
+        <div class="faq-answer">Yes. The tool supports scaling factors up to 200%. However, note that upscaling will stretch existing pixels, making the final image appear slightly blurred.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Related Tools Injected Dynamically -->
+  <section class="article-section">
+    <h2>Explore Complementary Graphics Tools</h2>
+    <div class="blog-grid" id="related-tools-grid">
+      <!-- Injected Dynamically -->
+    </div>
+  </section>
+
+  <!-- Section 7: Footer CTA Banner -->
+  <section class="cta-banner">
+    <h2 class="cta-title">Ready to explore more free tools?</h2>
+    <p class="cta-subtitle">DevToolkit has 40+ utility modules waiting for you.</p>
+    <a href="/index.html" class="btn-cta">Explore All Tools →</a>
+  </section>
+
+  <!-- Ads Slot Bottom -->
+  
+
+  <!-- Standard Footer -->
+  <footer>
+    <div style="text-align: center; font-size:12px; color:rgba(255,255,255,0.4); padding: 24px 0;">
+      &copy; 2026 DevToolKit. All rights reserved. | <a href="/index.html" style="color:var(--cyan); text-decoration:none;">Home</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from '../js/3d-background.js';
+    import { logToolUsage } from '../js/tools-tracker.js';
+
+    // Start background particle animation
+    initBackground('bg-container');
+
+    // Local 3D Hero Scene: Floating/Expanding Image Bounds frames
+    function initHero3D() {
+      const container = document.getElementById('tool-hero-3d');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000);
+      camera.position.z = 240;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const light1 = new THREE.AmbientLight(0xffffff, 0.5);
+      scene.add(light1);
+
+      const light2 = new THREE.DirectionalLight(0x00CCFF, 1);
+      light2.position.set(10, 20, 20);
+      scene.add(light2);
+
+      // Create expanding wireframes boxes
+      const meshes = [];
+      const scaleLimits = [];
+
+      for (let i = 0; i < 5; i++) {
+        const geom = new THREE.BoxGeometry(15, 12, 12);
+        const mat = new THREE.MeshPhongMaterial({
+          color: i % 2 === 0 ? 0x0066FF : 0x7B2FFF,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.35
+        });
+        const mesh = new THREE.Mesh(geom, mat);
+        mesh.position.set(
+          (Math.random() - 0.5) * 150,
+          (Math.random() - 0.5) * 80,
+          (Math.random() - 0.5) * 40
+        );
+        scene.add(mesh);
+        meshes.push(mesh);
+        scaleLimits.push({
+          dir: 1,
+          speed: 0.005 + (i * 0.002)
+        });
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        meshes.forEach((mesh, idx) => {
+          mesh.rotation.y += 0.004;
+          mesh.rotation.x += 0.002;
+
+          const limit = scaleLimits[idx];
+          mesh.scale.x += limit.dir * limit.speed;
+          mesh.scale.y += limit.dir * limit.speed;
+
+          if (mesh.scale.x > 1.8) limit.dir = -1;
+          if (mesh.scale.x < 0.6) limit.dir = 1;
+        });
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      });
+    }
+    initHero3D();
+
+    // Related Tools
+    const related = [
+      { name: 'Image Compressor', emoji: '🖼️', slug: 'image-compressor', cat: 'image', desc: 'Optimize assets files size' },
+      { name: 'Color Picker & Harmonies', emoji: '🎨', slug: 'color-picker', cat: 'developer', desc: 'Generate visual palettes swatches' },
+      { name: 'Base64 Encoder/Decoder', emoji: '💽', slug: 'base64-encoder', cat: 'developer', desc: 'Serializes graphics into strings' },
+      { name: 'QR Code Generator', emoji: '📱', slug: 'qr-code-generator', cat: 'developer', desc: 'Create code blocks assets' }
+    ];
+
+    const relatedGrid = document.getElementById('related-tools-grid');
+    related.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <div class="blog-thumb" style="display:flex; align-items:center; justify-content:center; font-size:32px;">${t.emoji}</div>
+        <div class="blog-info">
+          <div class="blog-title">${t.name}</div>
+          <div class="blog-desc">${t.desc}</div>
+          <a href="/tools/${t.slug}.html" class="blog-link">Use Tool →</a>
+        </div>
+      `;
+      card.querySelector('.blog-link').addEventListener('click', async () => {
+        await logToolUsage(t.name, t.cat, t.slug);
+      });
+      relatedGrid.appendChild(card);
+    });
+
+    // Image resizer core variables
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const dashboard = document.getElementById('dashboard');
+
+    const imgWidth = document.getElementById('img-width');
+    const imgHeight = document.getElementById('img-height');
+    const lockRatioCheckbox = document.getElementById('lock-ratio');
+    
+    const outFormat = document.getElementById('out-format');
+    const outQuality = document.getElementById('out-quality');
+    const qualityVal = document.getElementById('quality-val');
+    const qualityContainer = document.getElementById('quality-container');
+
+    const previewImg = document.getElementById('preview-img');
+    const statOrigSize = document.getElementById('stat-orig-size');
+    const statNewSize = document.getElementById('stat-new-size');
+
+    let loadedImage = null; // Stored Image object
+    let originalAspectRatio = 1;
+    let originalFileSizeText = '';
+
+    // File selection triggers
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      if (e.dataTransfer.files.length > 0) {
+        handleUploadedImage(e.dataTransfer.files[0]);
+      }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        handleUploadedImage(e.target.files[0]);
+      }
+    });
+
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function handleUploadedImage(file) {
+      if (!file.type.startsWith('image/')) {
+        alert("Please select a valid image file.");
+        return;
+      }
+
+      originalFileSizeText = formatBytes(file.size);
+      statOrigSize.textContent = originalFileSizeText;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        loadedImage = new Image();
+        loadedImage.onload = () => {
+          originalAspectRatio = loadedImage.width / loadedImage.height;
+          
+          // Populate fields
+          imgWidth.value = loadedImage.width;
+          imgHeight.value = loadedImage.height;
+
+          previewImg.src = loadedImage.src;
+
+          // UI display swap
+          dropZone.style.display = 'none';
+          dashboard.style.display = 'grid';
+
+          // Initial resize render
+          triggerResizeCalculation();
+        };
+        loadedImage.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Two-way aspect ratio lock constraints
+    imgWidth.addEventListener('input', () => {
+      if (lockRatioCheckbox.checked && loadedImage) {
+        imgHeight.value = Math.round(parseFloat(imgWidth.value) / originalAspectRatio) || '';
+      }
+      triggerResizeCalculation();
+    });
+
+    imgHeight.addEventListener('input', () => {
+      if (lockRatioCheckbox.checked && loadedImage) {
+        imgWidth.value = Math.round(parseFloat(imgHeight.value) * originalAspectRatio) || '';
+      }
+      triggerResizeCalculation();
+    });
+
+    // Shortcuts scaling clicks
+    document.querySelectorAll('.shortcut-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!loadedImage) return;
+        const scale = parseFloat(btn.getAttribute('data-scale')) / 100;
+        imgWidth.value = Math.round(loadedImage.width * scale);
+        imgHeight.value = Math.round(loadedImage.height * scale);
+        triggerResizeCalculation();
+      });
+    });
+
+    // Format dropdown triggers quality slider visibility
+    outFormat.addEventListener('change', () => {
+      if (outFormat.value === 'image/png') {
+        qualityContainer.style.display = 'none';
+      } else {
+        qualityContainer.style.display = 'flex';
+      }
+      triggerResizeCalculation();
+    });
+
+    outQuality.addEventListener('input', () => {
+      qualityVal.textContent = `${outQuality.value}%`;
+      triggerResizeCalculation();
+    });
+
+    // Canvas execution core
+    let debounceTimer = null;
+    function triggerResizeCalculation() {
+      if (!loadedImage) return;
+
+      // Debounce logic to prevent UI lag on slider drag
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const w = parseInt(imgWidth.value) || 1;
+        const h = parseInt(imgHeight.value) || 1;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(loadedImage, 0, 0, w, h);
+
+        const format = outFormat.value;
+        const quality = parseFloat(outQuality.value) / 100;
+
+        canvas.toBlob((blob) => {
+          if (!blob) return;
+          statNewSize.textContent = formatBytes(blob.size);
+          
+          // Free legacy URL to prevent memory leaks
+          if (previewImg.src.startsWith('blob:')) {
+            URL.revokeObjectURL(previewImg.src);
+          }
+          previewImg.src = URL.createObjectURL(blob);
+        }, format, quality);
+      }, 100);
+    }
+
+    // Reset action
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      dropZone.style.display = 'flex';
+      dashboard.style.display = 'none';
+      fileInput.value = '';
+      loadedImage = null;
+    });
+
+    // Download action trigger
+    document.getElementById('btn-download').addEventListener('click', async () => {
+      if (!loadedImage) return;
+
+      const w = parseInt(imgWidth.value) || 1;
+      const h = parseInt(imgHeight.value) || 1;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(loadedImage, 0, 0, w, h);
+
+      const format = outFormat.value;
+      const quality = parseFloat(outQuality.value) / 100;
+
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        
+        let ext = '.jpg';
+        if (format === 'image/png') ext = '.png';
+        else if (format === 'image/webp') ext = '.webp';
+
+        link.download = `devtoolkit-resized${ext}`;
+        link.click();
+        URL.revokeObjectURL(url);
+
+        await logToolUsage('Image Resizer', 'image', 'image-resizer');
+      }, format, quality);
+    });
+
+  </script>
+
+  <script>
+    // FAQ accordion helper
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

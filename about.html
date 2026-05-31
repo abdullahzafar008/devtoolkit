@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>About Us - DevToolKit | Free Developer & Content Creator Tools</title>
+  <meta name="description" content="Learn about DevToolKit, our mission to build 100% free web utilities, privacy-first design, and our story of making online tools accessible.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/about.html">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero Section */
+    .about-hero {
+      height: 350px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+      padding: 24px;
+      position: relative;
+    }
+
+    .about-hero h1 {
+      font-size: 42px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .about-hero p {
+      font-size: 16px;
+      color: var(--text-gray);
+      max-width: 600px;
+      margin: 0;
+    }
+
+    /* Content Layout */
+    .content-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    /* Story Section */
+    .story-section h2 {
+      font-size: 26px;
+      font-weight: 800;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .story-section p {
+      font-size: 15px;
+      color: var(--text-gray);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .story-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Mission Cards Grid */
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .mission-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mission-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .mission-card:hover {
+      border-color: var(--card-border);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px var(--card-glow);
+    }
+
+    .mission-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .mission-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 10px 0;
+    }
+
+    .mission-card p {
+      font-size: 13.5px;
+      color: var(--text-gray);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .stat-card {
+      background: rgba(0, 102, 255, 0.05);
+      border: 1px solid rgba(0, 102, 255, 0.15);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: 800;
+      color: #00CCFF;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--text-gray);
+      letter-spacing: 0.5px;
+    }
+
+    /* Team Section */
+    .team-section {
+      text-align: center;
+    }
+
+    .team-section h2 {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .team-section p {
+      font-size: 15px;
+      color: var(--text-gray);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Footer styles */
+    footer {
+      border-top: 1px solid rgba(0, 102, 255, 0.2);
+      background: rgba(5, 5, 16, 0.95);
+      padding: 48px 24px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-logo span {
+      color: #0066FF;
+      -webkit-text-fill-color: #0066FF;
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      color: var(--text-gray);
+      max-width: 300px;
+    }
+
+    .footer-col-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0066FF;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-link {
+      font-size: 13px;
+      color: var(--text-gray);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #00CCFF;
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 40px auto 0 auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating 3D Background Container -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="./js/navbar.js" type="module"></script>
+
+  <!-- Hero Section -->
+  <section class="about-hero" data-section="hero" id="hero">
+    <h1>About DevToolKit</h1>
+    <p>Empowering developers, students, content creators, and professionals worldwide with free, privacy-focused browser-based utilities.</p>
+  </section>
+
+  <!-- Content Sections -->
+  <main class="content-wrapper">
+    <div id="dynamic-sections-container"></div>
+    
+    <div id="static-about-cards">
+      <!-- Our Story Section -->
+      <section class="glass-card story-section" data-section="text" id="text">
+      <h2>Our Story</h2>
+      <p>DevToolKit was founded with one mission: to make professional-grade online tools free and accessible to everyone. We believe powerful tools should not cost money or require a subscription.</p>
+      <p>Our team of developers and designers work tirelessly to build, maintain and improve every tool on this platform. From SEO professionals to students, content creators to developers — DevToolKit is built for everyone.</p>
+      <p>Today DevToolKit offers 40+ free tools across 6 categories with thousands of users visiting every day. We are committed to keeping every tool 100% free forever.</p>
+    </section>
+
+    <!-- Our Mission Section -->
+    <section class="glass-card story-section" data-section="text" id="text">
+      <h2>Our Mission</h2>
+      <div class="mission-grid">
+        <div class="mission-card">
+          <div class="mission-icon">🆓</div>
+          <h3>Always Free</h3>
+          <p>Every tool on DevToolKit is and always will be completely free to use.</p>
+        </div>
+        <div class="mission-card">
+          <div class="mission-icon">🔒</div>
+          <h3>Privacy First</h3>
+          <p>We never collect or store your data. Everything runs in your browser.</p>
+        </div>
+        <div class="mission-card">
+          <div class="mission-icon">⚡</div>
+          <h3>Constantly Improving</h3>
+          <p>We add new tools and improve existing ones based on user feedback.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-number">40+</span>
+        <span class="stat-label">Free Tools</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">6</span>
+        <span class="stat-label">Categories</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">$0</span>
+        <span class="stat-label">Zero Cost</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">100%</span>
+        <span class="stat-label">Browser Based</span>
+      </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="glass-card team-section">
+      <h2>Built With ❤️ For Everyone</h2>
+      <p>DevToolKit is designed and engineered by an independent community of open-source developers who believe that web utility access should be universal, fast, and secure. We appreciate your support and usage of our tools!</p>
+    </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/index.html" class="footer-logo">Tool<span>Nest</span></a>
+        <p class="footer-tagline">All Tools. One Place. Zero Cost.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Categories</div>
+        <div class="footer-links">
+          <a href="/category-seo.html" class="footer-link">🔍 SEO Tools</a>
+          <a href="/category-text.html" class="footer-link">✍️ Text Tools</a>
+          <a href="/category-image.html" class="footer-link">🖼️ Image Tools</a>
+          <a href="/category-video.html" class="footer-link">🎬 Video Tools</a>
+          <a href="/category-developer.html" class="footer-link">🧑💻 Developer Tools</a>
+          <a href="/category-converter.html" class="footer-link">🔄 Converter Tools</a>
+        </div>
+      </div>
+      <div>
+                <div class="footer-col-title">Quick Links</div>
+        <div class="footer-links">
+          <a href="/about.html" class="footer-link">About</a>
+          <a href="/privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="/terms.html" class="footer-link">Terms of Service</a>
+          <a href="/contact.html" class="footer-link">Contact</a>
+          <a href="/sitemap.html" class="footer-link">Sitemap</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 DevToolKit. All rights reserved.
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from './js/3d-background.js';
+    import { loadPageContent } from './js/cms.js';
+
+    initBackground('bg-container');
+
+    loadPageContent('about').then(() => {
+      const dynamicSections = document.getElementById('dynamic-sections-container');
+      if (dynamicSections && dynamicSections.children.length > 0) {
+        console.log("About CMS layout blocks found: hiding fallback grids.");
+        document.getElementById('static-about-cards').style.display = 'none';
+        const staticHero = document.querySelector('.about-hero');
+        if (staticHero) staticHero.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>

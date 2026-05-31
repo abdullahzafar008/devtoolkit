@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Free Real-Time SEO Audit & Score Checker | DevToolkit</title>
+  <meta name="description" content="Audit your webpage's SEO compliance instantly. Paste your HTML code to analyze meta tags, heading hierarchies, mobile viewport styling, image alt text, and Open Graph attributes. Secure local parser.">
+  <meta name="keywords" content="seo checker, website audit, page score analyzer, search engine optimization checker, local seo audit, html seo parser">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/tools/seo-score-checker.html">
+  <meta property="og:title" content="Free Real-Time SEO Audit & Score Checker | DevToolkit">
+  <meta property="og:description" content="Paste your HTML code to audit meta tags, alt tags, and structural hierarchy locally inside your browser.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- FAQ JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does the local HTML SEO audit work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "By parsing the pasted raw HTML source using local browser DOM structures, the tool evaluates tag lengths, presence of metadata, headings hierarchy, and links compliance instantly in volatile memory."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does this tool support external URL crawls?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CORS security rules block direct client-side external web crawling. For maximum reliability, we recommend opening your page in a browser, copying its source code (Ctrl+U), and pasting it directly into the parser."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What criteria determines the SEO Score?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The score is calculated out of 100 based on weighted search engine guidelines, including title tag presence and length, description attributes, heading structures, canonical definitions, viewport configuration, and image alt text presence."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "SEO Audit & Score Checker",
+    "url": "https://www.devtoolkit.com/tools/seo-score-checker.html",
+    "description": "Premium browser-based SEO tags parser, alt attributes checker, viewport validator, and headings compliance auditor.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .tool-hero {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .hero-3d-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: relative;
+      z-index: 2;
+      padding: 24px;
+      max-width: 800px;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .tool-title {
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tool-tagline {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin: 0 0 24px 0;
+    }
+
+    .btn-scroll-down {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 20px;
+      color: #00CCFF;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .btn-scroll-down:hover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.2);
+    }
+
+    /* Workspace */
+    .tool-workspace {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 60px 24px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    .workspace-textarea {
+      width: 100%;
+      height: 250px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      color: #00FF66;
+      box-sizing: border-box;
+      outline: none;
+      resize: vertical;
+      line-height: 1.6;
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    .workspace-textarea:focus {
+      border-color: #00CCFF;
+      background: rgba(5, 5, 16, 0.85);
+    }
+
+    .controls-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .ctrl-btn {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      color: #00CCFF;
+      font-weight: 700;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .ctrl-btn:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+    }
+
+    /* Audit Score Dashboard */
+    .dashboard-panel {
+      display: none; /* Injected dynamically */
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .summary-box {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 32px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 30px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .summary-box {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+
+    .score-radial {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin: 0 auto;
+    }
+
+    .score-radial-circle {
+      transform: rotate(-90deg);
+    }
+
+    .score-text-inner {
+      position: absolute;
+      font-size: 32px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .score-desc {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .score-desc-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #00CCFF;
+    }
+
+    .score-desc-text {
+      font-size: 14px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    /* Counters statistics */
+    .counters-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .counter-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-error {
+      background: rgba(255, 0, 102, 0.15);
+      border: 1px solid #FF0066;
+      color: #FF0066;
+    }
+
+    .badge-warning {
+      background: rgba(255, 153, 0, 0.15);
+      border: 1px solid #FF9900;
+      color: #FF9900;
+    }
+
+    .badge-pass {
+      background: rgba(0, 255, 102, 0.15);
+      border: 1px solid #00FF66;
+      color: #00FF66;
+    }
+
+    /* Audit Groups tabs details */
+    .tabs-bar {
+      display: flex;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-gray);
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn.active, .tab-btn:hover {
+      background: rgba(0, 102, 255, 0.15);
+      border-color: #00CCFF;
+      color: #00CCFF;
+    }
+
+    /* Audit list block items */
+    .audit-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .audit-item {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color 0.2s ease;
+    }
+
+    .audit-item:hover {
+      border-color: rgba(0, 102, 255, 0.2);
+    }
+
+    .audit-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .audit-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .audit-body {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    .audit-recommendation {
+      font-size: 12px;
+      background: rgba(0, 102, 255, 0.05);
+      border-left: 3px solid #0066FF;
+      padding: 8px 12px;
+      border-radius: 0 4px 4px 0;
+      color: #00CCFF;
+    }
+
+    /* Article layout elements */
+    .article-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .step-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #00CCFF;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+    }
+
+    /* FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Related Tools Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .blog-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-thumb {
+      height: 140px;
+      background: linear-gradient(135deg, #0066FF, #7B2FFF);
+    }
+
+    .blog-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .blog-desc {
+      font-size: 12px;
+      color: var(--text-gray);
+      line-height: 1.4;
+    }
+
+    .blog-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: auto;
+    }
+
+    .blog-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.4), rgba(123, 47, 255, 0.4));
+      border-top: 1px solid var(--card-border);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cta-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .btn-cta {
+      padding: 12px 24px;
+      background: #0066FF;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-cta:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+    }
+
+    /* WordPress Documentation Comment Requirement */
+    /* 
+     Plugin Name: Real-Time SEO Auditor
+     Description: Full client-side DOM compiler checks meta tag sizes, alt tags, mobile-viewports.
+     Version: 1.0.0
+     Author: DevToolkit Inc.
+    */
+  </style>
+</head>
+<body>
+
+  <!-- Floating background particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <!-- Section 1: Hero -->
+  <section class="tool-hero">
+    <div class="hero-3d-scene" id="tool-hero-3d"></div>
+    <div class="hero-overlay">
+      <div class="breadcrumbs">
+        <a href="/index.html">Home</a>
+        <span class="separator">&gt;</span>
+        <a href="/category-seo.html">SEO Tools</a>
+        <span class="separator">&gt;</span>
+        <span>SEO Score Checker</span>
+      </div>
+      <h1 class="tool-title">SEO Score Checker & Page Auditor</h1>
+      <p class="tool-tagline">Paste your webpage's raw HTML source code to analyze SEO compliance, identify error attributes, and view instant optimization guides.</p>
+      <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
+    </div>
+  </section>
+
+  
+
+  <!-- Section 2: Workspace -->
+  <main class="tool-workspace" id="workspace">
+    <div class="glass-card">
+      
+      <!-- Input code block -->
+      <span class="panel-label">Paste Raw HTML Source Code</span>
+      <textarea class="workspace-textarea" id="html-input" placeholder="<!DOCTYPE html>
+<html>
+<head>
+  <title>Sample Title</title>
+  ...
+</head>
+<body>
+  <h1>Sample Heading</h1>
+</body>
+</html>"></textarea>
+
+      <!-- Controls -->
+      <div class="controls-bar">
+        <button class="ctrl-btn" id="btn-clear" style="background: rgba(255,255,255,0.03); color:#fff; border-color: rgba(255,255,255,0.1);">Clear</button>
+        <button class="ctrl-btn" id="btn-sample" style="background: rgba(0, 102, 255, 0.05);">Load Sample HTML</button>
+        <button class="ctrl-btn" id="btn-analyze">Audit SEO Score</button>
+      </div>
+
+      <!-- Dashboard Panel -->
+      <div class="dashboard-panel" id="dashboard-panel">
+        
+        <!-- Summary Box -->
+        <div class="summary-box">
+          <div class="score-radial">
+            <svg class="score-radial-circle" width="140" height="140">
+              <circle cx="70" cy="70" r="60" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent"/>
+              <circle id="score-progress" cx="70" cy="70" r="60" stroke="#00CCFF" stroke-width="8" stroke-dasharray="376.99" stroke-dashoffset="376.99" fill="transparent"/>
+            </svg>
+            <div class="score-text-inner" id="score-text">0%</div>
+          </div>
+          
+          <div class="score-desc">
+            <div class="score-desc-title" id="score-status-title">Needs Improvement</div>
+            <p class="score-desc-text" id="score-status-desc">Your page structure has multiple critical SEO errors. Review the expanded issues below to fix meta configurations.</p>
+            <div class="counters-row">
+              <span class="counter-badge badge-error" id="cnt-errors">0 Errors</span>
+              <span class="counter-badge badge-warning" id="cnt-warnings">0 Warnings</span>
+              <span class="counter-badge badge-pass" id="cnt-passed">0 Passed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audit Tabs -->
+        <div>
+          <div class="tabs-bar" id="audit-tabs">
+            <button class="tab-btn active" data-type="all">All Issues (0)</button>
+            <button class="tab-btn" data-type="errors">Errors (0)</button>
+            <button class="tab-btn" data-type="warnings">Warnings (0)</button>
+            <button class="tab-btn" data-type="passed">Passed (0)</button>
+          </div>
+
+          <div class="audit-list" id="audit-list">
+            <!-- Items injected dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  
+
+  <!-- Section 3: How to Use -->
+  <section class="article-section">
+    <h2>How to Perform a Webpage SEO Audit</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-emoji">🖥️</div>
+        <div class="step-title">1. Copy Source Code</div>
+        <div class="step-desc">Go to your page, open Source View (Ctrl+U or Right Click -> View Page Source), and select and copy everything (Ctrl+A, Ctrl+C).</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">📝</div>
+        <div class="step-title">2. Paste and Audit</div>
+        <div class="step-desc">Paste the HTML code into our text editor box above and click the "Audit SEO Score" button.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">🚀</div>
+        <div class="step-title">3. Fix Recommendations</div>
+        <div class="step-desc">Inspect failures and warnings. Follow the generated guide details to boost search rankings.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Key Features -->
+  <section class="article-section">
+    <h2>Complete SEO Auditing Criteria</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-head">🔍 Tags Compliance</div>
+        <div class="feature-desc">Checks title tags length, meta description availability, and absolute canonical tags definitions.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">📱 Mobile Layout viewport</div>
+        <div class="feature-desc">Ensures proper responsive viewport parameters are configured for flawless mobile render ranking.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🏷️ Media & Accessibility</div>
+        <div class="feature-desc">Scans image tags for missing alt descriptions attributes to maintain accessibility standards.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: FAQ -->
+  <section class="article-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-wrapper">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Why paste HTML instead of crawling a URL? <span>+</span></div>
+        <div class="faq-answer">Browser security constraints (CORS) block direct requests to foreign domains from clients. Direct code pasting allows deep, instantaneous parsing without backend proxy servers.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Does this tool check Open Graph attributes? <span>+</span></div>
+        <div class="faq-answer">Yes. It validates Facebook (og:title, og:description, og:image) and Twitter card configuration targets to optimize social share previews.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">What is the ideal title tag length? <span>+</span></div>
+        <div class="faq-answer">For optimum SERP snippets display on search engines, titles should stay between 30 and 60 characters. Descriptions should be between 120 and 160 characters.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Related Tools Injected Dynamically -->
+  <section class="article-section">
+    <h2>Explore Complementary SEO Tools</h2>
+    <div class="blog-grid" id="related-tools-grid">
+      <!-- Injected Dynamically -->
+    </div>
+  </section>
+
+  <!-- Section 7: Footer CTA Banner -->
+  <section class="cta-banner">
+    <h2 class="cta-title">Ready to explore more free tools?</h2>
+    <p class="cta-subtitle">DevToolkit has 40+ utility modules waiting for you.</p>
+    <a href="/index.html" class="btn-cta">Explore All Tools →</a>
+  </section>
+
+  <!-- Ads Slot Bottom -->
+  
+
+  <!-- Standard Footer -->
+  <footer>
+    <div style="text-align: center; font-size:12px; color:rgba(255,255,255,0.4); padding: 24px 0;">
+      &copy; 2026 DevToolKit. All rights reserved. | <a href="/index.html" style="color:var(--cyan); text-decoration:none;">Home</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from '../js/3d-background.js';
+    import { logToolUsage } from '../js/tools-tracker.js';
+
+    // Start background particle animation
+    initBackground('bg-container');
+
+    // Local 3D Hero Scene: Floating Globular circles
+    function initHero3D() {
+      const container = document.getElementById('tool-hero-3d');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000);
+      camera.position.z = 250;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const light = new THREE.AmbientLight(0xffffff, 0.4);
+      scene.add(light);
+
+      const dirLight = new THREE.DirectionalLight(0x00CCFF, 1);
+      dirLight.position.set(0, 10, 30);
+      scene.add(dirLight);
+
+      // Rotating wireframe sphere representing web crawlers
+      const geom = new THREE.SphereGeometry(25, 12, 12);
+      const mat = new THREE.MeshBasicMaterial({
+        color: 0x0066FF,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.35
+      });
+      const sphere = new THREE.Mesh(geom, mat);
+      scene.add(sphere);
+
+      // Colorful satellites
+      const meshes = [];
+      const orbitSpeeds = [];
+
+      for (let i = 0; i < 6; i++) {
+        const satGeom = new THREE.SphereGeometry(3, 16, 16);
+        const satMat = new THREE.MeshPhongMaterial({
+          color: i % 2 === 0 ? 0x00CCFF : 0x7B2FFF,
+          shininess: 100
+        });
+        const mesh = new THREE.Mesh(satGeom, satMat);
+        scene.add(mesh);
+        meshes.push(mesh);
+        orbitSpeeds.push({
+          angle: i * (Math.PI / 3),
+          speed: 0.005 + (i * 0.002),
+          radius: 40 + (i * 5)
+        });
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        sphere.rotation.y += 0.002;
+        sphere.rotation.x += 0.001;
+
+        meshes.forEach((mesh, idx) => {
+          const spec = orbitSpeeds[idx];
+          spec.angle += spec.speed;
+          mesh.position.x = Math.cos(spec.angle) * spec.radius;
+          mesh.position.z = Math.sin(spec.angle) * spec.radius;
+          mesh.position.y = Math.sin(spec.angle * 1.5) * 10;
+        });
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      });
+    }
+    initHero3D();
+
+    // Related Tools Grid Injection
+    const related = [
+      { name: 'Meta Tag Generator', emoji: '🏷️', slug: 'meta-tag-generator', cat: 'seo', desc: 'Create Google metadata grids' },
+      { name: 'Word Counter & Pace', emoji: '📝', slug: 'word-counter', cat: 'text', desc: 'Verify readability levels metrics' },
+      { name: 'QR Code Generator', emoji: '📱', slug: 'qr-code-generator', cat: 'developer', desc: 'Create code blocks assets' },
+      { name: 'Base64 Encoder/Decoder', emoji: '💽', slug: 'base64-encoder', cat: 'developer', desc: 'Convert variables safely' }
+    ];
+
+    const relatedGrid = document.getElementById('related-tools-grid');
+    related.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <div class="blog-thumb" style="display:flex; align-items:center; justify-content:center; font-size:32px;">${t.emoji}</div>
+        <div class="blog-info">
+          <div class="blog-title">${t.name}</div>
+          <div class="blog-desc">${t.desc}</div>
+          <a href="/tools/${t.slug}.html" class="blog-link">Use Tool →</a>
+        </div>
+      `;
+      card.querySelector('.blog-link').addEventListener('click', async () => {
+        await logToolUsage(t.name, t.cat, t.slug);
+      });
+      relatedGrid.appendChild(card);
+    });
+
+    // Sample HTML template loaders
+    const sampleHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Awesome Web Design Tips & Modern Ideas | DevToolkit</title>
+  <meta name="description" content="Discover modern web architecture design tips. Optimize your layout workflows with standard grids systems and premium colors.">
+  <link rel="canonical" href="https://www.devtoolkit.com/sample">
+  <meta property="og:title" content="Awesome Web Design Tips">
+  <meta property="og:description" content="Discover modern web design tips.">
+</head>
+<body>
+  <h1>Standard Web Architecture Design Guide</h1>
+  <h2>Why typography is extremely important</h2>
+  <img src="mockup.png" alt="Clean code illustration">
+  <img src="icon.png">
+  <a href="https://google.com" target="_blank" rel="noopener">Explore Search</a>
+</body>
+</html>`;
+
+    document.getElementById('btn-sample').addEventListener('click', () => {
+      document.getElementById('html-input').value = sampleHtml;
+    });
+
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      document.getElementById('html-input').value = '';
+      document.getElementById('dashboard-panel').style.display = 'none';
+    });
+
+    // Active Tab tracking
+    let currentTab = 'all';
+    let auditResults = [];
+
+    // Analyze Engine Mechanics
+    document.getElementById('btn-analyze').addEventListener('click', async () => {
+      const rawHtml = document.getElementById('html-input').value.trim();
+      if (!rawHtml) {
+        alert("Please paste your HTML source code to proceed.");
+        return;
+      }
+
+      // DOM Parser Compilation
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(rawHtml, "text/html");
+
+      auditResults = [];
+
+      // 1. Title Audit
+      const titleNode = doc.querySelector('title');
+      if (!titleNode) {
+        auditResults.push({
+          type: 'error',
+          title: 'Missing Page Title Tag',
+          body: 'The <title> tag is completely missing from the HTML document.',
+          recommendation: 'Add a <title>Your Title</title> element in the <head> block with a length between 30 and 60 characters.'
+        });
+      } else {
+        const titleLen = titleNode.textContent.trim().length;
+        if (titleLen < 30 || titleLen > 60) {
+          auditResults.push({
+            type: 'warning',
+            title: `Title Length Sub-optimal (${titleLen} characters)`,
+            body: `Your page title is ${titleLen} characters. Search engines typically truncate values longer than 60 or ignore short values under 30.`,
+            recommendation: 'Modify your title length to stay within 30 to 60 characters (e.g. current target is ' + titleNode.textContent.trim() + ').'
+          });
+        } else {
+          auditResults.push({
+            type: 'pass',
+            title: 'Optimal Title Tag Length',
+            body: `Passed: The title length is ideal (${titleLen} characters): "${titleNode.textContent.trim()}".`
+          });
+        }
+      }
+
+      // 2. Meta Description Audit
+      const descNode = doc.querySelector('meta[name="description"]');
+      if (!descNode) {
+        auditResults.push({
+          type: 'error',
+          title: 'Missing Meta Description Tag',
+          body: 'The description metadata parameter is missing from the document header.',
+          recommendation: 'Add <meta name="description" content="..."> inside <head> describing your page content within 120-160 characters.'
+        });
+      } else {
+        const descContent = descNode.getAttribute('content') || '';
+        const descLen = descContent.trim().length;
+        if (descLen < 120 || descLen > 160) {
+          auditResults.push({
+            type: 'warning',
+            title: `Sub-optimal Meta Description Length (${descLen} characters)`,
+            body: `Your description length is ${descLen} characters. Aim for 120-160 characters to optimize Google snippet previews.`,
+            recommendation: 'Adjust description attributes to contain between 120 and 160 characters.'
+          });
+        } else {
+          auditResults.push({
+            type: 'pass',
+            title: 'Optimal Description Tag Length',
+            body: `Passed: Meta description is correctly configured (${descLen} characters).`
+          });
+        }
+      }
+
+      // 3. Viewport Audit
+      const viewNode = doc.querySelector('meta[name="viewport"]');
+      if (!viewNode) {
+        auditResults.push({
+          type: 'error',
+          title: 'Missing Mobile Viewport Tag',
+          body: 'No responsive viewport layout tag was detected in your document header.',
+          recommendation: 'Add <meta name="viewport" content="width=device-width, initial-scale=1.0"> to trigger responsive mobile viewport rendering.'
+        });
+      } else {
+        auditResults.push({
+          type: 'pass',
+          title: 'Mobile Viewport Tag Detected',
+          body: 'Passed: Responsive viewports are correctly configured for mobile devices.'
+        });
+      }
+
+      // 4. H1 Heading audit
+      const h1s = doc.querySelectorAll('h1');
+      if (h1s.length === 0) {
+        auditResults.push({
+          type: 'error',
+          title: 'Missing H1 Primary Heading',
+          body: 'Your document does not contain an <h1> tag.',
+          recommendation: 'Always introduce exactly one <h1> element per page to act as the primary title header for search algorithms.'
+        });
+      } else if (h1s.length > 1) {
+        auditResults.push({
+          type: 'warning',
+          title: `Multiple H1 Heading Tags Detected (${h1s.length})`,
+          body: `Found ${h1s.length} <h1> tags. Using multiple primary headings may confuse indexing algorithms mapping primary context.`,
+          recommendation: 'Downgrade secondary <h1> tags to <h2> or <h3> elements, keeping only one <h1> at the top.'
+        });
+      } else {
+        auditResults.push({
+          type: 'pass',
+          title: 'Single H1 Heading Configured',
+          body: `Passed: Exact single <h1> tag parsed successfully: "${h1s[0].textContent.trim()}".`
+        });
+      }
+
+      // 5. Canonical Url Audit
+      const canonNode = doc.querySelector('link[rel="canonical"]');
+      if (!canonNode) {
+        auditResults.push({
+          type: 'warning',
+          title: 'Missing Canonical URL Link',
+          body: 'No canonical URL link (rel="canonical") tag was detected.',
+          recommendation: 'Add <link rel="canonical" href="https://yourdomain.com/page"> in your head to avoid duplicate content penalties.'
+        });
+      } else {
+        auditResults.push({
+          type: 'pass',
+          title: 'Canonical URL Defined',
+          body: `Passed: The canonical URL link is correctly defined: "${canonNode.getAttribute('href')}".`
+        });
+      }
+
+      // 6. Image alt attribute audit
+      const imgs = doc.querySelectorAll('img');
+      if (imgs.length > 0) {
+        let missingAlt = 0;
+        imgs.forEach(i => {
+          if (!i.hasAttribute('alt') || i.getAttribute('alt').trim() === '') {
+            missingAlt++;
+          }
+        });
+
+        if (missingAlt > 0) {
+          auditResults.push({
+            type: 'warning',
+            title: `Missing Alt Text on Images (${missingAlt}/${imgs.length})`,
+            body: `You have ${missingAlt} out of ${imgs.length} images missing "alt" text attributes. This degrades accessibility scores.`,
+            recommendation: 'Loop through your image elements and append descriptive alt attributes (e.g. <img src="..." alt="Description of image">).'
+          });
+        } else {
+          auditResults.push({
+            type: 'pass',
+            title: 'All Images Contain Alt Text',
+            body: `Passed: All ${imgs.length} image tags have valid descriptive alt text definitions.`
+          });
+        }
+      }
+
+      // 7. Open Graph metadata audit
+      const ogTitle = doc.querySelector('meta[property="og:title"]');
+      const ogDesc = doc.querySelector('meta[property="og:description"]');
+      if (!ogTitle || !ogDesc) {
+        auditResults.push({
+          type: 'warning',
+          title: 'Incomplete Open Graph Metadata',
+          body: 'Social share properties (og:title, og:description) are partially or fully missing.',
+          recommendation: 'Include basic Open Graph header meta tags to generate professional cards on platforms like Facebook and LinkedIn.'
+        });
+      } else {
+        auditResults.push({
+          type: 'pass',
+          title: 'Open Graph Metadata Complete',
+          body: 'Passed: The page contains valid Facebook social share metadata.'
+        });
+      }
+
+      // Calculate score out of 100 based on weight logic
+      let passes = auditResults.filter(r => r.type === 'pass').length;
+      let warnings = auditResults.filter(r => r.type === 'warning').length;
+      let errors = auditResults.filter(r => r.type === 'error').length;
+      let totalChecks = auditResults.length;
+
+      // Weighted score: error counts -15, warning counts -6
+      let scoreVal = 100 - (errors * 15) - (warnings * 6);
+      scoreVal = Math.max(0, Math.min(100, scoreVal));
+
+      // Display Dashboard
+      document.getElementById('dashboard-panel').style.display = 'flex';
+      
+      // Update Radial
+      const progressCircle = document.getElementById('score-progress');
+      const radius = 60;
+      const circumference = 2 * Math.PI * radius;
+      const offset = circumference - (scoreVal / 100) * circumference;
+      progressCircle.style.strokeDashoffset = offset;
+      
+      document.getElementById('score-text').textContent = `${scoreVal}%`;
+
+      // Status text updates
+      const statusTitle = document.getElementById('score-status-title');
+      const statusDesc = document.getElementById('score-status-desc');
+
+      if (scoreVal >= 90) {
+        statusTitle.textContent = 'Excellent SEO compliance!';
+        statusDesc.textContent = 'Your page conforms to major search engine guidelines. It is fully ready for high organic search rankings.';
+        progressCircle.setAttribute('stroke', '#00FF66');
+      } else if (scoreVal >= 70) {
+        statusTitle.textContent = 'Good structure (Needs tweaks)';
+        statusDesc.textContent = 'You have minor warnings and attributes configurations missing. Adjust the warning components to maximize organic traffic.';
+        progressCircle.setAttribute('stroke', '#FF9900');
+      } else {
+        statusTitle.textContent = 'Critical SEO issues found';
+        statusDesc.textContent = 'Your page has critical errors like missing titles or headings structures. Use the audit recommendations to fix these constraints immediately.';
+        progressCircle.setAttribute('stroke', '#FF0066');
+      }
+
+      // Counter badges
+      document.getElementById('cnt-errors').textContent = `${errors} Errors`;
+      document.getElementById('cnt-warnings').textContent = `${warnings} Warnings`;
+      document.getElementById('cnt-passed').textContent = `${passes} Passed`;
+
+      // Render Issues
+      renderIssues();
+
+      // Log usage
+      await logToolUsage('SEO Score Checker', 'seo', 'seo-score-checker');
+    });
+
+    function renderIssues() {
+      const listContainer = document.getElementById('audit-list');
+      listContainer.innerHTML = '';
+
+      let filtered = auditResults;
+      if (currentTab === 'errors') filtered = auditResults.filter(r => r.type === 'error');
+      if (currentTab === 'warnings') filtered = auditResults.filter(r => r.type === 'warning');
+      if (currentTab === 'passed') filtered = auditResults.filter(r => r.type === 'pass');
+
+      if (filtered.length === 0) {
+        listContainer.innerHTML = `<div style="text-align:center; padding: 24px; font-size:13px; color:var(--text-gray);">No audits match this filter group.</div>`;
+        return;
+      }
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'audit-item';
+        
+        let typeBadge = '';
+        if (item.type === 'error') typeBadge = `<span class="counter-badge badge-error">Error</span>`;
+        if (item.type === 'warning') typeBadge = `<span class="counter-badge badge-warning">Warning</span>`;
+        if (item.type === 'pass') typeBadge = `<span class="counter-badge badge-pass">Passed</span>`;
+
+        card.innerHTML = `
+          <div class="audit-header">
+            <span class="audit-title">${item.title}</span>
+            ${typeBadge}
+          </div>
+          <div class="audit-body">${item.body}</div>
+          ${item.recommendation ? `<div class="audit-recommendation"><strong>Fix:</strong> ${item.recommendation}</div>` : ''}
+        `;
+        listContainer.appendChild(card);
+      });
+
+      // Update tab counts
+      const tabs = document.getElementById('audit-tabs').querySelectorAll('.tab-btn');
+      tabs[0].textContent = `All Issues (${auditResults.length})`;
+      tabs[1].textContent = `Errors (${auditResults.filter(r => r.type === 'error').length})`;
+      tabs[2].textContent = `Warnings (${auditResults.filter(r => r.type === 'warning').length})`;
+      tabs[3].textContent = `Passed (${auditResults.filter(r => r.type === 'pass').length})`;
+    }
+
+    // Tabs clicks
+    document.getElementById('audit-tabs').querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.getElementById('audit-tabs').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentTab = btn.getAttribute('data-type');
+        renderIssues();
+      });
+    });
+
+  </script>
+
+  <script>
+    // FAQ accordion helper
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

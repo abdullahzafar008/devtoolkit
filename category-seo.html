@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Free SEO Tools & Auditing Directory - DevToolKit</title>
+  <meta name="description" content="Boost search rankings with 10 free SEO utility tools. Generate meta tags, audit SEO scores, create robots.txt, check backlinks, and build XML sitemaps client-side.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/category-seo.html">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- JSON-LD FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are SEO tools?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "SEO tools are specialized web utilities designed to analyze website performance, generate search optimization directives (like robots.txt and sitemaps), scan meta tags, and evaluate ranking signals like domain authority and backlinks."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are these SEO tools really free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, completely! Every tool runs client-side inside your browser sandbox, requiring no remote API subscriptions, fees, or account registrations."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which SEO tool should I use first?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We recommend starting with the Website SEO Score Checker. This audits your homepage or target layout, identifying errors in your meta configuration, heading structure, and missing tags."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How often should I check my SEO score?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It is best practice to run audits whenever you modify your website structure, update content templates, or publish new pages. Regular monthly checks keep your SEO score high."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need an account to use SEO tools?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, guests have full access to all SEO tools. Creating a free account is optional and is used to save your tool audit history to a personal dashboard."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is keyword density?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Keyword density measures the percentage of times a target keyword appears in your text relative to the total word count. Keeping it around 1% to 2% prevents keyword stuffing penalties."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I generate a sitemap?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Paste your page URLs into the Sitemap Generator tool. It compiles them into a structured XML format that you can upload to Google Search Console to speed up page indexing."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a robots.txt file?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Robots.txt is a plain text configuration file placed in your website root. It instructs search engine crawlers which sections of your site they are allowed to scan or ignore."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I check domain age?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use the Domain Age Checker tool by entering a domain. It polls registration metrics, displaying the exact date the domain was established and how old it is."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can beginners use these SEO tools?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, absolutely! Every tool is designed with intuitive interfaces, clear instructions, visual outputs, and downloadable file exports so that anyone can optimize websites easily."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .cat-hero {
+      height: 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+      padding: 24px;
+      position: relative;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .cat-hero h1 {
+      font-size: 42px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cat-hero p {
+      font-size: 16px;
+      color: var(--text-gray);
+      max-width: 600px;
+      margin: 0;
+    }
+
+    /* Content Layout */
+    .content-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    /* Tools Grid */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tool-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 24px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-6px);
+      border-color: #00CCFF;
+      box-shadow: 0 10px 25px var(--card-glow);
+    }
+
+    .card-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(0, 204, 255, 0.15);
+      color: #00CCFF;
+      letter-spacing: 0.5px;
+    }
+
+    .card-emoji {
+      font-size: 36px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin: 0;
+      line-height: 1.4;
+      min-height: 36px;
+    }
+
+    .card-btn {
+      margin-top: auto;
+      font-size: 13px;
+      font-weight: 600;
+      color: #00CCFF;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s ease;
+    }
+
+    .tool-card:hover .card-btn {
+      color: #7B2FFF;
+    }
+
+    /* Text Article Sections */
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 20px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .article-section h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #00CCFF;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+
+    .article-section p {
+      font-size: 14.5px;
+      color: var(--text-gray);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .article-section a.explain-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13.5px;
+      display: inline-block;
+      margin-top: 4px;
+      margin-bottom: 20px;
+    }
+
+    .article-section a.explain-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Accordion FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Tip Grid */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .tips-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .tip-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(0, 102, 255, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tip-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+    }
+
+    .tip-head span.emoji {
+      font-size: 22px;
+    }
+
+    .tip-desc {
+      font-size: 13.5px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    /* Footer styles */
+    footer {
+      border-top: 1px solid rgba(0, 102, 255, 0.2);
+      background: rgba(5, 5, 16, 0.95);
+      padding: 48px 24px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-logo span {
+      color: #0066FF;
+      -webkit-text-fill-color: #0066FF;
+    }
+
+    .footer-tagline {
+      font-size: 14px;
+      color: var(--text-gray);
+      max-width: 300px;
+    }
+
+    .footer-col-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0066FF;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-link {
+      font-size: 13px;
+      color: var(--text-gray);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-link:hover {
+      color: #00CCFF;
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 40px auto 0 auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating 3D Background Container -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="./js/navbar.js" type="module"></script>
+
+  <!-- Hero Section -->
+  <section class="cat-hero" data-section="hero" id="hero">
+    <div class="breadcrumbs">
+      <a href="/index.html">Home</a>
+      <span class="separator">&gt;</span>
+      <span>SEO Tools</span>
+    </div>
+    <h1>🔍 SEO Tools</h1>
+    <p>Powerful free SEO tools to boost your search engine rankings</p>
+  </section>
+
+  <!-- Content Wrapper -->
+  <main class="content-wrapper">
+    <div id="dynamic-sections-container"></div>
+    
+    <!-- Tools Grid -->
+    <section class="tools-grid" id="static-tools-grid" data-section="seo-tools" id="seo-tools">
+      <a href="/tools/meta-tag-generator.html" class="tool-card">
+        <span class="card-badge">SEO</span>
+        <span class="card-emoji">🏷️</span>
+        <h3 class="card-title">Meta Tag Generator</h3>
+        <p class="card-desc">Create search-friendly meta tags</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/keyword-density.html" class="tool-card">
+        <span class="card-badge">SEO</span>
+        <span class="card-emoji">📊</span>
+        <h3 class="card-title">Keyword Density Checker</h3>
+        <p class="card-desc">Analyze text keyword usage</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/robots-txt-generator.html" class="tool-card">
+        <span class="card-badge">SEO</span>
+        <span class="card-emoji">🤖</span>
+        <h3 class="card-title">Robots.txt Generator</h3>
+        <p class="card-desc">Create robots.txt directives</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/sitemap-generator.html" class="tool-card">
+        <span class="card-badge">SEO</span>
+        <span class="card-emoji">🗺️</span>
+        <h3 class="card-title">Sitemap Generator</h3>
+        <p class="card-desc">Generate complete XML sitemaps</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/google-index-checker.html" class="tool-card">
+        <span class="card-badge">SEO</span>
+        <span class="card-emoji">🔍</span>
+        <h3 class="card-title">Google Index Checker</h3>
+        <p class="card-desc">Verify index status on Google</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/http-headers-checker.html" class="tool-card">
+        <span class="card-badge">SEO</span>
+        <span class="card-emoji">🌐</span>
+        <h3 class="card-title">HTTP Headers Checker</h3>
+        <p class="card-desc">Inspect request/response headers</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/seo-score-checker.html" class="tool-card">
+        <span class="card-badge">SEO</span>
+        <span class="card-emoji">💯</span>
+        <h3 class="card-title">Website SEO Score Checker</h3>
+        <p class="card-desc">Analyze technical web score</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/domain-age-checker.html" class="tool-card">
+        <span class="card-badge">SEO</span>
+        <span class="card-emoji">⏳</span>
+        <h3 class="card-title">Domain Age Checker</h3>
+        <p class="card-desc">Check domains registration age</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/da-pa-checker.html" class="tool-card">
+        <span class="card-badge">SEO</span>
+        <span class="card-emoji">📈</span>
+        <h3 class="card-title">DA PA Checker</h3>
+        <p class="card-desc">Estimate Domain & Page Authority</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+
+      <a href="/tools/backlink-checker.html" class="tool-card">
+        <span class="card-badge">SEO</span>
+        <span class="card-emoji">🔗</span>
+        <h3 class="card-title">Backlink Checker</h3>
+        <p class="card-desc">Analyze backlink profile</p>
+        <span class="card-btn">Use Tool →</span>
+      </a>
+    </section>
+
+    <!-- Part A: Category Overview -->
+    <section class="glass-card article-section">
+      <h2>What are SEO Tools?</h2>
+      <p>Search Engine Optimization (SEO) tools are essential instruments designed to optimize your website layouts, diagnose ranking hurdles, and increase organic visibility. These tools systematically audit elements like meta tags, check robots.txt parameters, generate indexing maps, and extract domain attributes. By automating complex tests, they save hours of manual code reviews and help you keep pace with Search Console requirements.</p>
+      <p>Web developers, small business owners, SEO managers, and professional content creators utilize these utilities to monitor domain health and identify indexing issues. The main advantage of using these free online tools is that they run client-side inside your browser sandbox. This keeps your research proprietary, eliminates server upload delays, and ensures that sensitive domain parameters are never tracked or saved remotely.</p>
+      <p>Implementing proper on-page optimization, monitoring domain backlinks, and checking Domain Authority (DA) levels are crucial components of a healthy search engine marketing campaign. Using a structured set of SEO tools helps you build authoritative backlinks, discover keyword stuffing issues, and ensure that search engine bots like Googlebot crawl your website efficiently. These tools allow you to make data-driven changes that elevate your site metrics.</p>
+    </section>
+
+    <!-- Part B: Tools Overview Paras -->
+    <section class="glass-card article-section">
+      <h2>All SEO Tools Explained</h2>
+
+      <h3>Meta Tag Generator</h3>
+      <p>The Meta Tag Generator helps you generate clean, search-engine-friendly metadata for your pages. Simply enter your page title, description, and keywords to compile standard HTML tags, OpenGraph attributes for social media sites, and custom configurations.</p>
+      <p>This tool is highly valuable for developers wishing to establish social link cards or maintain technical tag profiles. Having accurate meta tags increases click-through rates (CTR) from search index previews.</p>
+      <a href="/tools/meta-tag-generator.html" class="explain-link">Use Meta Tag Generator →</a>
+
+      <h3>Keyword Density Checker</h3>
+      <p>This tool scans your text drafts to analyze the relative frequency of all keywords used. It computes density distributions to identify instances of keyword stuffing, which can trigger spam ranking algorithms.</p>
+      <p>Content writers use this to balance their copy and ensure focus keywords are mentioned naturally. This makes the text highly readable and fully aligned with modern search guidelines.</p>
+      <a href="/tools/keyword-density.html" class="explain-link">Use Keyword Density Checker →</a>
+
+      <h3>Robots.txt Generator</h3>
+      <p>Generate clean robots.txt directives to configure crawler visibility parameters for search bots. You can customize which user-agents are allowed or disallowed from indexing directories like your admin folders.</p>
+      <p>Web administrators use this to compile crawl paths and point search agents directly to their sitemaps. Creating this file ensures your crawl budget is spent on high-value public pages.</p>
+      <a href="/tools/robots-txt-generator.html" class="explain-link">Use Robots.txt Generator →</a>
+
+      <h3>Sitemap Generator</h3>
+      <p>Sitemap Generator is a client-side tool that builds complete XML sitemaps detailing all pages of your site. It packages them in XML structure ready to submit to Search Console profiles.</p>
+      <p>This tool helps crawlers discover and index new pages faster, creating a clear organizational map of your content directories. It is essential for new sites seeking rapid indexing.</p>
+      <a href="/tools/sitemap-generator.html" class="explain-link">Use Sitemap Generator →</a>
+
+      <h3>Google Index Checker</h3>
+      <p>The Google Index Checker helps you verify if target page URLs are successfully indexed and visible within Google Search index lists. It generates direct search query shortcuts for deep indexing analysis.</p>
+      <p>SEO professionals use this to check indexation status and ensure newly published articles are being actively tracked. This saves time compared to manual index lookups.</p>
+      <a href="/tools/google-index-checker.html" class="explain-link">Use Google Index Checker →</a>
+
+      <h3>HTTP Headers Checker</h3>
+      <p>Inspect request and response HTTP headers of target server links. It scans security headers, cache controls, cookies parameters, server versions, and CORS permissions.</p>
+      <p>Web developers use this to troubleshoot network redirects, analyze server connection profiles, and ensure security parameters like SSL and HSTS are configured.</p>
+      <a href="/tools/http-headers-checker.html" class="explain-link">Use HTTP Headers Checker →</a>
+
+      <h3>Website SEO Score Checker</h3>
+      <p>This analyzer audits webpage structures for on-page SEO issues. It crawls heading hierarchies, image alt attributes, page sizes, loading speeds, and responsive viewport settings.</p>
+      <p>This tool provides a numerical optimization score along with clear, actionable recommendations on how to repair markup errors. It is a perfect first-step tool for site audits.</p>
+      <a href="/tools/seo-score-checker.html" class="explain-link">Use Website SEO Score Checker →</a>
+
+      <h3>Domain Age Checker</h3>
+      <p>The Domain Age Checker checks the registration history of a domain, extracting creation dates, expiry limits, update actions, and registrar credentials.</p>
+      <p>Digital marketers use this to evaluate the authority age of potential backlink referrers. Older domains carry established authority trust signals that pass rank effectively.</p>
+      <a href="/tools/domain-age-checker.html" class="explain-link">Use Domain Age Checker →</a>
+
+      <h3>DA PA Checker</h3>
+      <p>Estimate the Moz Domain Authority (DA) and Page Authority (PA) metrics of your URL targets. It parses structural parameters to calculate authority metrics on a log scale.</p>
+      <p>This tool helps you evaluate site authority and project competition levels. Understanding these scores lets you choose keywords with the right difficulty levels.</p>
+      <a href="/tools/da-pa-checker.html" class="explain-link">Use DA PA Checker →</a>
+
+      <h3>Backlink Checker</h3>
+      <p>Audit inbound hyperlink configurations for any target website. It lists estimated referrers, DoFollow vs NoFollow distributions, and anchor keyword text variations.</p>
+      <p>This tool compiles a detailed CSV worksheet of referring links. It is essential for audit research, analyzing competitor link sources, and optimizing anchor text profiles.</p>
+      <a href="/tools/backlink-checker.html" class="explain-link">Use Backlink Checker →</a>
+    </section>
+
+    <!-- Part C: FAQ Section -->
+    <section class="glass-card faq-section" data-section="faq" id="faq">
+      <h2>Frequently Asked Questions about SEO Tools</h2>
+      <div class="faq-wrapper">
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">What are SEO tools? <span>+</span></div>
+          <div class="faq-answer">SEO tools are specialized web utilities designed to analyze website performance, generate search optimization directives (like robots.txt and sitemaps), scan meta tags, and evaluate ranking signals like domain authority and backlinks.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Are these SEO tools really free? <span>+</span></div>
+          <div class="faq-answer">Yes, completely! Every tool runs client-side inside your browser sandbox, requiring no remote API subscriptions, fees, or account registrations.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Which SEO tool should I use first? <span>+</span></div>
+          <div class="faq-answer">We recommend starting with the Website SEO Score Checker. This audits your homepage or target layout, identifying errors in your meta configuration, heading structure, and missing tags.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">How often should I check my SEO score? <span>+</span></div>
+          <div class="faq-answer">It is best practice to run audits whenever you modify your website structure, update content templates, or publish new pages. Regular monthly checks keep your SEO score high.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Do I need an account to use SEO tools? <span>+</span></div>
+          <div class="faq-answer">No, guests have full access to all SEO tools. Creating a free account is optional and is used to save your tool audit history to a personal dashboard.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">What is keyword density? <span>+</span></div>
+          <div class="faq-answer">Keyword density measures the percentage of times a target keyword appears in your text relative to the total word count. Keeping it around 1% to 2% prevents keyword stuffing penalties.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">How do I generate a sitemap? <span>+</span></div>
+          <div class="faq-answer">Paste your page URLs into the Sitemap Generator tool. It compiles them into a structured XML format that you can upload to Google Search Console to speed up page indexing.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">What is a robots.txt file? <span>+</span></div>
+          <div class="faq-answer">Robots.txt is a plain text configuration file placed in your website root. It instructs search engine crawlers which sections of your site they are allowed to scan or ignore.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">How do I check domain age? <span>+</span></div>
+          <div class="faq-answer">Use the Domain Age Checker tool by entering a domain. It polls registration metrics, displaying the exact date the domain was established and how old it is.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Can beginners use these SEO tools? <span>+</span></div>
+          <div class="faq-answer">Yes, absolutely! Every tool is designed with intuitive interfaces, clear instructions, visual outputs, and downloadable file exports so that anyone can optimize websites easily.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Part D: Tips & Tricks Section -->
+    <section class="glass-card article-section">
+      <h2>Pro Tips for SEO Tools</h2>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">💡</span> <strong>Monitor Backlink Quality</strong></div>
+          <p class="tip-desc">Focus on acquiring backlinks from high-DA pages rather than just volume. A few trusted links pass significantly more PageRank than dozens of spammy profiles.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">📝</span> <strong>Optimize Heading Hierarchy</strong></div>
+          <p class="tip-desc">Ensure each page has exactly one H1 tag containing your primary keyword. Organize subtopics logically using H2 and H3 elements to help crawlers parse themes.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">🤖</span> <strong>Verify Robots Directives</strong></div>
+          <p class="tip-desc">Regularly audit your robots.txt configuration to make sure you are not accidentally blocking search bots from scanning high-value content folders.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">📱</span> <strong>Focus on Mobile Usability</strong></div>
+          <p class="tip-desc">Use the SEO Score Checker to ensure viewport scaling is set correctly. Google indexes sites mobile-first, so mobile responsiveness is a major ranking signal.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-head"><span class="emoji">🗺️</span> <strong>Update Sitemaps Automatically</strong></div>
+          <p class="tip-desc">Whenever you add new directories or delete outdated pages, compile a fresh XML sitemap and resubmit it via Google Search Console to keep search indexes accurate.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="/index.html" class="footer-logo">Tool<span>Nest</span></a>
+        <p class="footer-tagline">All Tools. One Place. Zero Cost.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Categories</div>
+        <div class="footer-links">
+          <a href="/category-seo.html" class="footer-link">🔍 SEO Tools</a>
+          <a href="/category-text.html" class="footer-link">✍️ Text Tools</a>
+          <a href="/category-image.html" class="footer-link">🖼️ Image Tools</a>
+          <a href="/category-video.html" class="footer-link">🎬 Video Tools</a>
+          <a href="/category-developer.html" class="footer-link">🧑💻 Developer Tools</a>
+          <a href="/category-converter.html" class="footer-link">🔄 Converter Tools</a>
+        </div>
+      </div>
+      <div>
+                <div class="footer-col-title">Quick Links</div>
+        <div class="footer-links">
+          <a href="/about.html" class="footer-link">About</a>
+          <a href="/privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="/terms.html" class="footer-link">Terms of Service</a>
+          <a href="/contact.html" class="footer-link">Contact</a>
+          <a href="/sitemap.html" class="footer-link">Sitemap</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 DevToolKit. All rights reserved.
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from './js/3d-background.js';
+    import { loadPageContent } from './js/cms.js';
+
+    initBackground('bg-container');
+
+    loadPageContent('category-seo').then(() => {
+      const dynamicSections = document.getElementById('dynamic-sections-container');
+      if (dynamicSections && dynamicSections.children.length > 0) {
+        console.log("Category-SEO CMS layout blocks found: hiding fallback grids.");
+        document.getElementById('static-tools-grid').style.display = 'none';
+        document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
+        const staticHero = document.querySelector('.cat-hero');
+        if (staticHero) staticHero.style.display = 'none';
+      }
+    });
+  </script>
+
+  <script>
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+
+</body>
+</html>

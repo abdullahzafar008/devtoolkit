@@ -1,0 +1,11 @@
+{
+  "hero_heading": "🧑💻 Developer Tools",
+  "hero_subheading": "Formatting, encoding, hashes, and generators for modern programmers",
+  "seo_title": "Free Online Utilities & Tools for Developers - DevToolKit",
+  "seo_description": "Validate and format JSON, encode base64, generate cryptographically secure passwords, or build customizable QR codes.",
+  "overview_text": "Developer tools help programmers perform routine debugging and structural format tasks in real time. Validate complex JSON structures, generate hashes (MD5, SHA-256), or generate high-quality QR codes on the fly.",
+  "faqs": [
+    {"question": "Is the password generator secure?", "answer": "Yes! It uses your browser's secure window.crypto API to produce cryptographically random sequences locally."},
+    {"question": "How do I format minified JSON?", "answer": "Paste the minified string into the JSON Formatter editor, choose your indentation preference, and click Format."}
+  ]
+}

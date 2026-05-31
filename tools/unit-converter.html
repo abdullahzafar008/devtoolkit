@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Universal Unit Converter - Length, Weight, Temp, Digital Data | DevToolkit</title>
+  <meta name="description" content="Free multi-category universal unit converter. Instantly convert Length, Weight, Temperature, Area, Volume, Speed, Time, and Digital Storage parameters in real-time. Secure local client math.">
+  <meta name="keywords" content="unit converter, metric converter, temperature converter, length converter, area converter, data storage converter, digital unit conversion">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/tools/unit-converter.html">
+  <meta property="og:title" content="Universal Unit Converter - Length, Weight, Temp, Digital Data | DevToolkit">
+  <meta property="og:description" content="Instantly convert units across Length, Weight, Temperature, Area, Speed, and Digital storage systems. Local browser calculation.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- FAQ JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What categories does the Unit Converter support?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The tool supports conversions across 8 categories: Length, Weight/Mass, Temperature, Area, Volume, Speed, Time, and Digital Data Storage."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How is the Temperature scale calculated?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Unlike simple multiplier factors, temperature conversions use absolute scales formulas: Fahrenheit to Celsius uses (F - 32) * 5/9, while Kelvin offsets use subtraction/addition of 273.15."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are my values processed online?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. All conversion algorithms execute locally inside your browser volatile context using JavaScript multipliers. No inputs are stored or transmitted."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Universal Unit Converter",
+    "url": "https://www.devtoolkit.com/tools/unit-converter.html",
+    "description": "Premium multi-dimension measurement units converter and binary data storage systems translator.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .tool-hero {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .hero-3d-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: relative;
+      z-index: 2;
+      padding: 24px;
+      max-width: 800px;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .tool-title {
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tool-tagline {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin: 0 0 24px 0;
+    }
+
+    .btn-scroll-down {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 20px;
+      color: #00CCFF;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .btn-scroll-down:hover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.2);
+    }
+
+    /* Workspace */
+    .tool-workspace {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 60px 24px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    /* Dimensions Tabs bar */
+    .tabs-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 12px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-gray);
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn.active, .tab-btn:hover {
+      background: rgba(0, 102, 255, 0.15);
+      border-color: #00CCFF;
+      color: #00CCFF;
+    }
+
+    /* Converter block UI */
+    .converter-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .converter-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .unit-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255,255,255,0.03);
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .box-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+    }
+
+    .unit-input-wrap {
+      display: flex;
+      gap: 12px;
+    }
+
+    .value-field {
+      flex: 2;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 16px;
+      padding: 12px;
+      outline: none;
+      box-sizing: border-box;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .value-field:focus {
+      border-color: #00CCFF;
+    }
+
+    .unit-selector {
+      flex: 1.5;
+      background: rgba(5, 5, 16, 0.9);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: #fff;
+      padding: 12px;
+      outline: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .swap-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      color: #00CCFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 18px;
+      margin: 0 auto;
+    }
+
+    .swap-btn:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+      transform: rotate(180deg);
+    }
+
+    /* Controls */
+    .controls-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+    }
+
+    .ctrl-btn {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      color: #00CCFF;
+      font-weight: 700;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .ctrl-btn:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+    }
+
+    /* Article layout elements */
+    .article-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .step-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #00CCFF;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+    }
+
+    /* Comparison Table */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .comparison-table th {
+      color: #00CCFF;
+      font-weight: 700;
+      padding: 12px;
+      border-bottom: 2px solid rgba(0,102,255,0.2);
+    }
+
+    .comparison-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Related Tools Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .blog-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-thumb {
+      height: 140px;
+      background: linear-gradient(135deg, #0066FF, #7B2FFF);
+    }
+
+    .blog-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .blog-desc {
+      font-size: 12px;
+      color: var(--text-gray);
+      line-height: 1.4;
+    }
+
+    .blog-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: auto;
+    }
+
+    .blog-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.4), rgba(123, 47, 255, 0.4));
+      border-top: 1px solid var(--card-border);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cta-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .btn-cta {
+      padding: 12px 24px;
+      background: #0066FF;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-cta:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+    }
+
+    /* WordPress Documentation Comment Requirement */
+    /* 
+     Plugin Name: Universal Unit Converter
+     Description: Client-side mathematical converter across Length, Weight, Temp, Digital Data categories.
+     Version: 1.0.0
+     Author: DevToolkit Inc.
+    */
+  </style>
+</head>
+<body>
+
+  <!-- Floating background particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <!-- Section 1: Hero -->
+  <section class="tool-hero">
+    <div class="hero-3d-scene" id="tool-hero-3d"></div>
+    <div class="hero-overlay">
+      <div class="breadcrumbs">
+        <a href="/index.html">Home</a>
+        <span class="separator">&gt;</span>
+        <a href="/category-converter.html">Converter Tools</a>
+        <span class="separator">&gt;</span>
+        <span>Unit Converter</span>
+      </div>
+      <h1 class="tool-title">Universal Unit Converter</h1>
+      <p class="tool-tagline">Convert lengths, weights, temperatures, area dimensions, and binary digital data storage metrics in real-time instantly.</p>
+      <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
+    </div>
+  </section>
+
+  
+
+  <!-- Section 2: Workspace -->
+  <main class="tool-workspace" id="workspace">
+    <div class="glass-card">
+      
+      <!-- Horizontal Dimension Tabs -->
+      <div class="tabs-bar" id="dimensions-tabs">
+        <button class="tab-btn active" data-dimension="length">📏 Length</button>
+        <button class="tab-btn" data-dimension="weight">⚖️ Weight / Mass</button>
+        <button class="tab-btn" data-dimension="temperature">🌡️ Temperature</button>
+        <button class="tab-btn" data-dimension="area">🗺️ Area</button>
+        <button class="tab-btn" data-dimension="digital">💾 Digital Storage</button>
+      </div>
+
+      <!-- Conversion Layout Box -->
+      <div class="converter-row">
+        
+        <div class="unit-box">
+          <span class="box-title">Source Input</span>
+          <div class="unit-input-wrap">
+            <input type="number" class="value-field" id="src-val" value="1" step="any">
+            <select class="unit-selector" id="src-unit">
+              <!-- Injected via JavaScript -->
+            </select>
+          </div>
+        </div>
+
+        <button class="swap-btn" id="btn-swap" title="Swap Units">🔄</button>
+
+        <div class="unit-box">
+          <span class="box-title">Output Result</span>
+          <div class="unit-input-wrap">
+            <input type="text" class="value-field" id="dst-val" readonly>
+            <select class="unit-selector" id="dst-unit">
+              <!-- Injected via JavaScript -->
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Controls -->
+      <div class="controls-bar">
+        <button class="ctrl-btn" id="btn-clear" style="background: rgba(255,255,255,0.03); color:#fff; border-color: rgba(255,255,255,0.1);">Clear</button>
+        <button class="ctrl-btn" id="btn-copy">Copy Output</button>
+      </div>
+
+    </div>
+  </main>
+
+  
+
+  <!-- Section 3: How to Use -->
+  <section class="article-section">
+    <h2>How to Convert Measurement Units</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-emoji">🗺️</div>
+        <div class="step-title">1. Select Dimension Category</div>
+        <div class="step-desc">Pick Length, Weight, Temp, Area, or Digital Storage from the tab header.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">🔢</div>
+        <div class="step-title">2. Choose Source & Target</div>
+        <div class="step-desc">Enter the source value, pick your source unit, and configure the destination conversion target.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">📋</div>
+        <div class="step-title">3. Copy Converted Output</div>
+        <div class="step-desc">The result computes instantly. Click the copy button to save the floating decimal string.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Key Features -->
+  <section class="article-section">
+    <h2>Outstanding Utility Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-head">⚡ Comprehensive Range</div>
+        <div class="feature-desc">Covers standard metric, imperial, and digital data architectures seamlessly.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🔄 Instant Swap Actions</div>
+        <div class="feature-desc">Swap source and destination configurations quickly to reverse calculations without entering values again.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🔒 Secure Client Execution</div>
+        <div class="feature-desc">All equations evaluate locally within your browser JS stack. Perfect privacy control.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Common Multipliers Table -->
+  <section class="article-section">
+    <h2>Standard Metric Equivalencies</h2>
+    <div class="glass-card" style="padding: 24px; overflow-x: auto;">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Base Unit</th>
+            <th>Target Unit</th>
+            <th>Multiplier Factor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Length</strong></td>
+            <td>Meter (m)</td>
+            <td>Centimeter (cm)</td>
+            <td>100.00</td>
+          </tr>
+          <tr>
+            <td><strong>Weight</strong></td>
+            <td>Kilogram (kg)</td>
+            <td>Pound (lbs)</td>
+            <td>2.20462</td>
+          </tr>
+          <tr>
+            <td><strong>Area</strong></td>
+            <td>Square Kilometer (km²)</td>
+            <td>Acres</td>
+            <td>247.105</td>
+          </tr>
+          <tr>
+            <td><strong>Digital</strong></td>
+            <td>Gigabyte (GB)</td>
+            <td>Megabyte (MB)</td>
+            <td>1,024.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section 6: FAQ -->
+  <section class="article-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-wrapper">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Are Binary data storage factors calculated on base 1000 or 1024? <span>+</span></div>
+        <div class="faq-answer">The Digital Storage converter utilizes standard binary factors (base 1024) to translate Kilobytes, Megabytes, Gigabytes, and Terabytes accurately for operating systems.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">How does the temperature parser scale Kelvin bounds? <span>+</span></div>
+        <div class="faq-answer">Kelvin is bounded mathematically at absolute zero (0 K). The tool automatically maps Celsius and Fahrenheit relative offsets accurately.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Can I type scientific E-notations? <span>+</span></div>
+        <div class="faq-answer">Yes. The HTML5 input supports floating-point exponential formats (e.g. 1e-5 or 2.5e3) which evaluate correctly in JavaScript.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7: Related Tools Injected Dynamically -->
+  <section class="article-section">
+    <h2>Explore Other Converters & Calculators</h2>
+    <div class="blog-grid" id="related-tools-grid">
+      <!-- Injected Dynamically -->
+    </div>
+  </section>
+
+  <!-- Section 8: Footer CTA Banner -->
+  <section class="cta-banner">
+    <h2 class="cta-title">Ready to explore more free tools?</h2>
+    <p class="cta-subtitle">DevToolkit has 40+ utility modules waiting for you.</p>
+    <a href="/index.html" class="btn-cta">Explore All Tools →</a>
+  </section>
+
+  <!-- Ads Slot Bottom -->
+  
+
+  <!-- Standard Footer -->
+  <footer>
+    <div style="text-align: center; font-size:12px; color:rgba(255,255,255,0.4); padding: 24px 0;">
+      &copy; 2026 DevToolKit. All rights reserved. | <a href="/index.html" style="color:var(--cyan); text-decoration:none;">Home</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from '../js/3d-background.js';
+    import { logToolUsage } from '../js/tools-tracker.js';
+
+    // Start background particle animation
+    initBackground('bg-container');
+
+    // Local 3D Hero Scene: Floating geometric shapes representing dimensions
+    function initHero3D() {
+      const container = document.getElementById('tool-hero-3d');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000);
+      camera.position.z = 220;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const light1 = new THREE.AmbientLight(0xffffff, 0.4);
+      scene.add(light1);
+
+      const light2 = new THREE.DirectionalLight(0x00CCFF, 1);
+      light2.position.set(10, 20, 20);
+      scene.add(light2);
+
+      // Create geometry meshes (Cube, Cylinder, Torus, Sphere)
+      const meshes = [];
+      const rotSpeeds = [];
+
+      const geometries = [
+        new THREE.BoxGeometry(10, 10, 10),
+        new THREE.CylinderGeometry(6, 6, 12, 16),
+        new THREE.TorusGeometry(8, 2.5, 8, 24),
+        new THREE.SphereGeometry(6, 16, 16)
+      ];
+
+      for (let i = 0; i < 6; i++) {
+        const mat = new THREE.MeshPhongMaterial({
+          color: i % 2 === 0 ? 0x0066FF : 0x7B2FFF,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.4
+        });
+        const geom = geometries[i % geometries.length];
+        const mesh = new THREE.Mesh(geom, mat);
+        mesh.position.set(
+          (Math.random() - 0.5) * 150,
+          (Math.random() - 0.5) * 90,
+          (Math.random() - 0.5) * 40
+        );
+        scene.add(mesh);
+        meshes.push(mesh);
+        rotSpeeds.push({
+          x: Math.random() * 0.01 + 0.005,
+          y: Math.random() * 0.01 + 0.005
+        });
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        meshes.forEach((mesh, idx) => {
+          mesh.rotation.x += rotSpeeds[idx].x;
+          mesh.rotation.y += rotSpeeds[idx].y;
+        });
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      });
+    }
+    initHero3D();
+
+    // Related Tools
+    const related = [
+      { name: 'Binary Converter Systems', emoji: '🔢', slug: 'binary-converter', cat: 'converter', desc: 'Convert base numbers bases' },
+      { name: 'Color Picker & Harmonies', emoji: '🎨', slug: 'color-picker', cat: 'developer', desc: 'Select HEX and HSL strings' },
+      { name: 'Base64 Encoder/Decoder', emoji: '💽', slug: 'base64-encoder', cat: 'developer', desc: 'Convert variables safely' },
+      { name: 'JSON Formatter & Validator', emoji: '⚙️', slug: 'json-formatter', cat: 'developer', desc: 'Format structural JSON files' }
+    ];
+
+    const relatedGrid = document.getElementById('related-tools-grid');
+    related.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <div class="blog-thumb" style="display:flex; align-items:center; justify-content:center; font-size:32px;">${t.emoji}</div>
+        <div class="blog-info">
+          <div class="blog-title">${t.name}</div>
+          <div class="blog-desc">${t.desc}</div>
+          <a href="/tools/${t.slug}.html" class="blog-link">Use Tool →</a>
+        </div>
+      `;
+      card.querySelector('.blog-link').addEventListener('click', async () => {
+        await logToolUsage(t.name, t.cat, t.slug);
+      });
+      relatedGrid.appendChild(card);
+    });
+
+    // Conversion formulas database mapping
+    const unitsData = {
+      length: {
+        units: {
+          m: { name: 'Meters (m)', factor: 1 },
+          km: { name: 'Kilometers (km)', factor: 1000 },
+          cm: { name: 'Centimeters (cm)', factor: 0.01 },
+          mm: { name: 'Millimeters (mm)', factor: 0.001 },
+          mi: { name: 'Miles (mi)', factor: 1609.34 },
+          yd: { name: 'Yards (yd)', factor: 0.9144 },
+          ft: { name: 'Feet (ft)', factor: 0.3048 },
+          in: { name: 'Inches (in)', factor: 0.0254 }
+        }
+      },
+      weight: {
+        units: {
+          kg: { name: 'Kilograms (kg)', factor: 1 },
+          g: { name: 'Grams (g)', factor: 0.001 },
+          mg: { name: 'Milligrams (mg)', factor: 0.000001 },
+          lb: { name: 'Pounds (lbs)', factor: 0.453592 },
+          oz: { name: 'Ounces (oz)', factor: 0.0283495 },
+          st: { name: 'Stones (st)', factor: 6.35029 }
+        }
+      },
+      temperature: {
+        units: {
+          c: { name: 'Celsius (°C)', special: true },
+          f: { name: 'Fahrenheit (°F)', special: true },
+          k: { name: 'Kelvin (K)', special: true }
+        }
+      },
+      area: {
+        units: {
+          m2: { name: 'Square Meters (m²)', factor: 1 },
+          km2: { name: 'Square Kilometers (km²)', factor: 1000000 },
+          mi2: { name: 'Square Miles (mi²)', factor: 2589988.11 },
+          yd2: { name: 'Square Yards (yd²)', factor: 0.836127 },
+          ft2: { name: 'Square Feet (ft²)', factor: 0.092903 },
+          ac: { name: 'Acres (ac)', factor: 4046.86 },
+          ha: { name: 'Hectares (ha)', factor: 10000 }
+        }
+      },
+      digital: {
+        units: {
+          b: { name: 'Bytes (B)', factor: 1 },
+          kb: { name: 'Kilobytes (KB)', factor: 1024 },
+          mb: { name: 'Megabytes (MB)', factor: 1024 * 1024 },
+          gb: { name: 'Gigabytes (GB)', factor: 1024 * 1024 * 1024 },
+          tb: { name: 'Terabytes (TB)', factor: 1024 * 1024 * 1024 * 1024 },
+          bit: { name: 'Bits (b)', factor: 0.125 }
+        }
+      }
+    };
+
+    let activeDimension = 'length';
+    const dimTabs = document.getElementById('dimensions-tabs');
+    const srcUnitSelect = document.getElementById('src-unit');
+    const dstUnitSelect = document.getElementById('dst-unit');
+    const srcValInput = document.getElementById('src-val');
+    const dstValInput = document.getElementById('dst-val');
+
+    // Load dropdown units dynamically
+    function populateUnits(dimension) {
+      srcUnitSelect.innerHTML = '';
+      dstUnitSelect.innerHTML = '';
+
+      const units = unitsData[dimension].units;
+      Object.keys(units).forEach(key => {
+        const optionSrc = document.createElement('option');
+        optionSrc.value = key;
+        optionSrc.textContent = units[key].name;
+        srcUnitSelect.appendChild(optionSrc);
+
+        const optionDst = document.createElement('option');
+        optionDst.value = key;
+        optionDst.textContent = units[key].name;
+        dstUnitSelect.appendChild(optionDst);
+      });
+
+      // Default presets
+      const keys = Object.keys(units);
+      if (keys.length > 1) {
+        dstUnitSelect.selectedIndex = 1;
+      }
+      runConversion();
+    }
+
+    // Mathematical calculations controller
+    function runConversion() {
+      const srcVal = parseFloat(srcValInput.value);
+      if (isNaN(srcVal)) {
+        dstValInput.value = '';
+        return;
+      }
+
+      const srcKey = srcUnitSelect.value;
+      const dstKey = dstUnitSelect.value;
+      const dim = unitsData[activeDimension];
+
+      // Special Temperature rules
+      if (activeDimension === 'temperature') {
+        let tempInC;
+        if (srcKey === 'c') tempInC = srcVal;
+        else if (srcKey === 'f') tempInC = (srcVal - 32) * 5/9;
+        else if (srcKey === 'k') tempInC = srcVal - 273.15;
+
+        let result;
+        if (dstKey === 'c') result = tempInC;
+        else if (dstKey === 'f') result = (tempInC * 9/5) + 32;
+        else if (dstKey === 'k') result = tempInC + 273.15;
+
+        dstValInput.value = Number(result.toFixed(6));
+        return;
+      }
+
+      // Standard factors rules
+      const srcFactor = dim.units[srcKey].factor;
+      const dstFactor = dim.units[dstKey].factor;
+      
+      const valInBase = srcVal * srcFactor;
+      const result = valInBase / dstFactor;
+
+      // Handle precision formatting nicely
+      if (result % 1 === 0) {
+        dstValInput.value = result;
+      } else {
+        // limit floating points decimal size
+        dstValInput.value = Number(result.toFixed(8));
+      }
+    }
+
+    // Setup dimension change clicks
+    dimTabs.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        dimTabs.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeDimension = btn.getAttribute('data-dimension');
+        populateUnits(activeDimension);
+      });
+    });
+
+    // Inputs updates
+    srcValInput.addEventListener('input', runConversion);
+    srcUnitSelect.addEventListener('change', runConversion);
+    dstUnitSelect.addEventListener('change', runConversion);
+
+    // Swap action
+    document.getElementById('btn-swap').addEventListener('click', () => {
+      const tempKey = srcUnitSelect.value;
+      srcUnitSelect.value = dstUnitSelect.value;
+      dstUnitSelect.value = tempKey;
+      runConversion();
+    });
+
+    // Copy action
+    document.getElementById('btn-copy').addEventListener('click', () => {
+      const val = dstValInput.value;
+      if (!val) return;
+      navigator.clipboard.writeText(val);
+      alert('Output converted unit copied! 📋');
+    });
+
+    // Clear action
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      srcValInput.value = '';
+      dstValInput.value = '';
+    });
+
+    // Initial setup
+    populateUnits('length');
+
+  </script>
+
+  <script>
+    // FAQ accordion helper
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

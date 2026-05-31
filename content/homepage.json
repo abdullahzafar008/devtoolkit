@@ -1,0 +1,22 @@
+{
+  "hero_heading": "All Tools. One Place.",
+  "hero_subheading": "Free online tools for developers, writers and designers. No login required.",
+  "btn1_text": "Explore Tools",
+  "btn1_link": "#tools",
+  "btn2_text": "Get Started Free",
+  "btn2_link": "signup.html",
+  "stats": [
+    {"icon": "🔧", "value": "40+", "label": "Free Tools"},
+    {"icon": "👥", "value": "10K+", "label": "Happy Users"},
+    {"icon": "⚡", "value": "1M+", "label": "Monthly Uses"},
+    {"icon": "📂", "value": "6", "label": "Categories"}
+  ],
+  "faq_heading": "Frequently Asked Questions",
+  "faqs": [
+    {"question": "Are all tools free?", "answer": "Yes! Every tool on DevToolKit is 100% free forever. No credit card needed."},
+    {"question": "Do I need an account?", "answer": "No account needed to use any tool. Sign up only to save your history."},
+    {"question": "Is my data safe?", "answer": "Yes. All tools run in your browser. Nothing stored on our servers."},
+    {"question": "How many tools are available?", "answer": "We have 40+ free tools across 6 categories."},
+    {"question": "Does it work on mobile?", "answer": "Yes! All tools are fully mobile responsive."}
+  ]
+}

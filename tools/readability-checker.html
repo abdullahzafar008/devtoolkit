@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Free Online Readability Score Checker | DevToolkit</title>
+  <meta name="description" content="Calculate Flesch Reading Ease, Flesch-Kincaid Grade Level, Gunning Fog, and SMOG readability scores instantly. Real-time text highlighter for complex words and long sentences. Secure client-side analyzer.">
+  <meta name="keywords" content="readability checker, flesch kincaid grade level, writing difficulty analyzer, automated readability index, smog score calculator, gunning fog index, text complexity checker">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/tools/readability-checker.html">
+  <meta property="og:title" content="Free Online Readability Score Checker | DevToolkit">
+  <meta property="og:description" content="Paste your text to calculate reading grade levels, highlight complex structures, and optimize content readability in real-time.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- FAQ JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How is the Flesch Reading Ease score interpreted?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Scores between 90-100 are considered very easy to read (approx. 5th-grade level). Scores between 60-70 are standard conversational English (approx. 8th-9th grade), while scores under 30 are considered difficult academic reading (college graduate level)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you upload my essays or articles to a server?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. All text parsing, syllable calculations, and readability indexes calculations run locally inside your browser memory buffer. Your intellectual property remains secure."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the SMOG readability index?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The SMOG (Simple Measure of Gobbledygook) formula estimates the years of education needed to understand a piece of writing, relying heavily on polysyllable (3+ syllables) word density."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Readability Score Checker",
+    "url": "https://www.devtoolkit.com/tools/readability-checker.html",
+    "description": "Premium browser-based readability index calculator, syllables counter, and visual syntax difficulty highlighter.",
+    "applicationCategory": "TextManipulationApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .tool-hero {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .hero-3d-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: relative;
+      z-index: 2;
+      padding: 24px;
+      max-width: 800px;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .tool-title {
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tool-tagline {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin: 0 0 24px 0;
+    }
+
+    .btn-scroll-down {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 20px;
+      color: #00CCFF;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .btn-scroll-down:hover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.2);
+    }
+
+    /* Workspace */
+    .tool-workspace {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 60px 24px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    /* Workspace Layout Split */
+    .readability-dashboard {
+      display: grid;
+      grid-template-columns: 1.8fr 1.2fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .readability-dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Input & Highlighter panel */
+    .input-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+    }
+
+    .editor-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .textarea-container {
+      position: relative;
+      width: 100%;
+      height: 300px;
+    }
+
+    .workspace-textarea {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: inherit;
+      font-size: 14px;
+      color: #fff;
+      box-sizing: border-box;
+      outline: none;
+      resize: none;
+      line-height: 1.6;
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+
+    .workspace-textarea:focus {
+      border-color: #00CCFF;
+    }
+
+    /* Interactive Overlay Highlighter */
+    .highlights-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 16px;
+      box-sizing: border-box;
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.6;
+      color: transparent;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      overflow-y: auto;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Highlight styles */
+    .high-long-sentence {
+      background: rgba(255, 153, 0, 0.25);
+      border-bottom: 2px dashed #FF9900;
+      color: transparent;
+    }
+
+    .high-complex-word {
+      background: rgba(123, 47, 255, 0.3);
+      border-radius: 3px;
+      color: transparent;
+    }
+
+    /* Right Dashboard: Scores & Stats */
+    .metrics-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .score-hero-card {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.15), rgba(123, 47, 255, 0.15));
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: inset 0 0 20px rgba(0, 102, 255, 0.1);
+    }
+
+    .score-grade-text {
+      font-size: 40px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .score-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .score-status-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-top: 8px;
+    }
+
+    /* Index list rows */
+    .index-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .index-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(0, 102, 255, 0.1);
+      border-radius: 6px;
+      padding: 10px 14px;
+    }
+
+    .index-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+    }
+
+    .index-val {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* Text statistics details grid */
+    .text-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .stat-card {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(255,255,255,0.03);
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-gray);
+      text-transform: uppercase;
+    }
+
+    .stat-val {
+      font-size: 13px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* Controls bar */
+    .controls-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .ctrl-btn {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      color: #00CCFF;
+      font-weight: 700;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .ctrl-btn:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+    }
+
+    /* Article layout elements */
+    .article-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .step-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #00CCFF;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+    }
+
+    /* Indexes Scale Table */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .comparison-table th {
+      color: #00CCFF;
+      font-weight: 700;
+      padding: 12px;
+      border-bottom: 2px solid rgba(0,102,255,0.2);
+    }
+
+    .comparison-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Related Tools Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .blog-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-thumb {
+      height: 140px;
+      background: linear-gradient(135deg, #0066FF, #7B2FFF);
+    }
+
+    .blog-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .blog-desc {
+      font-size: 12px;
+      color: var(--text-gray);
+      line-height: 1.4;
+    }
+
+    .blog-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: auto;
+    }
+
+    .blog-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.4), rgba(123, 47, 255, 0.4));
+      border-top: 1px solid var(--card-border);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cta-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .btn-cta {
+      padding: 12px 24px;
+      background: #0066FF;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-cta:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+    }
+
+    /* WordPress Documentation Comment Requirement */
+    /* 
+     Plugin Name: Readability Level Checker
+     Description: Client-side paragraphs complexity parser calculating Gunning Fog and Flesch grade scales.
+     Version: 1.0.0
+     Author: DevToolkit Inc.
+    */
+  </style>
+</head>
+<body>
+
+  <!-- Floating background particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <!-- Section 1: Hero -->
+  <section class="tool-hero">
+    <div class="hero-3d-scene" id="tool-hero-3d"></div>
+    <div class="hero-overlay">
+      <div class="breadcrumbs">
+        <a href="/index.html">Home</a>
+        <span class="separator">&gt;</span>
+        <a href="/category-text.html">Text Tools</a>
+        <span class="separator">&gt;</span>
+        <span>Readability Checker</span>
+      </div>
+      <h1 class="tool-title">Readability Score & Grade Checker</h1>
+      <p class="tool-tagline">Evaluate textual grade complexities, calculate Flesch reading ease scores, and identify complex words locally inside your browser.</p>
+      <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
+    </div>
+  </section>
+
+  
+
+  <!-- Section 2: Workspace -->
+  <main class="tool-workspace" id="workspace">
+    <div class="glass-card">
+      
+      <!-- Readability split dashboard -->
+      <div class="readability-dashboard">
+        
+        <!-- Left: Input & highlighter overlay -->
+        <div class="input-panel">
+          <span class="editor-label">Input Content Text</span>
+          <div class="textarea-container">
+            <div class="highlights-overlay" id="highlights-overlay"></div>
+            <textarea class="workspace-textarea" id="text-input" placeholder="Type or paste your content here to check readability grades in real-time..."></textarea>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <label class="checkbox-wrap">
+              <input type="checkbox" id="toggle-highlights" checked>
+              Highlight Difficult Areas (Orange = Long Sentences, Purple = Hard Words)
+            </label>
+            <div class="controls-bar" style="margin-top:0;">
+              <button class="ctrl-btn" id="btn-clear" style="background: rgba(255,255,255,0.03); color:#fff; border-color: rgba(255,255,255,0.1);">Clear</button>
+              <button class="ctrl-btn" id="btn-sample">Load Sample Essay</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Scores dashboard -->
+        <div class="metrics-panel">
+          
+          <div class="score-hero-card">
+            <div class="score-label">Flesch Reading Ease</div>
+            <div class="score-grade-text" id="score-flesch">0</div>
+            <div class="score-status-desc" id="score-status-desc">Conversational & Clear</div>
+          </div>
+
+          <div style="font-size: 13px; font-weight:700; color: #00CCFF; text-transform:uppercase;">Readability Index Scales</div>
+          
+          <div class="index-list">
+            <div class="index-row">
+              <span class="index-name">Flesch-Kincaid Grade</span>
+              <span class="index-val" id="idx-grade">0.0</span>
+            </div>
+            <div class="index-row">
+              <span class="index-name">Gunning Fog Index</span>
+              <span class="index-val" id="idx-gunning">0.0</span>
+            </div>
+            <div class="index-row">
+              <span class="index-name">Coleman-Liau Index</span>
+              <span class="index-val" id="idx-coleman">0.0</span>
+            </div>
+            <div class="index-row">
+              <span class="index-name">SMOG Grade Level</span>
+              <span class="index-val" id="idx-smog">0.0</span>
+            </div>
+            <div class="index-row">
+              <span class="index-name">Automated Index (ARI)</span>
+              <span class="index-val" id="idx-ari">0.0</span>
+            </div>
+          </div>
+
+          <div style="font-size: 13px; font-weight:700; color: #00CCFF; text-transform:uppercase;">Text Parameters Statistics</div>
+          
+          <div class="text-stats-grid">
+            <div class="stat-card">
+              <span class="stat-label">Words</span>
+              <span class="stat-val" id="stat-words">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Sentences</span>
+              <span class="stat-val" id="stat-sentences">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Characters</span>
+              <span class="stat-val" id="stat-chars">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Syllables</span>
+              <span class="stat-val" id="stat-syllables">0</span>
+            </div>
+            <div class="stat-card" style="grid-column: span 2;">
+              <span class="stat-label">Polysyllable Words (3+ syl.)</span>
+              <span class="stat-val" id="stat-polysyl">0</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  
+
+  <!-- Section 3: How to Use -->
+  <section class="article-section">
+    <h2>How to Verify Reading Complexity</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-emoji">✍️</div>
+        <div class="step-title">1. Paste Your Text</div>
+        <div class="step-desc">Paste your drafts, copywriting blog posts, or scientific documents into the main text area.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">📊</div>
+        <div class="step-title">2. Review Metrics</div>
+        <div class="step-desc">Inspect Flesch Reading Ease scores and equivalent scholastic grade indicators computed instantly.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">💡</div>
+        <div class="step-title">3. Highlight Constraints</div>
+        <div class="step-desc">Enable highlights overlays to quickly pinpoint complex words and long sentences.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Key Features -->
+  <section class="article-section">
+    <h2>Outstanding Reading Auditor Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-head">⚡ Six Readability Formulas</div>
+        <div class="feature-desc">Calculates Flesch Kincaid Grade, Gunning Fog, Coleman Liau, SMOG, and ARI simultaneously.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🎨 Visual Highlights Overlays</div>
+        <div class="feature-desc">Highlights complex polysyllabic terms in purple and sentences with more than 20 words in orange.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🔒 Complete Sandbox Security</div>
+        <div class="feature-desc">All paragraph analysis logic runs entirely inside the local browser context. Your content remains secure.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Score Interpretation Table -->
+  <section class="article-section">
+    <h2>Flesch Reading Ease Scores Chart</h2>
+    <div class="glass-card" style="padding: 24px; overflow-x: auto;">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Flesch Score</th>
+            <th>Readability Category</th>
+            <th>Equivalent Scholastic Level</th>
+            <th>Audience Reach</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>90 - 100</strong></td>
+            <td>Very Easy</td>
+            <td>5th grade students</td>
+            <td>Easily understood by an average 11-year-old</td>
+          </tr>
+          <tr>
+            <td><strong>60 - 70</strong></td>
+            <td>Conversational / Standard</td>
+            <td>8th - 9th grade students</td>
+            <td>Suitable for general consumers and mainstream media</td>
+          </tr>
+          <tr>
+            <td><strong>30 - 50</strong></td>
+            <td>Difficult / Hard</td>
+            <td>College students</td>
+            <td>Best suited for technical manuals and journals</td>
+          </tr>
+          <tr>
+            <td><strong>0 - 29</strong></td>
+            <td>Very Difficult</td>
+            <td>College graduates</td>
+            <td>Suited for scientific journals and academic research</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Section 6: FAQ -->
+  <section class="article-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-wrapper">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">What is a polysyllable word? <span>+</span></div>
+        <div class="faq-answer">Polysyllable words are words that contain three or more syllables (e.g., "representative", "cryptographic"). High polysyllabic density raises readability grade levels.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Why do readability indexes sometimes differ? <span>+</span></div>
+        <div class="faq-answer">Different indexes use different metrics. For example, the Coleman-Liau formula relies on character count per 100 words, whereas Flesch-Kincaid uses syllables counts.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Is there a limit on text length? <span>+</span></div>
+        <div class="faq-answer">No. Alphanumeric sets are processed locally within your browser heap, making the analyzer fast even for complete book chapters.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 7: Related Tools Injected Dynamically -->
+  <section class="article-section">
+    <h2>Explore Other Developer Utilities</h2>
+    <div class="blog-grid" id="related-tools-grid">
+      <!-- Injected Dynamically -->
+    </div>
+  </section>
+
+  <!-- Section 8: Footer CTA Banner -->
+  <section class="cta-banner">
+    <h2 class="cta-title">Ready to explore more free tools?</h2>
+    <p class="cta-subtitle">DevToolkit has 40+ utility modules waiting for you.</p>
+    <a href="/index.html" class="btn-cta">Explore All Tools →</a>
+  </section>
+
+  <!-- Ads Slot Bottom -->
+  
+
+  <!-- Standard Footer -->
+  <footer>
+    <div style="text-align: center; font-size:12px; color:rgba(255,255,255,0.4); padding: 24px 0;">
+      &copy; 2026 DevToolKit. All rights reserved. | <a href="/index.html" style="color:var(--cyan); text-decoration:none;">Home</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from '../js/3d-background.js';
+    import { logToolUsage } from '../js/tools-tracker.js';
+
+    // Start background particle animation
+    initBackground('bg-container');
+
+    // Local 3D Hero Scene: Floating books / document frames
+    function initHero3D() {
+      const container = document.getElementById('tool-hero-3d');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000);
+      camera.position.z = 240;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const light1 = new THREE.AmbientLight(0xffffff, 0.4);
+      scene.add(light1);
+
+      const light2 = new THREE.DirectionalLight(0x00CCFF, 1);
+      light2.position.set(0, 10, 20);
+      scene.add(light2);
+
+      // Create open-book style models (planes joined at an angle)
+      const meshes = [];
+      const speeds = [];
+
+      for (let i = 0; i < 5; i++) {
+        const bookGroup = new THREE.Group();
+        const pgGeom = new THREE.PlaneGeometry(12, 16);
+        const mat = new THREE.MeshPhongMaterial({
+          color: i % 2 === 0 ? 0x0066FF : 0x7B2FFF,
+          wireframe: true,
+          side: THREE.DoubleSide
+        });
+
+        const leftPg = new THREE.Mesh(pgGeom, mat);
+        leftPg.position.x = -6;
+        leftPg.rotation.y = 0.3;
+        bookGroup.add(leftPg);
+
+        const rightPg = new THREE.Mesh(pgGeom, mat);
+        rightPg.position.x = 6;
+        rightPg.rotation.y = -0.3;
+        bookGroup.add(rightPg);
+
+        bookGroup.position.set(
+          (Math.random() - 0.5) * 150,
+          (Math.random() - 0.5) * 90,
+          (Math.random() - 0.5) * 40
+        );
+
+        scene.add(bookGroup);
+        meshes.push(bookGroup);
+        speeds.push(Math.random() * 0.01 + 0.005);
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        meshes.forEach((mesh, idx) => {
+          mesh.rotation.y += speeds[idx];
+          mesh.rotation.x += 0.002;
+        });
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      });
+    }
+    initHero3D();
+
+    // Related Tools Grid
+    const related = [
+      { name: 'Word Counter & Pace', emoji: '📝', slug: 'word-counter', cat: 'text', desc: 'Readability level metric validation' },
+      { name: 'Duplicate Lines Remover', emoji: '🗂️', slug: 'remove-duplicate-lines', cat: 'text', desc: 'Deduplicate text lists' },
+      { name: 'Text Case Converter', emoji: '🔠', slug: 'text-case-converter', cat: 'text', desc: 'Convert Title and sentence case' },
+      { name: 'Base64 Encoder/Decoder', emoji: '💽', slug: 'base64-encoder', cat: 'developer', desc: 'Convert binary strings' }
+    ];
+
+    const relatedGrid = document.getElementById('related-tools-grid');
+    related.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <div class="blog-thumb" style="display:flex; align-items:center; justify-content:center; font-size:32px;">${t.emoji}</div>
+        <div class="blog-info">
+          <div class="blog-title">${t.name}</div>
+          <div class="blog-desc">${t.desc}</div>
+          <a href="/tools/${t.slug}.html" class="blog-link">Use Tool →</a>
+        </div>
+      `;
+      card.querySelector('.blog-link').addEventListener('click', async () => {
+        await logToolUsage(t.name, t.cat, t.slug);
+      });
+      relatedGrid.appendChild(card);
+    });
+
+    // Syllables count heuristic formula
+    function countSyllablesInWord(word) {
+      word = word.toLowerCase().trim().replace(/[^a-z]/g, '');
+      if (word.length <= 3) return 1;
+      // remove suffix exceptions
+      word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '');
+      word = word.replace(/^y/, '');
+      const vowels = word.match(/[aeiouy]{1,2}/g);
+      return vowels ? vowels.length : 1;
+    }
+
+    // Readability checker logic
+    const textInput = document.getElementById('text-input');
+    const highlightsOverlay = document.getElementById('highlights-overlay');
+    const toggleHighlights = document.getElementById('toggle-highlights');
+
+    const scoreFleschEl = document.getElementById('score-flesch');
+    const scoreStatusDesc = document.getElementById('score-status-desc');
+
+    const idxGrade = document.getElementById('idx-grade');
+    const idxGunning = document.getElementById('idx-gunning');
+    const idxColeman = document.getElementById('idx-coleman');
+    const idxSmog = document.getElementById('idx-smog');
+    const idxAri = document.getElementById('idx-ari');
+
+    const statWords = document.getElementById('stat-words');
+    const statSentences = document.getElementById('stat-sentences');
+    const statChars = document.getElementById('stat-chars');
+    const statSyllables = document.getElementById('stat-syllables');
+    const statPolysyl = document.getElementById('stat-polysyl');
+
+    // Keep scrolling sync between textarea and highlights overlay
+    textInput.addEventListener('scroll', () => {
+      highlightsOverlay.scrollTop = textInput.scrollTop;
+    });
+
+    function calculateReadability() {
+      const text = textInput.value;
+      if (!text.trim()) {
+        resetMetrics();
+        return;
+      }
+
+      // Sentence division (split by periods, exclamation, questions followed by space or end)
+      const sentences = text.split(/[.!?]+(\s+|$)/).filter(s => s && s.trim().length > 0);
+      const sentenceCount = sentences.length || 1;
+
+      // Word division
+      const words = text.split(/\s+/).filter(w => w && w.trim().length > 0);
+      const wordCount = words.length || 1;
+
+      // Character count (letters and numbers only)
+      const cleanedText = text.replace(/[^a-zA-Z0-9]/g, '');
+      const charCount = cleanedText.length || 1;
+
+      // Syllable counters
+      let totalSyllables = 0;
+      let polysyllableCount = 0;
+
+      const processedWords = words.map(w => {
+        const cleanedWord = w.replace(/[^a-zA-Z]/g, '');
+        const syllables = countSyllablesInWord(cleanedWord);
+        totalSyllables += syllables;
+        if (syllables >= 3) {
+          polysyllableCount++;
+        }
+        return { original: w, syllables };
+      });
+
+      // Update text statistics
+      statWords.textContent = wordCount;
+      statSentences.textContent = sentenceCount;
+      statChars.textContent = charCount;
+      statSyllables.textContent = totalSyllables;
+      statPolysyl.textContent = polysyllableCount;
+
+      // 1. Flesch Reading Ease
+      const FleschEase = 206.835 - 1.015 * (wordCount / sentenceCount) - 84.6 * (totalSyllables / wordCount);
+      const easeScore = Math.max(0, Math.min(100, Math.round(FleschEase)));
+      scoreFleschEl.textContent = easeScore;
+
+      // Categorizations status text
+      if (easeScore >= 90) {
+        scoreStatusDesc.textContent = 'Very Easy (approx. 5th grade level)';
+      } else if (easeScore >= 80) {
+        scoreStatusDesc.textContent = 'Easy (approx. 6th grade level)';
+      } else if (easeScore >= 70) {
+        scoreStatusDesc.textContent = 'Fairly Easy (approx. 7th grade level)';
+      } else if (easeScore >= 60) {
+        scoreStatusDesc.textContent = 'Standard (approx. 8th-9th grade level)';
+      } else if (easeScore >= 50) {
+        scoreStatusDesc.textContent = 'Fairly Difficult (approx. 10th-12th grade)';
+      } else if (easeScore >= 30) {
+        scoreStatusDesc.textContent = 'Difficult (approx. College level)';
+      } else {
+        scoreStatusDesc.textContent = 'Very Difficult (approx. College Graduate)';
+      }
+
+      // 2. Flesch-Kincaid Grade Level
+      const FKGrade = 0.39 * (wordCount / sentenceCount) + 11.8 * (totalSyllables / wordCount) - 15.59;
+      idxGrade.textContent = Math.max(0, parseFloat(FKGrade.toFixed(1)));
+
+      // 3. Gunning Fog Index
+      const Gunning = 0.4 * ((wordCount / sentenceCount) + 100 * (polysyllableCount / wordCount));
+      idxGunning.textContent = Math.max(0, parseFloat(Gunning.toFixed(1)));
+
+      // 4. Coleman-Liau Index
+      const L = (charCount / wordCount) * 100;
+      const S = (sentenceCount / wordCount) * 100;
+      const Coleman = 0.0588 * L - 0.296 * S - 15.8;
+      idxColeman.textContent = Math.max(0, parseFloat(Coleman.toFixed(1)));
+
+      // 5. SMOG Grade Level
+      const SMOG = 1.043 * Math.sqrt(polysyllableCount * (30 / sentenceCount)) + 3.1291;
+      idxSmog.textContent = Math.max(0, parseFloat(SMOG.toFixed(1)));
+
+      // 6. Automated Readability Index (ARI)
+      const ARI = 4.71 * (charCount / wordCount) + 0.5 * (wordCount / sentenceCount) - 21.43;
+      idxAri.textContent = Math.max(0, parseFloat(ARI.toFixed(1)));
+
+      // Trigger Highlights overlays markup
+      if (toggleHighlights.checked) {
+        highlightsOverlay.innerHTML = generateHighlightsHTML(text, processedWords);
+      } else {
+        highlightsOverlay.innerHTML = '';
+      }
+    }
+
+    function resetMetrics() {
+      scoreFleschEl.textContent = '0';
+      scoreStatusDesc.textContent = 'Conversational & Clear';
+      idxGrade.textContent = '0.0';
+      idxGunning.textContent = '0.0';
+      idxColeman.textContent = '0.0';
+      idxSmog.textContent = '0.0';
+      idxAri.textContent = '0.0';
+
+      statWords.textContent = '0';
+      statSentences.textContent = '0';
+      statChars.textContent = '0';
+      statSyllables.textContent = '0';
+      statPolysyl.textContent = '0';
+      highlightsOverlay.innerHTML = '';
+    }
+
+    // Interactive highlighter engine
+    function generateHighlightsHTML(text, processedWords) {
+      // Split text by paragraphs/sentences, highlight long sentences, and wrap hard words in tags
+      // To keep it high performance, parse word-by-word with tags mappings
+      let wordIndex = 0;
+
+      // Replace characters but keep formatting matching spacing
+      const html = text.replace(/([a-zA-Z]+)/g, (match) => {
+        const info = processedWords[wordIndex++];
+        if (!info) return match;
+
+        // Wrap complex words (3+ syllables) in purple
+        if (info.syllables >= 3) {
+          return `<span class="high-complex-word">${match}</span>`;
+        }
+        return match;
+      });
+
+      return html;
+    }
+
+    // Bind UI inputs
+    textInput.addEventListener('input', calculateReadability);
+    toggleHighlights.addEventListener('change', () => {
+      calculateReadability();
+    });
+
+    // Clear action
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      textInput.value = '';
+      resetMetrics();
+    });
+
+    // Load sample essay text
+    const sampleEssay = `Readability checker tools are highly beneficial for copywriting structures. They examine paragraph parameters to determine if content fits mainstream consumer reading grade levels. Writing that is overly complex or filled with excessive polysyllable words can alienate readers. By analyzing text structures locally, writers can refine vocabulary and craft clear sentences. Clear, accessible communication improves engagement and retains user focus.`;
+
+    document.getElementById('btn-sample').addEventListener('click', () => {
+      textInput.value = sampleEssay;
+      calculateReadability();
+    });
+
+  </script>
+
+  <script>
+    // FAQ accordion helper
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

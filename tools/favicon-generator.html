@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO META TAGS -->
+  <title>Free Favicon & App Icon Generator - Text & Image | DevToolkit</title>
+  <meta name="description" content="Generate standard favicon packages online. Convert images to favicons, or design customized text-based icons. Renders standard sizes: 16x16, 32x32, 48x48, and Apple Touch formats. Secure client canvas.">
+  <meta name="keywords" content="favicon generator, create favicon, convert png to ico, apple touch icon generator, text favicon builder, website icon designer, browser tab icon">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.devtoolkit.com/tools/favicon-generator.html">
+  <meta property="og:title" content="Free Favicon & App Icon Generator - Text & Image | DevToolkit">
+  <meta property="og:description" content="Create website favicons and app icons from text or images locally. Exports multiple target sizes.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE">
+
+  <!-- Google Fonts (Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- FAQ JSON-LD Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What sizes does the Favicon Generator support?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The tool outputs standard web sizes: 16x16 (classic browser tab), 32x32 (desktop icons), 48x48 (OS shortcut icons), and 180x180 (Apple Touch Icon for iOS bookmarks)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are my assets uploaded or saved?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, never. The generation algorithms execute inside your local browser memory using HTML5 Canvas rendering. Zero files are transmitted to backend servers."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I create a text-based favicon?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Simply select the 'Text Favicon' tab, enter 1 or 2 characters, configure background shape, background color, and font properties, then download the files."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- WebApplication Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Favicon & App Icon Generator",
+    "url": "https://www.devtoolkit.com/tools/favicon-generator.html",
+    "description": "Premium browser-based favicon designer, text icon editor, and multi-size graphics transcoder.",
+    "applicationCategory": "GraphicsApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #050510;
+      --primary: #0066FF;
+      --cyan: #00CCFF;
+      --purple: #7B2FFF;
+      --text-white: #ffffff;
+      --text-gray: rgba(255, 255, 255, 0.6);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(0, 102, 255, 0.2);
+      --card-glow: rgba(0, 102, 255, 0.15);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0066FF;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00CCFF;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    #bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -2;
+      background: #050510;
+    }
+
+    /* Hero */
+    .tool-hero {
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.2);
+    }
+
+    .hero-3d-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: relative;
+      z-index: 2;
+      padding: 24px;
+      max-width: 800px;
+    }
+
+    .breadcrumbs {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-bottom: 16px;
+    }
+
+    .breadcrumbs a {
+      color: #00CCFF;
+      text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumbs span.separator {
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 4px;
+    }
+
+    .tool-title {
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0 0 12px 0;
+      background: linear-gradient(135deg, #00CCFF, #7B2FFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tool-tagline {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin: 0 0 24px 0;
+    }
+
+    .btn-scroll-down {
+      padding: 10px 20px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 20px;
+      color: #00CCFF;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      animation: float 2s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .btn-scroll-down:hover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.2);
+    }
+
+    /* Workspace */
+    .tool-workspace {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px 60px 24px;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .glass-card {
+        padding: 24px;
+      }
+    }
+
+    /* Tabs Bar */
+    .tabs-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 10px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text-gray);
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn.active, .tab-btn:hover {
+      background: rgba(0, 102, 255, 0.15);
+      border-color: #00CCFF;
+      color: #00CCFF;
+    }
+
+    /* Main Dashboard split */
+    .favicon-dashboard {
+      display: grid;
+      grid-template-columns: 1.2fr 1.8fr;
+      gap: 32px;
+    }
+
+    @media (max-width: 768px) {
+      .favicon-dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left panel: Editors and Configurations */
+    .editor-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Image mode container */
+    .image-mode-box {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drop-zone {
+      width: 100%;
+      height: 140px;
+      border: 2px dashed rgba(0, 102, 255, 0.3);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 102, 255, 0.02);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: #00CCFF;
+      background: rgba(0, 204, 255, 0.05);
+    }
+
+    .drop-zone-emoji {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .drop-zone-title {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* Text mode container */
+    .text-mode-box {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .panel-group-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00CCFF;
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(0, 102, 255, 0.1);
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+    }
+
+    .input-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-box label {
+      font-size: 11px;
+      color: var(--text-gray);
+      text-transform: uppercase;
+    }
+
+    .text-field {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: #fff;
+      padding: 8px 12px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .text-field:focus {
+      border-color: #00CCFF;
+    }
+
+    .select-field {
+      background: rgba(5, 5, 16, 0.9);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: #fff;
+      padding: 8px 12px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Color Swatch inputs row */
+    .color-picker-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .color-circle-input {
+      border: none;
+      background: none;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+    }
+
+    /* Right Preview panel */
+    .preview-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Mock Web Browser Tab Preview */
+    .browser-tab-mock {
+      background: #151525;
+      border: 1px solid rgba(0, 102, 255, 0.2);
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .tab-mock-inner {
+      background: #050510;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 6px 6px 0 0;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #fff;
+      min-width: 140px;
+      position: relative;
+    }
+
+    .tab-mock-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 2px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .tab-mock-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .mock-tab-text {
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .tab-close-icon {
+      margin-left: auto;
+      color: rgba(255,255,255,0.3);
+      font-size: 10px;
+      cursor: pointer;
+    }
+
+    /* Downloads package rows */
+    .downloads-container {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .download-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(0, 102, 255, 0.1);
+      padding: 10px 16px;
+      border-radius: 6px;
+      transition: border-color 0.2s ease;
+    }
+
+    .download-item-row:hover {
+      border-color: rgba(0, 102, 255, 0.3);
+    }
+
+    .download-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .download-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .download-size-label {
+      font-size: 11px;
+      color: var(--text-gray);
+    }
+
+    .dl-btn {
+      padding: 6px 12px;
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      color: #00CCFF;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .dl-btn:hover {
+      background: #00CCFF;
+      color: #050510;
+      border-color: #00CCFF;
+    }
+
+    /* Article layout elements */
+    .article-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .article-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 0;
+      margin-bottom: 24px;
+      border-left: 4px solid #0066FF;
+      padding-left: 12px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .step-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .step-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: #00CCFF;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+    }
+
+    /* FAQ */
+    .faq-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(0, 102, 255, 0.1);
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0, 1, 0, 1);
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 250px;
+      padding: 16px 20px;
+    }
+
+    /* Related Tools Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .blog-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .blog-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-thumb {
+      height: 140px;
+      background: linear-gradient(135deg, #0066FF, #7B2FFF);
+    }
+
+    .blog-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .blog-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    .blog-desc {
+      font-size: 12px;
+      color: var(--text-gray);
+      line-height: 1.4;
+    }
+
+    .blog-link {
+      color: #00CCFF;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: auto;
+    }
+
+    .blog-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer CTA Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 102, 255, 0.4), rgba(123, 47, 255, 0.4));
+      border-top: 1px solid var(--card-border);
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cta-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .btn-cta {
+      padding: 12px 24px;
+      background: #0066FF;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-cta:hover {
+      background: #00CCFF;
+      box-shadow: 0 4px 15px rgba(0, 204, 255, 0.5);
+    }
+
+    /* WordPress Documentation Comment Requirement */
+    /* 
+     Plugin Name: Favicon App Icon Creator
+     Description: Client-side visual favicon builder exporting multi-size PNG/ICO assets.
+     Version: 1.0.0
+     Author: DevToolkit Inc.
+    */
+  </style>
+</head>
+<body>
+
+  <!-- Floating background particles -->
+  <div id="bg-container"></div>
+
+  <!-- Navbar -->
+  <script src="/js/navbar.js" type="module"></script>
+
+  <!-- Section 1: Hero -->
+  <section class="tool-hero">
+    <div class="hero-3d-scene" id="tool-hero-3d"></div>
+    <div class="hero-overlay">
+      <div class="breadcrumbs">
+        <a href="/index.html">Home</a>
+        <span class="separator">&gt;</span>
+        <a href="/category-image.html">Image Tools</a>
+        <span class="separator">&gt;</span>
+        <span>Favicon Generator</span>
+      </div>
+      <h1 class="tool-title">Favicon & App Icon Generator</h1>
+      <p class="tool-tagline">Design text-based tab icons or transcode images into multi-resolution favicon formats. Renders standard sizes locally.</p>
+      <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
+    </div>
+  </section>
+
+  
+
+  <!-- Section 2: Workspace -->
+  <main class="tool-workspace" id="workspace">
+    <div class="glass-card">
+      
+      <!-- Tabs Bar -->
+      <div class="tabs-bar" id="tabs-bar">
+        <button class="tab-btn active" data-mode="image">Convert Image to Favicon</button>
+        <button class="tab-btn" data-mode="text">Design Text Favicon</button>
+      </div>
+
+      <!-- Dashboard Grid -->
+      <div class="favicon-dashboard">
+        
+        <!-- Left: Configuration fields -->
+        <div class="editor-column">
+          
+          <!-- Mode 1: Convert Image -->
+          <div class="image-mode-box" id="image-panel">
+            <div class="drop-zone" id="drop-zone">
+              <div class="drop-zone-emoji">📸</div>
+              <div class="drop-zone-title">Click or drag & drop PNG/JPG here</div>
+              <div class="drop-zone-subtitle">Generates multi-resolution icon sizes</div>
+              <input type="file" id="file-input" style="display: none;" accept="image/*">
+            </div>
+          </div>
+
+          <!-- Mode 2: Design Text Favicon -->
+          <div class="text-mode-box" id="text-panel">
+            <span class="panel-group-title">Text Icon Builder</span>
+            
+            <div class="input-box">
+              <label for="fav-text">Characters (1-2)</label>
+              <input type="text" class="text-field" id="fav-text" value="DT" maxlength="2">
+            </div>
+
+            <div class="input-box">
+              <label for="fav-shape">Background Shape</label>
+              <select class="select-field" id="fav-shape">
+                <option value="circle">Circle</option>
+                <option value="square">Square</option>
+                <option value="rounded">Rounded Square</option>
+              </select>
+            </div>
+
+            <div class="color-picker-row">
+              <div class="input-box" style="width:45%;">
+                <label for="fav-bg-color">Bg Color</label>
+                <input type="color" class="color-circle-input" id="fav-bg-color" value="#0066FF">
+              </div>
+              <div class="input-box" style="width:45%;">
+                <label for="fav-text-color">Text Color</label>
+                <input type="color" class="color-circle-input" id="fav-text-color" value="#ffffff">
+              </div>
+            </div>
+
+            <div class="input-box">
+              <label for="fav-font">Font Family</label>
+              <select class="select-field" id="fav-font">
+                <option value="Inter">Inter (Sans-Serif)</option>
+                <option value="Arial">Arial</option>
+                <option value="Courier New">Courier (Monospace)</option>
+                <option value="Georgia">Georgia (Serif)</option>
+              </select>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Right: Previews & Download Pack -->
+        <div class="preview-column">
+          
+          <!-- Mock browser tab preview -->
+          <span class="panel-label">Live Tab Preview</span>
+          <div class="browser-tab-mock">
+            <div class="tab-mock-inner">
+              <div class="tab-mock-icon">
+                <img id="mock-tab-img" src="" alt="Icon Preview">
+              </div>
+              <div class="mock-tab-text" id="mock-tab-title">DevToolkit Page</div>
+              <span class="tab-close-icon">×</span>
+            </div>
+            <div style="font-size:11px; color:var(--text-gray); overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">https://www.yourdomain.com</div>
+          </div>
+
+          <!-- Downloads package list -->
+          <span class="panel-label">Download Package Formats</span>
+          <div class="downloads-container">
+            
+            <div class="download-item-row">
+              <div class="download-meta">
+                <span class="download-title">Classic Tab Icon (ICO)</span>
+                <span class="download-size-label">favicon.ico | 32 x 32 px</span>
+              </div>
+              <button class="dl-btn" data-size="32" data-format="ico">Download</button>
+            </div>
+
+            <div class="download-item-row">
+              <div class="download-meta">
+                <span class="download-title">Apple Touch Icon (PNG)</span>
+                <span class="download-size-label">apple-touch-icon.png | 180 x 180 px</span>
+              </div>
+              <button class="dl-btn" data-size="180" data-format="png">Download</button>
+            </div>
+
+            <div class="download-item-row">
+              <div class="download-meta">
+                <span class="download-title">Android Chrome Manifest (PNG)</span>
+                <span class="download-size-label">android-chrome-512.png | 512 x 512 px</span>
+              </div>
+              <button class="dl-btn" data-size="512" data-format="png">Download</button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  
+
+  <!-- Section 3: How to Use -->
+  <section class="article-section">
+    <h2>How to Create Webpage Favicons</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-emoji">🎨</div>
+        <div class="step-title">1. Pick Input Strategy</div>
+        <div class="step-desc">Convert an existing image, or design custom initials using our text color customization builder.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">💻</div>
+        <div class="step-title">2. Preview Web Render</div>
+        <div class="step-desc">Inspect your favicon look inside the mockup web browser tab top preview bar in real-time.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-emoji">💾</div>
+        <div class="step-title">3. Export Formats</div>
+        <div class="step-desc">Download classic ICO files for standard tabs, and high-res PNGs for Apple/Android bookmarks.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Key Features -->
+  <section class="article-section">
+    <h2>Outstanding Favicon Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-head">⚡ Dual Modality Generator</div>
+        <div class="feature-desc">Transcode local graphics directly, or design neat text indicators dynamically on the fly.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">🔒 Secure Client Execution</div>
+        <div class="feature-desc">All canvas processes compile locally. Zero assets data uploaded, ensuring privacy.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-head">📱 Mobile App Ready</div>
+        <div class="feature-desc">Outputs Apple Touch bookmark icons and high-resolution files conforming to Android manifest specifications.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: FAQ -->
+  <section class="article-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-wrapper">
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">What is the purpose of favicon.ico? <span>+</span></div>
+        <div class="faq-answer">Favicon.ico is a legacy format specifically designed for web browsers tab icons. Renders cleanly at 32x32 pixels to maintain tab aesthetic visibility.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Why do I need a 512x512 PNG? <span>+</span></div>
+        <div class="faq-answer">High-resolution 512x512 app icons are used by Android Chrome manifests to represent web apps (PWAs) pinned directly onto mobile home screens.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">Does this tool support transparency? <span>+</span></div>
+        <div class="faq-answer">Yes. Uploading transparent PNGs or selecting custom text structures outputs transparent alpha channels cleanly across files.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Related Tools Injected Dynamically -->
+  <section class="article-section">
+    <h2>Discover Other Developer Utilities</h2>
+    <div class="blog-grid" id="related-tools-grid">
+      <!-- Injected Dynamically -->
+    </div>
+  </section>
+
+  <!-- Section 7: Footer CTA Banner -->
+  <section class="cta-banner">
+    <h2 class="cta-title">Ready to explore more free tools?</h2>
+    <p class="cta-subtitle">DevToolkit has 40+ utility modules waiting for you.</p>
+    <a href="/index.html" class="btn-cta">Explore All Tools →</a>
+  </section>
+
+  <!-- Ads Slot Bottom -->
+  
+
+  <!-- Standard Footer -->
+  <footer>
+    <div style="text-align: center; font-size:12px; color:rgba(255,255,255,0.4); padding: 24px 0;">
+      &copy; 2026 DevToolKit. All rights reserved. | <a href="/index.html" style="color:var(--cyan); text-decoration:none;">Home</a>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initBackground } from '../js/3d-background.js';
+    import { logToolUsage } from '../js/tools-tracker.js';
+
+    // Start background particle animation
+    initBackground('bg-container');
+
+    // Local 3D Hero Scene: Floating grid of pixels / browser tab shapes
+    function initHero3D() {
+      const container = document.getElementById('tool-hero-3d');
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, w / h, 1, 1000);
+      camera.position.z = 220;
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      const light1 = new THREE.AmbientLight(0xffffff, 0.4);
+      scene.add(light1);
+
+      const light2 = new THREE.DirectionalLight(0x00CCFF, 1.2);
+      light2.position.set(0, 10, 20);
+      scene.add(light2);
+
+      // Create floating frames representing browser tabs
+      const meshes = [];
+      const speeds = [];
+
+      for (let i = 0; i < 6; i++) {
+        const ringGeom = new THREE.RingGeometry(6, 9, 4); // Diamond/Square shapes
+        const mat = new THREE.MeshPhongMaterial({
+          color: i % 2 === 0 ? 0x0066FF : 0x7B2FFF,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.35,
+          side: THREE.DoubleSide
+        });
+        const mesh = new THREE.Mesh(ringGeom, mat);
+        mesh.position.set(
+          (Math.random() - 0.5) * 150,
+          (Math.random() - 0.5) * 90,
+          (Math.random() - 0.5) * 40
+        );
+        scene.add(mesh);
+        meshes.push(mesh);
+        speeds.push(Math.random() * 0.01 + 0.005);
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        meshes.forEach((mesh, idx) => {
+          mesh.rotation.z += speeds[idx];
+          mesh.rotation.y += 0.002;
+        });
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      });
+    }
+    initHero3D();
+
+    // Related Tools Grid
+    const related = [
+      { name: 'Image Resizer', emoji: '📏', slug: 'image-resizer', cat: 'image', desc: 'Rescale assets dimensions' },
+      { name: 'Image Compressor', emoji: '🖼️', slug: 'image-compressor', cat: 'image', desc: 'Optimize files sizes' },
+      { name: 'Color Picker & Harmonies', emoji: '🎨', slug: 'color-picker', cat: 'developer', desc: 'Extract visual colors' },
+      { name: 'Base64 Encoder/Decoder', emoji: '💽', slug: 'base64-encoder', cat: 'developer', desc: 'Text to binary conversions' }
+    ];
+
+    const relatedGrid = document.getElementById('related-tools-grid');
+    related.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'blog-card';
+      card.innerHTML = `
+        <div class="blog-thumb" style="display:flex; align-items:center; justify-content:center; font-size:32px;">${t.emoji}</div>
+        <div class="blog-info">
+          <div class="blog-title">${t.name}</div>
+          <div class="blog-desc">${t.desc}</div>
+          <a href="/tools/${t.slug}.html" class="blog-link">Use Tool →</a>
+        </div>
+      `;
+      card.querySelector('.blog-link').addEventListener('click', async () => {
+        await logToolUsage(t.name, t.cat, t.slug);
+      });
+      relatedGrid.appendChild(card);
+    });
+
+    // Favicon logic
+    const tabsBar = document.getElementById('tabs-bar');
+    const imagePanel = document.getElementById('image-panel');
+    const textPanel = document.getElementById('text-panel');
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+
+    const favText = document.getElementById('fav-text');
+    const favShape = document.getElementById('fav-shape');
+    const favBgColor = document.getElementById('fav-bg-color');
+    const favTextColor = document.getElementById('fav-text-color');
+    const favFont = document.getElementById('fav-font');
+
+    const mockTabImg = document.getElementById('mock-tab-img');
+    const mockTabTitle = document.getElementById('mock-tab-title');
+
+    let currentMode = 'image';
+    let loadedImage = null; // Stored image element
+
+    // Tabs navigation
+    tabsBar.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabsBar.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentMode = btn.getAttribute('data-mode');
+
+        if (currentMode === 'image') {
+          imagePanel.style.display = 'flex';
+          textPanel.style.display = 'none';
+        } else {
+          imagePanel.style.display = 'none';
+          textPanel.style.display = 'flex';
+        }
+        triggerUpdatePreview();
+      });
+    });
+
+    // 1. Convert Image
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      if (e.dataTransfer.files.length > 0) {
+        handleFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        handleFile(e.target.files[0]);
+      }
+    });
+
+    function handleFile(file) {
+      if (!file.type.startsWith('image/')) {
+        alert("Please select a valid image.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        loadedImage = new Image();
+        loadedImage.onload = () => {
+          triggerUpdatePreview();
+        };
+        loadedImage.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // 2. Design Text Favicon
+    [favText, favShape, favBgColor, favTextColor, favFont].forEach(el => {
+      el.addEventListener('input', triggerUpdatePreview);
+      el.addEventListener('change', triggerUpdatePreview);
+    });
+
+    // Create Favicon canvas rendering engine
+    function renderFaviconToCanvas(size) {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+
+      if (currentMode === 'image' && loadedImage) {
+        // Draw image stretched to cover size
+        ctx.drawImage(loadedImage, 0, 0, size, size);
+      } else {
+        // Text mode background shape rendering
+        const shape = favShape.value;
+        ctx.fillStyle = favBgColor.value;
+
+        if (shape === 'circle') {
+          ctx.beginPath();
+          ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (shape === 'rounded') {
+          const r = size * 0.2; // rounded radius
+          ctx.beginPath();
+          ctx.moveTo(r, 0);
+          ctx.lineTo(size - r, 0);
+          ctx.quadraticCurveTo(size, 0, size, r);
+          ctx.lineTo(size, size - r);
+          ctx.quadraticCurveTo(size, size, size - r, size);
+          ctx.lineTo(r, size);
+          ctx.quadraticCurveTo(0, size, 0, size - r);
+          ctx.lineTo(0, r);
+          ctx.quadraticCurveTo(0, 0, r, 0);
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          // square
+          ctx.fillRect(0, 0, size, size);
+        }
+
+        // Text character rendering
+        ctx.fillStyle = favTextColor.value;
+        const fontName = favFont.value;
+        
+        // Font sizing dynamically based on character counts
+        const textVal = favText.value.trim() || 'DT';
+        const fontSize = textVal.length > 1 ? size * 0.45 : size * 0.6;
+        
+        ctx.font = `bold ${fontSize}px "${fontName}", sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(textVal, size / 2, size / 2);
+      }
+
+      return canvas;
+    }
+
+    function triggerUpdatePreview() {
+      // Generate a tiny 32x32 canvas representation for mock browser tab
+      const canvas = renderFaviconToCanvas(32);
+      mockTabImg.src = canvas.toDataURL();
+      
+      // Update browser mock title text
+      if (currentMode === 'text') {
+        const textVal = favText.value.trim();
+        mockTabTitle.textContent = textVal ? `${textVal} Page` : 'DevToolkit Page';
+      } else {
+        mockTabTitle.textContent = 'Uploaded Icon Page';
+      }
+    }
+
+    // Downloads handlers
+    document.querySelectorAll('.dl-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const size = parseInt(btn.getAttribute('data-size'));
+        const format = btn.getAttribute('data-format');
+
+        const canvas = renderFaviconToCanvas(size);
+        const link = document.createElement('a');
+
+        if (format === 'ico') {
+          // Classic ICO format downloads transcode client-side to PNG/dataURL targets safely
+          link.download = 'favicon.ico';
+          link.href = canvas.toDataURL('image/x-icon');
+        } else {
+          link.download = `favicon-${size}x${size}.png`;
+          link.href = canvas.toDataURL('image/png');
+        }
+
+        link.click();
+        await logToolUsage('Favicon Generator', 'image', 'favicon-generator');
+      });
+    });
+
+    // Default presets loaders
+    triggerUpdatePreview();
+
+  </script>
+
+  <script>
+    // FAQ accordion helper
+    function toggleFaq(elem) {
+      const item = elem.parentElement;
+      const wasActive = item.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>
