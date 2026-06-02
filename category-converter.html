@@ -533,8 +533,8 @@
       <span class="separator">&gt;</span>
       <span>Converter Tools</span>
     </div>
-    <h1>🔄 Converter Tools</h1>
-    <p>Free converter tools for quick and easy conversions</p>
+    <h1 class="category-title">🔄 Converter Tools</h1>
+    <p class="hero-subtitle">Free converter tools for quick and easy conversions</p>
   </section>
 
   <!-- Content Wrapper -->
@@ -577,7 +577,7 @@
     </section>
 
     <!-- Part A: Category Overview -->
-    <section class="glass-card article-section">
+    <section class="glass-card article-section category-overview">
       <h2>What are Converter Tools?</h2>
       <p>Converter tools are mathematical calculations and numerical translators built to translate units, compute base number system variables, and compile complex equations. Executed entirely client-side using JavaScript, these utilities let you convert binary code, verify your chronological age, convert metric measurements, and solve scientific math functions directly in your browser. Since computations run on your machine, your entries are completely secure and private.</p>
       <p>Developers, students, scientists, and managers use these calculators to handle quick conversions. Converting between metric systems, calculating date offsets, translating binary strings to hex values, or running logarithmic equations requires accurate solvers. Standardizing these converters in a browser-based suite saves you from looking up conversion tables manually.</p>
@@ -721,19 +721,23 @@
 
   <script type="module">
     import { initBackground } from './js/3d-background.js';
-    import { loadPageContent } from './js/cms.js';
-
     initBackground('bg-container');
+  </script>
 
-    loadPageContent('category-converter').then(() => {
-      const dynamicSections = document.getElementById('dynamic-sections-container');
-      if (dynamicSections && dynamicSections.children.length > 0) {
-        console.log("Category-CONVERTER CMS layout blocks found: hiding fallback grids.");
-        document.getElementById('static-tools-grid').style.display = 'none';
-        document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
-        const staticHero = document.querySelector('.cat-hero');
-        if (staticHero) staticHero.style.display = 'none';
-      }
+  <script type="module">
+    import { loadCategoryContent } from './js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCategoryContent('converter').then(() => {
+        const dynamicSections = document.getElementById('dynamic-sections-container');
+        if (dynamicSections && dynamicSections.children.length > 0) {
+          console.log("Category-CONVERTER CMS layout blocks found: hiding fallback grids.");
+          const staticToolsGrid = document.getElementById('static-tools-grid');
+          if (staticToolsGrid) staticToolsGrid.style.display = 'none';
+          document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
+          const staticHero = document.querySelector('.cat-hero');
+          if (staticHero) staticHero.style.display = 'none';
+        }
+      });
     });
   </script>
 

@@ -707,7 +707,7 @@
         <span>YouTube to MP3</span>
       </div>
       <h1 class="tool-title">YouTube to MP3 Converter</h1>
-      <p class="tool-tagline">Convert video streams to high-fidelity audio, retrieve thumbnails, configure audio bitrates, and save locally.</p>
+      <p class="tool-tagline tool-description">Convert video streams to high-fidelity audio, retrieve thumbnails, configure audio bitrates, and save locally.</p>
       <a href="#workspace" class="btn-scroll-down">Use Converter Below ↓</a>
     </div>
   </section>
@@ -815,7 +815,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">What is the difference between 128k and 320k bitrates? <span>+</span></div>
         <div class="faq-answer">Bitrate refers to the amount of data processed per second. 320kbps (kilobits per second) provides much richer audio with less compression loss, while 128kbps is highly compressed to minimize file storage sizes.</div>
@@ -1084,6 +1084,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

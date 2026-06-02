@@ -664,7 +664,7 @@
         <span>Word Combiner</span>
       </div>
       <h1 class="tool-title">Word Combiner & Permutation Builder</h1>
-      <p class="tool-tagline">Combine multiple lists of words into all possible text combinations. Generate keyword variations and domain ideas instantly.</p>
+      <p class="tool-tagline tool-description">Combine multiple lists of words into all possible text combinations. Generate keyword variations and domain ideas instantly.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -815,7 +815,7 @@ com"></textarea>
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">What is the Cartesian Product list merge? <span>+</span></div>
         <div class="faq-answer">The Cartesian product combines every line of List A with every line of List B, and then with every line of List C. If lists contain 10 lines each, it yields 1,000 combinations (10 x 10 x 10).</div>
@@ -1113,6 +1113,14 @@ com"></textarea>
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

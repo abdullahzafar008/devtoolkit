@@ -742,7 +742,7 @@
         <span>Scientific Calculator</span>
       </div>
       <h1 class="tool-title">Scientific Calculator</h1>
-      <p class="tool-tagline">Evaluate complex algebraic functions, configure DEG/RAD values, and plot 2D graphs in real-time.</p>
+      <p class="tool-tagline tool-description">Evaluate complex algebraic functions, configure DEG/RAD values, and plot 2D graphs in real-time.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -886,7 +886,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">What is the difference between DEG and RAD modes? <span>+</span></div>
         <div class="faq-answer">DEG (Degrees) treats circle angles as 360 units, while RAD (Radians) defines circles by 2π units. Toggle DEG or RAD to verify correct trigonometric properties.</div>
@@ -1373,6 +1373,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

@@ -1,244 +1,293 @@
-import { supabase } from './supabase-config.js';
+const STRAPI_URL = 'http://localhost:1337'
 
-export async function getPageSections(pageName) {
+async function strapiGet(endpoint) {
   try {
-    const { data, error } = await supabase
-      .from('page_sections')
-      .select('*')
-      .eq('page_name', pageName)
-      .eq('is_visible', true)
-      .order('display_order');
-    if (error) throw error;
-    return data || [];
-  } catch (err) {
-    console.error(`Error loading page sections for ${pageName}:`, err);
-    return [];
-  }
-}
-
-export async function getSiteStats() {
-  try {
-    const { data, error } = await supabase
-      .from('site_stats')
-      .select('*')
-      .order('display_order');
-    if (error) throw error;
-    return data || [];
-  } catch (err) {
-    console.error("Error loading site stats:", err);
-    return [];
-  }
-}
-
-export async function getFAQs(pageName) {
-  try {
-    const { data, error } = await supabase
-      .from('faqs')
-      .select('*')
-      .eq('page_name', pageName)
-      .eq('is_active', true)
-      .order('display_order');
-    if (error) throw error;
-    return data || [];
-  } catch (err) {
-    console.error(`Error loading FAQs for ${pageName}:`, err);
-    return [];
-  }
-}
-
-export async function getAnnouncement() {
-  try {
-    const { data, error } = await supabase
-      .from('announcements')
-      .select('*')
-      .eq('is_active', true)
-      .limit(1)
-      .maybeSingle();
-    if (error) throw error;
-    return data || null;
-  } catch (err) {
-    console.error("Error loading announcement:", err);
-    return null;
-  }
-}
-
-export async function getToolData(toolSlug) {
-  try {
-    const { data, error } = await supabase
-      .from('tools_cms')
-      .select('*')
-      .eq('tool_slug', toolSlug)
-      .maybeSingle();
-    if (error) throw error;
-    return data || null;
-  } catch (err) {
-    console.error(`Error loading tool data for ${toolSlug}:`, err);
-    return null;
-  }
-}
-
-// Injects top page banner
-function showAnnouncementBar(ann) {
-  if (document.getElementById('cms-top-banner')) return;
-
-  const msg = ann.message || 'New features released!';
-  const bg = ann.bg_color || '#0066FF';
-  const tc = ann.text_color || '#FFFFFF';
-  const lText = ann.link_text || '';
-  const lUrl = ann.link_url || '#';
-
-  const banner = document.createElement('div');
-  banner.id = 'cms-top-banner';
-  banner.style.cssText = `background: ${bg}; color: ${tc}; font-size: 13.5px; font-weight: 700; padding: 12px 40px 12px 24px; text-align: center; position: relative; z-index: 99999; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; box-shadow: 0 4px 15px rgba(0,0,0,0.25);`;
-
-  banner.innerHTML = `
-    <span>📢 ${msg}</span>
-    ${lText ? `<a href="${lUrl}" style="color: ${tc}; text-decoration: underline; display: inline-flex; align-items: center; gap: 4px; opacity: 0.95; transition: opacity 0.2s;" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.95';">${lText} &rarr;</a>` : ''}
-    <button style="position: absolute; right: 16px; background: transparent; border: none; color: ${tc}; font-size: 18px; font-weight: 300; cursor: pointer; display: flex; align-items: center; justify-content: center; height: 24px; width: 24px; opacity: 0.7; transition: opacity 0.2s;" onclick="document.getElementById('cms-top-banner').remove();" onmouseover="this.style.opacity='1';" onmouseout="this.style.opacity='0.7';">&times;</button>
-  `;
-
-  document.body.insertBefore(banner, document.body.firstChild);
-}
-
-// Dynamic load Page Content from Supabase
-export async function loadPageContent(pageName) {
-  try {
-    const announcement = await getAnnouncement();
-    if (announcement) {
-      showAnnouncementBar(announcement);
+    const res = await fetch(
+      `${STRAPI_URL}/api/${endpoint}`)
+    if (!res.ok) {
+      console.log('Strapi error:',
+        res.status, endpoint)
+      return null
     }
-
-    const { data: sections, error } = await supabase
-      .from('page_sections')
-      .select('*')
-      .eq('page_name', pageName)
-      .eq('is_visible', true)
-      .order('display_order');
-
-    if (error || !sections || sections.length === 0) {
-      return;
-    }
-
-    sections.forEach(section => {
-      renderSection(section);
-    });
-
-  } catch (err) {
-    console.log('CMS fallback to static', err);
+    const json = await res.json()
+    return json.data
+  } catch(e) {
+    console.log('Strapi fetch failed:', e)
+    return null
   }
 }
 
-export function renderSection(section) {
-  const content = section.content || {};
-  const key = section.section_key;
+async function getPage(pageName) {
+  const data = await strapiGet(
+    `pages?filters[page_name][$eq]=${pageName}`)
+  if (!data || !data.length) return null
+  return data[0]
+}
 
-  const target = document.querySelector(`[data-section="${key}"]`) || document.getElementById(key);
-  if (!target) return;
+async function getStats(pageName) {
+  const data = await strapiGet(
+    `stats?filters[page_name][$eq]=${pageName}&sort=display_order:asc`)
+  return data || []
+}
 
-  switch(section.section_type) {
-    case 'hero':
-      const h1 = target.querySelector('h1');
-      const sub = target.querySelector('p');
-      const btn1 = target.querySelector('.btn-primary, .cta-btn-1, .btn-explore');
-      const btn2 = target.querySelector('.btn-secondary, .cta-btn-2, .btn-start');
+async function getFAQs(pageName) {
+  const data = await strapiGet(
+    `faqs?filters[page_name][$eq]=${pageName}&filters[is_active][$eq]=true&sort=display_order:asc`)
+  return data || []
+}
 
-      if (h1 && content.heading)
-        h1.textContent = content.heading;
-      if (sub && content.subheading)
-        sub.textContent = content.subheading;
-      if (btn1 && content.btn1Text) {
-        btn1.textContent = content.btn1Text;
-        if (content.btn1Link)
-          btn1.href = content.btn1Link;
-      }
-      if (btn2 && content.btn2Text) {
-        btn2.textContent = content.btn2Text;
-        if (content.btn2Link)
-          btn2.href = content.btn2Link;
-      }
-      break;
+async function getCategory(key) {
+  const data = await strapiGet(
+    `categories?filters[category_key][$eq]=${key}`)
+  if (!data || !data.length) return null
+  return data[0]
+}
 
-    case 'faq':
-      const faqContainer = target.querySelector('.faq-list') || target.querySelector('.faq-wrapper') || target;
-      if (!content.faqs) break;
-      faqContainer.innerHTML = content.faqs.map((faq, i) => `
-        <div class="faq-item">
-          <div class="faq-question" onclick="toggleFaq ? toggleFaq(this) : (this.parentElement.classList.toggle('active'))">
-            ${faq.question}
-            <span class="faq-icon">+</span>
-          </div>
-          <div class="faq-answer" id="faq-ans-${i}">
-            ${faq.answer}
-          </div>
-        </div>
-      `).join('');
-      break;
+async function getTool(slug) {
+  const data = await strapiGet(
+    `tools?filters[tool_slug][$eq]=${slug}`)
+  if (!data || !data.length) return null
+  return data[0]
+}
 
-    case 'stats':
-      const statsContainer = target.querySelector('.stats-grid') || target.querySelector('.stats-bar') || target;
-      if (!content.stats) break;
-      statsContainer.innerHTML = content.stats.map(stat => `
-        <div class="stat-item">
-          <span class="stat-icon" style="font-size: 24px;">
-            ${stat.icon || ''}
-          </span>
-          <span class="stat-value" style="font-size: 24px; font-weight: 800; color:#00CCFF; display:block;">
-            ${stat.value || ''}
-          </span>
-          <span class="stat-label">
-            ${stat.label || ''}
-          </span>
-        </div>
-      `).join('');
-      break;
+async function getToolFAQs(slug) {
+  const data = await strapiGet(
+    `tool-faqs?filters[tool_slug][$eq]=${slug}&sort=display_order:asc`)
+  return data || []
+}
 
-    case 'cards':
-      const cardsContainer = target.querySelector('.cards-grid') || target.querySelector('.tools-grid') || target;
-      if (!content.cards) break;
-      cardsContainer.innerHTML = content.cards.map(card => `
-        <div class="card glass-card">
-          <div class="card-emoji" style="font-size: 32px; margin-bottom: 12px;">
-            ${card.emoji || ''}
-          </div>
-          <h3 class="card-title">${card.title || ''}</h3>
-          <p class="card-desc">${card.description || ''}</p>
-          ${card.link ? 
-            `<a href="${card.link}" class="card-link-btn" style="color:#00CCFF; text-decoration:none; font-weight:600; font-size:13.5px; display:inline-block; margin-top:8px;">
-              Use Tool →
-            </a>` : ''}
-        </div>
-      `).join('');
-      break;
+async function loadPageContent(pageName) {
+  console.log('CMS: loading', pageName)
+  const [page, stats, faqs] =
+    await Promise.all([
+      getPage(pageName),
+      getStats(pageName),
+      getFAQs(pageName)
+    ])
 
-    case 'text':
-      const textH2 = target.querySelector('h2');
-      const textSub = target.querySelector('h3, .subheading');
-      const textBody = target.querySelector('.text-body, p');
-      if (textH2 && content.heading)
-        textH2.textContent = content.heading;
-      if (textSub && content.subheading)
-        textSub.textContent = content.subheading;
-      if (textBody && content.body)
-        textBody.innerHTML = content.body;
-      break;
+  console.log('Raw page data:', page)
+  console.log('Raw stats data:', stats)
+  console.log('Raw faqs data:', faqs)
 
-    case 'cta':
-      const ctaH2 = target.querySelector('h2');
-      const ctaSub = target.querySelector('p');
-      const ctaBtn = target.querySelector('a, button');
-      if (ctaH2 && content.heading)
-        ctaH2.textContent = content.heading;
-      if (ctaSub && content.subheading)
-        ctaSub.textContent = content.subheading;
-      if (ctaBtn) {
-        if (content.btnText)
-          ctaBtn.textContent = content.btnText;
-        if (content.btnLink)
-          ctaBtn.href = content.btnLink;
-      }
-      if (content.colorFrom && content.colorTo) {
-        target.style.background = `linear-gradient(135deg, ${content.colorFrom}, ${content.colorTo})`;
-      }
-      break;
+  if (page) {
+    applyPageContent(page)
+    console.log('CMS: page loaded ✅')
   }
+  if (stats && stats.length) {
+    renderStats(stats)
+    console.log('CMS: stats loaded ✅')
+  }
+  if (faqs && faqs.length) {
+    renderFAQs(faqs)
+    console.log('CMS: faqs loaded ✅')
+  }
+}
+
+async function loadCategoryContent(key) {
+  const [cat, faqs] = await Promise.all([
+    getCategory(key),
+    getFAQs('category-' + key)
+  ])
+  if (cat) applyCategoryContent(cat)
+  if (faqs && faqs.length) renderFAQs(faqs)
+}
+
+async function loadToolContent(slug) {
+  const [tool, faqs] = await Promise.all([
+    getTool(slug),
+    getToolFAQs(slug)
+  ])
+  if (tool) applyToolContent(tool)
+  if (faqs && faqs.length) renderFAQs(faqs)
+}
+
+function renderMissionCards(cards) {
+  if (!cards || !cards.length) return
+  const container = document.querySelector(
+    '.mission-cards, .mission-grid, .about-mission')
+  if (!container) return
+  container.innerHTML = cards.map(c => `
+    <div class="mission-card glass-card">
+      <div class="mission-icon">
+        ${c.icon || ''}
+      </div>
+      <h3>${c.title || ''}</h3>
+      <p>${c.description || ''}</p>
+    </div>
+  `).join('')
+}
+
+function applyPageContent(page) {
+  if (!page) return
+  console.log('Applying page:', page)
+
+  const heading = document.querySelector(
+    'h1, .page-title, .typewriter-text, #typewriter-lbl')
+  const sub = document.querySelector(
+    '.hero-sub, .page-sub')
+  const btn1 = document.querySelector(
+    '.hero-btn-explore, .btn-explore')
+  const btn2 = document.querySelector(
+    '.hero-btn-start, .btn-start')
+  
+  const story = document.querySelector('.about-story')
+  const email = document.querySelector('.contact-email')
+
+  console.log('Found heading:', heading)
+  console.log('Found sub:', sub)
+
+  if (heading) {
+    if (page.heading) heading.textContent = page.heading
+    else if (page.hero_heading) heading.textContent = page.hero_heading
+  }
+  if (sub) {
+    if (page.subheading) sub.textContent = page.subheading
+    else if (page.hero_subheading) sub.textContent = page.hero_subheading
+  }
+  if (story && page.story) {
+    story.innerHTML = page.story
+  }
+  if (email && page.email) {
+    email.textContent = page.email
+    email.href = `mailto:${page.email}`
+  }
+  if (btn1) {
+    if (page.btn1_text)
+      btn1.textContent = page.btn1_text
+    if (page.btn1_link)
+      btn1.href = page.btn1_link
+  }
+  if (btn2) {
+    if (page.btn2_text)
+      btn2.textContent = page.btn2_text
+    if (page.btn2_link)
+      btn2.href = page.btn2_link
+  }
+  if (page.mission_cards && Array.isArray(page.mission_cards)) {
+    renderMissionCards(page.mission_cards)
+  }
+  if (page.seo_title)
+    document.title = page.seo_title
+  if (page.seo_description) {
+    const meta = document.querySelector(
+      'meta[name="description"]')
+    if (meta) meta.setAttribute(
+      'content', page.seo_description)
+  }
+}
+
+function applyCategoryContent(cat) {
+  if (!cat) return
+  const h1 = document.querySelector(
+    'h1, .category-title, .hero-title')
+  const sub = document.querySelector(
+    '.hero-subtitle, .category-sub')
+  const overview = document.querySelector(
+    '.overview-text, .category-overview, .category-description')
+
+  if (h1 && cat.hero_heading)
+    h1.textContent = cat.hero_heading
+  if (sub && cat.hero_subheading)
+    sub.textContent = cat.hero_subheading
+  if (overview && cat.overview_text)
+    overview.innerHTML = cat.overview_text
+  if (cat.seo_title)
+    document.title = cat.seo_title
+  if (cat.seo_description) {
+    const meta = document.querySelector(
+      'meta[name="description"]')
+    if (meta) meta.setAttribute(
+      'content', cat.seo_description)
+  }
+}
+
+function applyToolContent(tool) {
+  if (!tool) return
+  const h1 = document.querySelector(
+    'h1, .tool-title, .hero-title')
+  const desc = document.querySelector(
+    '.tool-description, .hero-subtitle')
+  const longDesc = document.querySelector(
+    '.tool-long-desc, .what-is-text')
+
+  if (h1 && tool.tool_name)
+    h1.textContent = tool.tool_name
+  if (desc && tool.description)
+    desc.textContent = tool.description
+  if (longDesc && tool.long_description)
+    longDesc.innerHTML = tool.long_description
+  if (tool.seo_title)
+    document.title = tool.seo_title
+  if (tool.seo_description) {
+    const meta = document.querySelector(
+      'meta[name="description"]')
+    if (meta) meta.setAttribute(
+      'content', tool.seo_description)
+  }
+}
+
+function renderStats(stats) {
+  if (!stats || !stats.length) return
+  const container = document.querySelector(
+    '#stats, .stats-bar')
+  if (!container) {
+    console.log('Stats not found!')
+    return
+  }
+  container.innerHTML = stats.map(s => `
+    <div class="stat-item">
+      <span class="stat-icon">
+        ${s.icon || ''}
+      </span>
+      <span class="stat-value">
+        ${s.value || ''}
+      </span>
+      <span class="stat-label">
+        ${s.label || ''}
+      </span>
+    </div>
+  `).join('')
+  console.log('✅ Stats rendered!')
+}
+
+function renderFAQs(faqs) {
+  if (!faqs || !faqs.length) return
+  const container = document.querySelector(
+    '.faq-list')
+  if (!container) {
+    console.log('FAQ container not found!')
+    return
+  }
+  container.innerHTML = faqs.map(
+    (f, i) => `
+    <div class="faq-item">
+      <div class="faq-question"
+        onclick="
+          const ans =
+            this.nextElementSibling;
+          const icon =
+            this.querySelector('.faq-icon');
+          ans.classList.toggle('open');
+          if(icon) icon.textContent =
+            ans.classList.contains('open')
+            ? '−' : '+';
+        ">
+        ${f.question}
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">
+        ${f.answer}
+      </div>
+    </div>
+  `).join('')
+  console.log('✅ FAQs rendered:',
+    faqs.length)
+}
+
+export {
+  loadPageContent,
+  loadCategoryContent,
+  loadToolContent,
+  renderStats,
+  renderFAQs
 }

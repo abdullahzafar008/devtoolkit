@@ -791,7 +791,7 @@
         <span>Domain Age Checker</span>
       </div>
       <h1 class="tool-title">Domain Age & DNS Checker</h1>
-      <p class="tool-tagline">Track domain age timelines, retrieve public DNS entries, verify registration cycles, and look up details locally.</p>
+      <p class="tool-tagline tool-description">Track domain age timelines, retrieve public DNS entries, verify registration cycles, and look up details locally.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -975,7 +975,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Why do some domains fail to load via RDAP? <span>+</span></div>
         <div class="faq-answer">Many registrars block direct browser queries via CORS headers to protect privacy. If a domain fails, toggle our WHOIS Parser tab, paste the raw lookup data, and the tool will immediately calculate age metrics.</div>
@@ -1413,6 +1413,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

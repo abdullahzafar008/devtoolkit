@@ -663,7 +663,7 @@
         <span>Unit Converter</span>
       </div>
       <h1 class="tool-title">Universal Unit Converter</h1>
-      <p class="tool-tagline">Convert lengths, weights, temperatures, area dimensions, and binary digital data storage metrics in real-time instantly.</p>
+      <p class="tool-tagline tool-description">Convert lengths, weights, temperatures, area dimensions, and binary digital data storage metrics in real-time instantly.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -808,7 +808,7 @@
   <!-- Section 6: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Are Binary data storage factors calculated on base 1000 or 1024? <span>+</span></div>
         <div class="faq-answer">The Digital Storage converter utilizes standard binary factors (base 1024) to translate Kilobytes, Megabytes, Gigabytes, and Terabytes accurately for operating systems.</div>
@@ -1140,6 +1140,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

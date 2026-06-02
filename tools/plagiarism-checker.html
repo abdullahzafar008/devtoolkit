@@ -740,7 +740,7 @@
         <span>Plagiarism Checker</span>
       </div>
       <h1 class="tool-title">Plagiarism Checker</h1>
-      <p class="tool-tagline">Scan and calculate text uniqueness percentages. Highlight identical duplicate phrases instantly.</p>
+      <p class="tool-tagline tool-description">Scan and calculate text uniqueness percentages. Highlight identical duplicate phrases instantly.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -815,7 +815,7 @@
   <!-- Section 4: What is this tool -->
   <section class="article-section">
     <h2>What is Plagiarism Checker?</h2>
-    <div class="paragraphs-wrap">
+    <div class="paragraphs-wrap tool-long-desc">
       <p>A plagiarism checker free utility checks your texts and articles against common document structures to verify unique copy results. Publishing identical content on blogs or school projects drops indexing grades, causing penalties.</p>
       <p>Using sentence-level Levenshtein similarity algorithms, the editor audits characters live. It runs quick calculations comparing sequences against common digital templates, tracking matching indicators safely.</p>
       <p>Because calculations execute completely client-side in the browser cache, your documents are completely private. No drafts are sent over networks or saved remotely, which guarantees security.</p>
@@ -928,7 +928,7 @@
   <!-- Section 9: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Do you charge for full uniqueness reports? <span>▼</span></div>
         <div class="faq-answer">No. Uniqueness scans and highlights are 100% free with no words limits.</div>
@@ -1289,6 +1289,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

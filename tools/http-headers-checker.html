@@ -737,7 +737,7 @@
         <span>HTTP Headers Checker</span>
       </div>
       <h1 class="tool-title">HTTP Response Headers Checker</h1>
-      <p class="tool-tagline">Evaluate server configurations metadata, run response security checklists, and check compliance grades instantly.</p>
+      <p class="tool-tagline tool-description">Evaluate server configurations metadata, run response security checklists, and check compliance grades instantly.</p>
       <a href="#workspace" class="btn-scroll-down">Use Checker Below ↓</a>
     </div>
   </section>
@@ -877,7 +877,7 @@ Permissions-Policy: geolocation=(), camera=()</textarea>
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Why do browsers block raw header checks via JS? <span>+</span></div>
         <div class="faq-answer">Browsers enforce strict CORS (Cross-Origin Resource Sharing) security. Direct javascript ajax calls to foreign domains block headers to prevent cookie and authorization token leakage. Our tool leverages proxy fallbacks to bypass this.</div>
@@ -1223,6 +1223,14 @@ referrer-policy: strict-origin-when-cross-origin`;
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

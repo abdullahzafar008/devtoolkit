@@ -539,8 +539,8 @@
       <span class="separator">&gt;</span>
       <span>Developer Tools</span>
     </div>
-    <h1>🧑💻 Developer Tools</h1>
-    <p>Free developer tools for programmers and web developers</p>
+    <h1 class="category-title">🧑💻 Developer Tools</h1>
+    <p class="hero-subtitle">Free developer tools for programmers and web developers</p>
   </section>
 
   <!-- Content Wrapper -->
@@ -599,7 +599,7 @@
     </section>
 
     <!-- Part A: Category Overview -->
-    <section class="glass-card article-section">
+    <section class="glass-card article-section category-overview">
       <h2>What are Developer Tools?</h2>
       <p>Developer tools are dedicated, browser-based web applications that assist software engineers, web developers, database administrators, and QA engineers in formatting variables, translating values, checking hash values, and generating security tokens. Processing inputs client-side, these modules let you format JSON files, encode Base64 strings, hash payloads, and create QR codes locally. Your sensitive keys, private data structures, and URLs are never sent over the web.</p>
       <p>Having a lightweight, browser-based collection of developer tools increases productivity. Programmers constantly need to check and structure API responses, encode URL query strings safely, or generate temporary secure hashes for file integrity checks. Using client-side utilities eliminates dependency installation steps and ensures that code audits, passwords, and JSON objects remain private.</p>
@@ -753,19 +753,23 @@
 
   <script type="module">
     import { initBackground } from './js/3d-background.js';
-    import { loadPageContent } from './js/cms.js';
-
     initBackground('bg-container');
+  </script>
 
-    loadPageContent('category-developer').then(() => {
-      const dynamicSections = document.getElementById('dynamic-sections-container');
-      if (dynamicSections && dynamicSections.children.length > 0) {
-        console.log("Category-DEVELOPER CMS layout blocks found: hiding fallback grids.");
-        document.getElementById('static-tools-grid').style.display = 'none';
-        document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
-        const staticHero = document.querySelector('.cat-hero');
-        if (staticHero) staticHero.style.display = 'none';
-      }
+  <script type="module">
+    import { loadCategoryContent } from './js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCategoryContent('developer').then(() => {
+        const dynamicSections = document.getElementById('dynamic-sections-container');
+        if (dynamicSections && dynamicSections.children.length > 0) {
+          console.log("Category-DEVELOPER CMS layout blocks found: hiding fallback grids.");
+          const staticToolsGrid = document.getElementById('static-tools-grid');
+          if (staticToolsGrid) staticToolsGrid.style.display = 'none';
+          document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
+          const staticHero = document.querySelector('.cat-hero');
+          if (staticHero) staticHero.style.display = 'none';
+        }
+      });
     });
   </script>
 

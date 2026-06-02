@@ -723,7 +723,7 @@
         <span>Base64 Encoder</span>
       </div>
       <h1 class="tool-title">Base64 Encoder & Decoder</h1>
-      <p class="tool-tagline">Encode plain text strings or decode Base64 data values. Convert images to data URLs instantly.</p>
+      <p class="tool-tagline tool-description">Encode plain text strings or decode Base64 data values. Convert images to data URLs instantly.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -812,7 +812,7 @@
   <!-- Section 4: What is this tool -->
   <section class="article-section">
     <h2>What is Base64 Encoder & Decoder?</h2>
-    <div class="paragraphs-wrap">
+    <div class="paragraphs-wrap tool-long-desc">
       <p>A base64 encoder decoder free online utility represents structured data into ASCII format patterns cleanly. It is an essential asset for developers to encode cookies, transmit email attachments securely, or inline small graphics files directly inside CSS sheets.</p>
       <p>The image data URL converter encodes images like PNG or JPEGs directly into raw base64. Placing inline graphics inside HTML files decreases independent file requests, accelerating client loading delays.</p>
       <p>We prioritize security. All conversions are executed locally inside browser volatile memories, meaning no parsed values ever travel to external databases.</p>
@@ -925,7 +925,7 @@
   <!-- Section 9: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Does Base64 encoding encrypt my strings? <span>▼</span></div>
         <div class="faq-answer">No. Base64 is a serialization format, not encryption. Anyone can decode it easily. Use encryption algorithms like AES for high-security.</div>
@@ -1247,6 +1247,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

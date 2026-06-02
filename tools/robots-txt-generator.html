@@ -782,7 +782,7 @@
         <span>Robots.txt Generator</span>
       </div>
       <h1 class="tool-title">Robots.txt Rules Generator</h1>
-      <p class="tool-tagline">Create custom web robot instructions, manage crawler pathways, assign site delays, and download standard text outputs instantly.</p>
+      <p class="tool-tagline tool-description">Create custom web robot instructions, manage crawler pathways, assign site delays, and download standard text outputs instantly.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -932,7 +932,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Where does a robots.txt file live on a server? <span>+</span></div>
         <div class="faq-answer">It must live at the exact top-level root folder of your web site. If your website is `example.com`, the file should load at `https://example.com/robots.txt`. If placed inside subdirectories, search engine crawlers will not discover it.</div>
@@ -1399,6 +1399,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

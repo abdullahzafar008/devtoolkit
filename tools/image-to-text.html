@@ -679,7 +679,7 @@
         <span>Image to Text</span>
       </div>
       <h1 class="tool-title">Image to Text Converter (OCR)</h1>
-      <p class="tool-tagline">Upload images to extract readable, editable plain text blocks instantly. Powered by 100% secure client-side browser execution.</p>
+      <p class="tool-tagline tool-description">Upload images to extract readable, editable plain text blocks instantly. Powered by 100% secure client-side browser execution.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -782,7 +782,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">How does client-side OCR work? <span>+</span></div>
         <div class="faq-answer">It utilizes Tesseract.js, a compiled WebAssembly port of the famous Google Tesseract OCR engine, running directly inside your browser without backend network requirements.</div>
@@ -1066,6 +1066,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

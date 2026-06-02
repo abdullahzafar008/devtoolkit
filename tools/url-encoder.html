@@ -639,7 +639,7 @@
         <span>URL Encoder Decoder</span>
       </div>
       <h1 class="tool-title">URL Encoder & Decoder</h1>
-      <p class="tool-tagline">Percent-encode special character parameters securely, decode escaped link values, and parse query parameters locally.</p>
+      <p class="tool-tagline tool-description">Percent-encode special character parameters securely, decode escaped link values, and parse query parameters locally.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -781,7 +781,7 @@
   <!-- Section 6: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Why is URL encoding necessary? <span>+</span></div>
         <div class="faq-answer">URLs can only be sent over the internet using the ASCII character set. Special characters like spaces or brackets are replaced with a percent sign (%) and two hex digits.</div>
@@ -1065,6 +1065,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

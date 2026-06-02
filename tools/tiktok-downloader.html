@@ -760,7 +760,7 @@
         <span>TikTok Downloader</span>
       </div>
       <h1 class="tool-title">TikTok Watermark Remover & Downloader</h1>
-      <p class="tool-tagline">Save HD TikTok videos, extract MP3 background sound clips, check metrics, and retrieve CDN links instantly.</p>
+      <p class="tool-tagline tool-description">Save HD TikTok videos, extract MP3 background sound clips, check metrics, and retrieve CDN links instantly.</p>
       <a href="#workspace" class="btn-scroll-down">Use Downloader Below ↓</a>
     </div>
   </section>
@@ -880,7 +880,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">How are TikTok watermarks removed? <span>+</span></div>
         <div class="faq-answer">TikTok watermarks are added dynamically by the app. Our tool queries public CDN endpoints which list the raw upload files before the watermark layer is compiled, retrieving the clean original video.</div>
@@ -1189,6 +1189,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

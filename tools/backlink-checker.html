@@ -774,7 +774,7 @@
         <span>Backlink Checker</span>
       </div>
       <h1 class="tool-title">Backlink Authority Checker</h1>
-      <p class="tool-tagline">Audit website inbound link profiles, evaluate referring domain distributions, analyze anchor texts, and export CSV reports.</p>
+      <p class="tool-tagline tool-description">Audit website inbound link profiles, evaluate referring domain distributions, analyze anchor texts, and export CSV reports.</p>
       <a href="#workspace" class="btn-scroll-down">Use Checker Below ↓</a>
     </div>
   </section>
@@ -915,7 +915,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">What is a referring domain? <span>+</span></div>
         <div class="faq-answer">Referring domains are the unique website domains (e.g. `wikipedia.org`) that contain hyperlinks pointing to your site. A single referring domain can contain multiple individual backlinks.</div>
@@ -1340,6 +1340,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

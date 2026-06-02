@@ -715,7 +715,7 @@
         <span>Grammar Checker</span>
       </div>
       <h1 class="tool-title">Grammar Checker</h1>
-      <p class="tool-tagline">Scan and correct spelling, stylistic, or grammar errors instantly with zero limits.</p>
+      <p class="tool-tagline tool-description">Scan and correct spelling, stylistic, or grammar errors instantly with zero limits.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -781,7 +781,7 @@
   <!-- Section 4: What is this tool -->
   <section class="article-section">
     <h2>What is Grammar Checker?</h2>
-    <div class="paragraphs-wrap">
+    <div class="paragraphs-wrap tool-long-desc">
       <p>A grammar checker free utility helps you perfect document structures, spelling, and sentence layouts prior to digital publishing runs. For writers, students, and SEO managers, polished copy is key to retaining search engine trust metrics.</p>
       <p>By connecting to LanguageTool API endpoints, the helper scans syntax rules dynamically. It targets issues like missing spaces, typos, punctuation mismatch, and verb conjugations, offering suggestions instantly.</p>
       <p>We prioritize confidentiality. All input documents are processed using secure channels, and parsed texts are never saved on external databases, offering maximum security during editing steps.</p>
@@ -894,7 +894,7 @@
   <!-- Section 9: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Are there character or word count limits? <span>▼</span></div>
         <div class="faq-answer">No. You can check unlimited text lengths with no restrictions.</div>
@@ -1197,6 +1197,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

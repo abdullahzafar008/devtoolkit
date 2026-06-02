@@ -727,7 +727,7 @@
         <span>SEO Score Checker</span>
       </div>
       <h1 class="tool-title">SEO Score Checker & Page Auditor</h1>
-      <p class="tool-tagline">Paste your webpage's raw HTML source code to analyze SEO compliance, identify error attributes, and view instant optimization guides.</p>
+      <p class="tool-tagline tool-description">Paste your webpage's raw HTML source code to analyze SEO compliance, identify error attributes, and view instant optimization guides.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -748,6 +748,14 @@
 </head>
 <body>
   <h1>Sample Heading</h1>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
+  </script>
 </body>
 </html>"></textarea>
 
@@ -847,7 +855,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Why paste HTML instead of crawling a URL? <span>+</span></div>
         <div class="faq-answer">Browser security constraints (CORS) block direct requests to foreign domains from clients. Direct code pasting allows deep, instantaneous parsing without backend proxy servers.</div>
@@ -1018,6 +1026,14 @@
   <img src="mockup.png" alt="Clean code illustration">
   <img src="icon.png">
   <a href="https://google.com" target="_blank" rel="noopener">Explore Search</a>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
+  </script>
 </body>
 </html>`;
 
@@ -1321,6 +1337,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

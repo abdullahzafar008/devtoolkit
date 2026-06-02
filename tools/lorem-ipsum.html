@@ -664,7 +664,7 @@
         <span>Lorem Ipsum</span>
       </div>
       <h1 class="tool-title">Lorem Ipsum Dummy Text Generator</h1>
-      <p class="tool-tagline">Create custom randomized Latin placeholder text, customize length thresholds, and format clean HTML paragraphs markup locally.</p>
+      <p class="tool-tagline tool-description">Create custom randomized Latin placeholder text, customize length thresholds, and format clean HTML paragraphs markup locally.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -780,7 +780,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Where did the standard standard passage come from? <span>+</span></div>
         <div class="faq-answer">It originates from a passage written by Cicero in 45 BC. A type specialist scrambled the words in the 1500s to create a book of type samples.</div>
@@ -1105,6 +1105,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

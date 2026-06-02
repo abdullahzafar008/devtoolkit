@@ -742,7 +742,7 @@
         <span>Hash Generator</span>
       </div>
       <h1 class="tool-title">MD5 & SHA Cryptographic Hash Generator</h1>
-      <p class="tool-tagline">Calculate secure cryptographic checksum hashes for alphanumeric text blocks or local files. Powered fully client-side inside browser contexts.</p>
+      <p class="tool-tagline tool-description">Calculate secure cryptographic checksum hashes for alphanumeric text blocks or local files. Powered fully client-side inside browser contexts.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -906,7 +906,7 @@
   <!-- Section 6: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Can I reverse MD5 or SHA-256 back to text? <span>+</span></div>
         <div class="faq-answer">No. Cryptographic hashes are designed mathematically as one-way trapdoor functions. They cannot be decoded back. They can only be checked against a matches database.</div>
@@ -1204,6 +1204,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

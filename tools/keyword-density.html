@@ -762,7 +762,7 @@
         <span>Keyword Density Checker</span>
       </div>
       <h1 class="tool-title">Keyword Density Checker</h1>
-      <p class="tool-tagline">Parse copy texts, filter stop words, audit monogram bigram distributions, and protect content against keyword stuffing.</p>
+      <p class="tool-tagline tool-description">Parse copy texts, filter stop words, audit monogram bigram distributions, and protect content against keyword stuffing.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -919,7 +919,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Does Google penalize high keyword density? <span>+</span></div>
         <div class="faq-answer">Yes, Google penalizes sites that practice "keyword stuffing," which is the practice of loading a webpage with keywords in an attempt to manipulate search rankings. It creates a poor user experience and can lead to ranking drops.</div>
@@ -1267,6 +1267,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

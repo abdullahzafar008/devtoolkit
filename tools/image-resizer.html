@@ -763,7 +763,7 @@
         <span>Image Resizer</span>
       </div>
       <h1 class="tool-title">Secure Online Image Resizer</h1>
-      <p class="tool-tagline">Change image dimensions in pixels or percentages, lock aspect ratios, and export optimized assets. Powered entirely locally inside your browser.</p>
+      <p class="tool-tagline tool-description">Change image dimensions in pixels or percentages, lock aspect ratios, and export optimized assets. Powered entirely locally inside your browser.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -915,7 +915,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Does resizing reduce image quality? <span>+</span></div>
         <div class="faq-answer">Scaling down discards pixels to fit the new size, reducing file size. For JPEG/WebP formats, the quality slider controls compression ratios to minimize artifact noise.</div>
@@ -1279,6 +1279,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

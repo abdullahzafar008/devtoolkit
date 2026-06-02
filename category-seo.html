@@ -539,8 +539,8 @@
       <span class="separator">&gt;</span>
       <span>SEO Tools</span>
     </div>
-    <h1>🔍 SEO Tools</h1>
-    <p>Powerful free SEO tools to boost your search engine rankings</p>
+    <h1 class="category-title">🔍 SEO Tools</h1>
+    <p class="hero-subtitle">Powerful free SEO tools to boost your search engine rankings</p>
   </section>
 
   <!-- Content Wrapper -->
@@ -631,7 +631,7 @@
     </section>
 
     <!-- Part A: Category Overview -->
-    <section class="glass-card article-section">
+    <section class="glass-card article-section category-overview">
       <h2>What are SEO Tools?</h2>
       <p>Search Engine Optimization (SEO) tools are essential instruments designed to optimize your website layouts, diagnose ranking hurdles, and increase organic visibility. These tools systematically audit elements like meta tags, check robots.txt parameters, generate indexing maps, and extract domain attributes. By automating complex tests, they save hours of manual code reviews and help you keep pace with Search Console requirements.</p>
       <p>Web developers, small business owners, SEO managers, and professional content creators utilize these utilities to monitor domain health and identify indexing issues. The main advantage of using these free online tools is that they run client-side inside your browser sandbox. This keeps your research proprietary, eliminates server upload delays, and ensures that sensitive domain parameters are never tracked or saved remotely.</p>
@@ -808,16 +808,21 @@
     import { loadPageContent } from './js/cms.js';
 
     initBackground('bg-container');
+  </script>
 
-    loadPageContent('category-seo').then(() => {
-      const dynamicSections = document.getElementById('dynamic-sections-container');
-      if (dynamicSections && dynamicSections.children.length > 0) {
-        console.log("Category-SEO CMS layout blocks found: hiding fallback grids.");
-        document.getElementById('static-tools-grid').style.display = 'none';
-        document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
-        const staticHero = document.querySelector('.cat-hero');
-        if (staticHero) staticHero.style.display = 'none';
-      }
+  <script type="module">
+    import { loadCategoryContent } from './js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCategoryContent('seo').then(() => {
+        const dynamicSections = document.getElementById('dynamic-sections-container');
+        if (dynamicSections && dynamicSections.children.length > 0) {
+          console.log("Category-SEO CMS layout blocks found: hiding fallback grids.");
+          document.getElementById('static-tools-grid').style.display = 'none';
+          document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
+          const staticHero = document.querySelector('.cat-hero');
+          if (staticHero) staticHero.style.display = 'none';
+        }
+      });
     });
   </script>
 

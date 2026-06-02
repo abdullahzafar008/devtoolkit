@@ -676,7 +676,7 @@
         <span>Binary Converter</span>
       </div>
       <h1 class="tool-title">Binary Converter & Base System Matrix</h1>
-      <p class="tool-tagline">Encode text strings to binary, decode binary to ASCII, and dynamically translate values across Decimal, Hex, Octal, and Binary.</p>
+      <p class="tool-tagline tool-description">Encode text strings to binary, decode binary to ASCII, and dynamically translate values across Decimal, Hex, Octal, and Binary.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -792,7 +792,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Can I convert large text files to binary? <span>+</span></div>
         <div class="faq-answer">Yes. Because all execution happens locally in volatile browser memory, large paragraphs are handled smoothly and instantly.</div>
@@ -1141,6 +1141,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

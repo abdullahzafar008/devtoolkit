@@ -661,7 +661,7 @@
         <span>Text to Binary</span>
       </div>
       <h1 class="tool-title">Text to Binary Converter</h1>
-      <p class="tool-tagline">Encode text strings to binary digits, decode binary digits to plain text, customize separators, and parse parameters instantly.</p>
+      <p class="tool-tagline tool-description">Encode text strings to binary digits, decode binary digits to plain text, customize separators, and parse parameters instantly.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -792,7 +792,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">What is the binary representation of letter 'A'? <span>+</span></div>
         <div class="faq-answer">In standard 8-bit ASCII encoding, the uppercase letter 'A' corresponds to decimal value 65. Calculated in base-2 binary code, it is represented as `01000001`.</div>
@@ -1145,6 +1145,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

@@ -657,6 +657,64 @@
     .modal-close-btn:hover {
       background: #00CCFF;
     }
+
+    .faq-section {
+      padding: 80px 20px;
+    }
+
+    .faq-section .section-faq-title {
+      text-align: center;
+      font-size: 2rem;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    .faq-item {
+      border: 1px solid rgba(0,102,255,0.2);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .faq-question {
+      padding: 18px 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      font-weight: 500;
+      background: rgba(255,255,255,0.03);
+      transition: background 0.2s;
+    }
+
+    .faq-question:hover {
+      background: rgba(0,102,255,0.1);
+    }
+
+    .faq-icon {
+      color: #0066FF;
+      font-size: 20px;
+      font-weight: 300;
+      flex-shrink: 0;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      padding: 0 20px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.7;
+    }
+
+    .faq-answer.open {
+      max-height: 300px;
+      padding: 16px 20px;
+    }
   </style>
 </head>
 <body class="fade-in">
@@ -713,6 +771,17 @@
     <div id="dynamic-sections-container"></div>
     <!-- Will be dynamically populated with category headers and grids -->
   </main>
+
+  <section class="faq-section"
+    id="faq-section">
+    <div class="container">
+      <h2 class="section-faq-title">
+        Frequently Asked Questions
+      </h2>
+      <div class="faq-list">
+      </div>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer>
@@ -913,7 +982,7 @@
         speed = 500; // Delay before starting next word
       }
 
-      setTimeout(tickTypewriter, speed);
+      window.typewriterTimeout = setTimeout(tickTypewriter, speed);
     }
     tickTypewriter();
 

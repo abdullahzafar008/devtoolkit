@@ -539,8 +539,8 @@
       <span class="separator">&gt;</span>
       <span>Image Tools</span>
     </div>
-    <h1>🖼️ Image Tools</h1>
-    <p>Free image tools for designers and content creators</p>
+    <h1 class="category-title">🖼️ Image Tools</h1>
+    <p class="hero-subtitle">Free image tools for designers and content creators</p>
   </section>
 
   <!-- Content Wrapper -->
@@ -599,7 +599,7 @@
     </section>
 
     <!-- Part A: Category Overview -->
-    <section class="glass-card article-section">
+    <section class="glass-card article-section category-overview">
       <h2>What are Image Tools?</h2>
       <p>Image tools are specialized web utility applications built to resize, compress, format, extract data from, and analyze digital graphic assets. Running client-side using native HTML5 Canvas APIs, these modules let you optimize file weights, create favicon icon packages, run OCR text extractions, and edit pixel metrics directly inside your browser. Because calculations run on your device, your images are never sent to external servers, protecting your privacy.</p>
       <p>Graphic designers, frontend developers, social media managers, and bloggers rely on these utilities to prepare high-quality photos for web publishing. Keeping image sizes small is a critical component of web speed optimization and mobile SEO ranking scores. These tools enable anyone to easily reduce PNG and JPG weights, lock aspect ratios, change format files, and harvest exact color palette hex codes for styling guidelines.</p>
@@ -753,19 +753,23 @@
 
   <script type="module">
     import { initBackground } from './js/3d-background.js';
-    import { loadPageContent } from './js/cms.js';
-
     initBackground('bg-container');
+  </script>
 
-    loadPageContent('category-image').then(() => {
-      const dynamicSections = document.getElementById('dynamic-sections-container');
-      if (dynamicSections && dynamicSections.children.length > 0) {
-        console.log("Category-IMAGE CMS layout blocks found: hiding fallback grids.");
-        document.getElementById('static-tools-grid').style.display = 'none';
-        document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
-        const staticHero = document.querySelector('.cat-hero');
-        if (staticHero) staticHero.style.display = 'none';
-      }
+  <script type="module">
+    import { loadCategoryContent } from './js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCategoryContent('image').then(() => {
+        const dynamicSections = document.getElementById('dynamic-sections-container');
+        if (dynamicSections && dynamicSections.children.length > 0) {
+          console.log("Category-IMAGE CMS layout blocks found: hiding fallback grids.");
+          const staticToolsGrid = document.getElementById('static-tools-grid');
+          if (staticToolsGrid) staticToolsGrid.style.display = 'none';
+          document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
+          const staticHero = document.querySelector('.cat-hero');
+          if (staticHero) staticHero.style.display = 'none';
+        }
+      });
     });
   </script>
 

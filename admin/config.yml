@@ -47,6 +47,8 @@ collections:
     label: "🔧 Tools"
     folder: "content/tools"
     create: true
+    extension: "json"
+    format: "json"
     slug: "{{slug}}"
     fields:
       - {label: "Tool Name", name: "title", widget: "string"}

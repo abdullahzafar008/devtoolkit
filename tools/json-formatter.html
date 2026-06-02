@@ -681,7 +681,7 @@
         <span>JSON Formatter</span>
       </div>
       <h1 class="tool-title">JSON Formatter & Validator</h1>
-      <p class="tool-tagline">Beautify, validate, minify, and inspect JSON variables inside a secure local sandbox environment.</p>
+      <p class="tool-tagline tool-description">Beautify, validate, minify, and inspect JSON variables inside a secure local sandbox environment.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -755,7 +755,7 @@
   <!-- Section 4: What is this tool -->
   <section class="article-section">
     <h2>What is JSON Formatter & Validator?</h2>
-    <div class="paragraphs-wrap">
+    <div class="paragraphs-wrap tool-long-desc">
       <p>A json formatter online tool serves as a lightweight debugger workspace that parses nested data payload variables instantly. It is an essential asset for API developers and database designers, optimizing code readabilities for quick auditing checks.</p>
       <p>By mapping syntax parsing lines, the validation debugger isolates errors such as missing commas or broken brackets immediately, highlighting problem points to accelerate troubleshooting workflows.</p>
       <p>Confidentiality remains completely secured. All parser and string transformations occur locally inside your active browser, meaning none of your configuration parameters touch the network.</p>
@@ -868,7 +868,7 @@
   <!-- Section 9: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Can I format extremely large JSON logs? <span>▼</span></div>
         <div class="faq-answer">Yes. The formatter easily supports massive payload objects, compiling indents in milliseconds.</div>
@@ -1153,6 +1153,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

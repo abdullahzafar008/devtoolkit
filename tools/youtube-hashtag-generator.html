@@ -730,7 +730,7 @@
         <span>YT Hashtag Generator</span>
       </div>
       <h1 class="tool-title">YouTube Hashtag Generator</h1>
-      <p class="tool-tagline">Boost video discoverability with highly optimized hashtags. Check description limits and extract viral category tags instantly.</p>
+      <p class="tool-tagline tool-description">Boost video discoverability with highly optimized hashtags. Check description limits and extract viral category tags instantly.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -848,7 +848,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">What happens if I use more than 15 hashtags on a video? <span>+</span></div>
         <div class="faq-answer">YouTube has a strict policy regarding over-tagging. If a single video includes more than 15 hashtags on its description or title, the platform's algorithm ignores all hashtags on that video, and it might flag your video for metadata spam.</div>
@@ -1163,6 +1163,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

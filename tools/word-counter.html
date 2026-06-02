@@ -716,7 +716,7 @@
         <span>Word Counter</span>
       </div>
       <h1 class="tool-title">Word Counter</h1>
-      <p class="tool-tagline">Examine character counts, sentence metrics, lines, reading speed rates, and keyword densities instantly.</p>
+      <p class="tool-tagline tool-description">Examine character counts, sentence metrics, lines, reading speed rates, and keyword densities instantly.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -836,7 +836,7 @@
   <!-- Section 4: What is this tool -->
   <section class="article-section">
     <h2>What is Word Counter?</h2>
-    <div class="paragraphs-wrap">
+    <div class="paragraphs-wrap tool-long-desc">
       <p>A word counter online utility is a must-have editor helper that calculates detailed text structures and character limits in real time. Perfect for publishers, copywriters, and content directors, our tool tracks keyword densities to help optimize articles for search indexing constraints.</p>
       <p>By monitoring density metrics, writers can align text frequency signals to target topics without keyword stuffing. Readability speeds like reading and speaking duration estimations help content creators adjust length variables for script recording tasks.</p>
       <p>All calculations execute locally inside the browser. No input text files are transmitted or logged on databases, offering absolute confidentiality during drafting and copywriting phases.</p>
@@ -954,7 +954,7 @@
   <!-- Section 9: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Is this word counter really free? <span>▼</span></div>
         <div class="faq-answer">Yes, it is 100% free with no limits on text lengths or calculation frequencies.</div>
@@ -1331,6 +1331,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

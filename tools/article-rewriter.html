@@ -747,7 +747,7 @@
         <span>Article Rewriter</span>
       </div>
       <h1 class="tool-title">Article Rewriter & Paraphraser</h1>
-      <p class="tool-tagline">Rephrase texts, spin articles with semantic synonyms database, protect capitals, and evaluate uniqueness locally.</p>
+      <p class="tool-tagline tool-description">Rephrase texts, spin articles with semantic synonyms database, protect capitals, and evaluate uniqueness locally.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -881,7 +881,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Will the spun content pass plagiarism checkers? <span>+</span></div>
         <div class="faq-answer">Yes. Because the rewriter swaps out high percentages of common words and nouns with vocabulary alternatives, it significantly changes sentence structures, helping pass automated text matching limits.</div>
@@ -1325,6 +1325,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

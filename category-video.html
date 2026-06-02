@@ -533,8 +533,8 @@
       <span class="separator">&gt;</span>
       <span>Video Tools</span>
     </div>
-    <h1>🎬 Video Tools</h1>
-    <p>Free video tools for content creators and social media managers</p>
+    <h1 class="category-title">🎬 Video Tools</h1>
+    <p class="hero-subtitle">Free video tools for content creators and social media managers</p>
   </section>
 
   <!-- Content Wrapper -->
@@ -577,7 +577,7 @@
     </section>
 
     <!-- Part A: Category Overview -->
-    <section class="glass-card article-section">
+    <section class="glass-card article-section category-overview">
       <h2>What are Video Tools?</h2>
       <p>Video tools are browser-based utilities designed to help social media managers, video editors, and content creators acquire assets, build promotional hashtags, check stream locations, and manage downloads from media platforms. Operating entirely client-side, these modules let you extract HD thumbnail files, compile tags, check TikTok video resources, and parse audio configurations. All operations process locally in your browser memory, keeping your links private.</p>
       <p>Content creators use these tools to speed up their production workflows. Designing high-click-through-rate thumbnails requires references, and optimizing video visibility requires high-search volume tags. Having a direct set of utilities that let you save source assets, locate background audio file paths, and build viral tags profile arrays ensures you stay competitive on platforms like YouTube, TikTok, and Instagram.</p>
@@ -721,19 +721,23 @@
 
   <script type="module">
     import { initBackground } from './js/3d-background.js';
-    import { loadPageContent } from './js/cms.js';
-
     initBackground('bg-container');
+  </script>
 
-    loadPageContent('category-video').then(() => {
-      const dynamicSections = document.getElementById('dynamic-sections-container');
-      if (dynamicSections && dynamicSections.children.length > 0) {
-        console.log("Category-VIDEO CMS layout blocks found: hiding fallback grids.");
-        document.getElementById('static-tools-grid').style.display = 'none';
-        document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
-        const staticHero = document.querySelector('.cat-hero');
-        if (staticHero) staticHero.style.display = 'none';
-      }
+  <script type="module">
+    import { loadCategoryContent } from './js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCategoryContent('video').then(() => {
+        const dynamicSections = document.getElementById('dynamic-sections-container');
+        if (dynamicSections && dynamicSections.children.length > 0) {
+          console.log("Category-VIDEO CMS layout blocks found: hiding fallback grids.");
+          const staticToolsGrid = document.getElementById('static-tools-grid');
+          if (staticToolsGrid) staticToolsGrid.style.display = 'none';
+          document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
+          const staticHero = document.querySelector('.cat-hero');
+          if (staticHero) staticHero.style.display = 'none';
+        }
+      });
     });
   </script>
 

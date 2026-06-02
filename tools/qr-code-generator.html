@@ -717,7 +717,7 @@
         <span>QR Code Generator</span>
       </div>
       <h1 class="tool-title">QR Code Generator</h1>
-      <p class="tool-tagline">Create customizable, high-resolution QR codes for links, text, and parameters instantly.</p>
+      <p class="tool-tagline tool-description">Create customizable, high-resolution QR codes for links, text, and parameters instantly.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -801,7 +801,7 @@
   <!-- Section 4: What is this tool -->
   <section class="article-section">
     <h2>What is QR Code Generator?</h2>
-    <div class="paragraphs-wrap">
+    <div class="paragraphs-wrap tool-long-desc">
       <p>A qr code generator free utility converts alphanumeric characters and web links into scannable 2D matrix bar symbols. Widely used on product packages, advertisement flyers, and mobile displays, QR codes let users access web pages instantly with their smartphone cameras.</p>
       <p>Our client-side builder supports custom sizes up to 512px and custom color pickers. This allows creators to style barcodes to match brand assets while maintaining scan readability thresholds.</p>
       <p>As a fully secure browser tool, the encoded text is processed directly inside your browser cache. No URL metrics are sent across networks, offering absolute data privacy for internal project tests.</p>
@@ -919,7 +919,7 @@
   <!-- Section 9: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Do you charge to download high resolution QR codes? <span>▼</span></div>
         <div class="faq-answer">No, high-resolution PNG downloads are completely free with no restrictions.</div>
@@ -1205,6 +1205,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

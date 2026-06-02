@@ -539,8 +539,8 @@
       <span class="separator">&gt;</span>
       <span>Text Tools</span>
     </div>
-    <h1>✍️ Text Tools</h1>
-    <p>Free text tools for writers, students and content creators</p>
+    <h1 class="category-title">✍️ Text Tools</h1>
+    <p class="hero-subtitle">Free text tools for writers, students and content creators</p>
   </section>
 
   <!-- Content Wrapper -->
@@ -631,7 +631,7 @@
     </section>
 
     <!-- Part A: Category Overview -->
-    <section class="glass-card article-section">
+    <section class="glass-card article-section category-overview">
       <h2>What are Text Tools?</h2>
       <p>Text tools are highly efficient browser-based applications designed to assist authors, copywriters, students, and engineers in restructuring content, auditing formatting parameters, and parsing textual data. These tools operate client-side, enabling operations such as live syntax scanning, casing transformations, sifting lists, and word counts directly inside your local browser memory space. This keeps draft content private, eliminates upload delays, and secures proprietary copy from remote cloud logs.</p>
       <p>By automating manual text formatting steps, these utility modules allow users to easily polish articles, optimize keyword frequencies, check document grade readability scores, and generate placeholder layouts. Writing for modern audiences requires careful balance: avoiding plagiarized phrases, maintaining a target word count limit, and keeping sentence complexity in line with high readability ease index levels. Text tools streamline these checks so that you can craft highly polished articles without leaving your workspace.</p>
@@ -805,19 +805,23 @@
 
   <script type="module">
     import { initBackground } from './js/3d-background.js';
-    import { loadPageContent } from './js/cms.js';
-
     initBackground('bg-container');
+  </script>
 
-    loadPageContent('category-text').then(() => {
-      const dynamicSections = document.getElementById('dynamic-sections-container');
-      if (dynamicSections && dynamicSections.children.length > 0) {
-        console.log("Category-TEXT CMS layout blocks found: hiding fallback grids.");
-        document.getElementById('static-tools-grid').style.display = 'none';
-        document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
-        const staticHero = document.querySelector('.cat-hero');
-        if (staticHero) staticHero.style.display = 'none';
-      }
+  <script type="module">
+    import { loadCategoryContent } from './js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCategoryContent('text').then(() => {
+        const dynamicSections = document.getElementById('dynamic-sections-container');
+        if (dynamicSections && dynamicSections.children.length > 0) {
+          console.log("Category-TEXT CMS layout blocks found: hiding fallback grids.");
+          const staticToolsGrid = document.getElementById('static-tools-grid');
+          if (staticToolsGrid) staticToolsGrid.style.display = 'none';
+          document.querySelectorAll('.glass-card').forEach(c => c.style.display = 'none');
+          const staticHero = document.querySelector('.cat-hero');
+          if (staticHero) staticHero.style.display = 'none';
+        }
+      });
     });
   </script>
 

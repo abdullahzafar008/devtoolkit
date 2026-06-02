@@ -680,7 +680,7 @@
         <span>YouTube Thumbnail Downloader</span>
       </div>
       <h1 class="tool-title">YouTube Thumbnail Downloader</h1>
-      <p class="tool-tagline">Extract and download high quality cover thumbnails for any YouTube video instantly.</p>
+      <p class="tool-tagline tool-description">Extract and download high quality cover thumbnails for any YouTube video instantly.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -767,7 +767,7 @@
   <!-- Section 4: What is this tool -->
   <section class="article-section">
     <h2>What is YouTube Thumbnail Downloader?</h2>
-    <div class="paragraphs-wrap">
+    <div class="paragraphs-wrap tool-long-desc">
       <p>A youtube thumbnail downloader utility helps design and media professionals retrieve the cover graphics of any published YouTube video. Video covers are key to design studies, allowing editors to review branding templates and check click-through aesthetics.</p>
       <p>The image extractor uses client-side regex algorithms to isolate video ID tokens and maps them directly to YouTube's public thumbnail CDN. Previews are instantly loaded in sizes ranging from default 360p cards to Full HD 1080p covers.</p>
       <p>Because processing runs locally inside your browser sandbox, the video links you parse are never uploaded to our databases. This ensures complete confidentiality for unpublished client previews.</p>
@@ -885,7 +885,7 @@
   <!-- Section 9: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Why is a Max Resolution cover not showing up? <span>▼</span></div>
         <div class="faq-answer">Maximum Resolution (1080p) thumbnails are only available if the uploader uploaded an HD cover. If not, the uploader fallback standard quality applies.</div>
@@ -1174,6 +1174,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

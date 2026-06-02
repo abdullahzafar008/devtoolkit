@@ -796,7 +796,7 @@
         <span>Meta Tag Generator</span>
       </div>
       <h1 class="tool-title">Meta Tag Generator</h1>
-      <p class="tool-tagline">Create SEO optimized meta tags to maximize your rankings and click-through rates.</p>
+      <p class="tool-tagline tool-description">Create SEO optimized meta tags to maximize your rankings and click-through rates.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -909,7 +909,7 @@
   <!-- Section 4: What is this tool -->
   <section class="article-section">
     <h2>What is Meta Tag Generator?</h2>
-    <div class="paragraphs-wrap">
+    <div class="paragraphs-wrap tool-long-desc">
       <p>A meta tag generator free utility helps you configure standard HTML head attributes to inform search engine crawlers about the content structure of your website pages. Implementing accurate meta elements ensures search engines correctly parse page titles and descriptive outlines during search mapping index runs.</p>
       <p>By providing a clean preview interface, our metadata creator maps how search snippets render on Google and other network listings. Optimized titles and summaries directly impact search traffic numbers by offering attractive outlines to searching users.</p>
       <p>Additionally, configuring social graph variables helps you manage link appearance when shared on platforms like Facebook and Twitter. Clean images, titles, and site summaries lead to higher overall CTR metrics across all marketing channels.</p>
@@ -1027,7 +1027,7 @@
   <!-- Section 9: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Is this generator really free? <span>▼</span></div>
         <div class="faq-answer">Yes, 100% free forever. No credit cards, sign-ups, or usage caps apply.</div>
@@ -1342,6 +1342,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

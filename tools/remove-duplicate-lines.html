@@ -652,7 +652,7 @@
         <span>Remove Duplicate Lines</span>
       </div>
       <h1 class="tool-title">Remove Duplicate Lines & Sort Lists</h1>
-      <p class="tool-tagline">Deduplicate textual databases, sort unique list components, trim white spaces, and filter empty structures in real-time locally.</p>
+      <p class="tool-tagline tool-description">Deduplicate textual databases, sort unique list components, trim white spaces, and filter empty structures in real-time locally.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -779,7 +779,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">What is the difference between Case-Sensitive and Insensitive? <span>+</span></div>
         <div class="faq-answer">Case-sensitive matches "Orange" and "orange" as different lines. Unchecking the case-sensitivity rule matches them as duplicates and keeps only the first parsed occurrence.</div>
@@ -1078,6 +1078,14 @@ apple`;
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

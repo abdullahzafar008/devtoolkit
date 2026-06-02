@@ -806,7 +806,7 @@
         <span>Sitemap Generator</span>
       </div>
       <h1 class="tool-title">XML Sitemap Generator</h1>
-      <p class="tool-tagline">Quickly extract URLs, assign priority mappings, define update frequencies, and build index structures for index engines.</p>
+      <p class="tool-tagline tool-description">Quickly extract URLs, assign priority mappings, define update frequencies, and build index structures for index engines.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -986,7 +986,7 @@
   <!-- Section 5: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Where do I upload the sitemap.xml file? <span>+</span></div>
         <div class="faq-answer">Upload the file directly into the top-level root public folder of your site's server. For example: `https://yourdomain.com/sitemap.xml`.</div>
@@ -1510,6 +1510,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>

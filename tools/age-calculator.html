@@ -805,7 +805,7 @@
         <span>Age Calculator</span>
       </div>
       <h1 class="tool-title">Chronological Age Calculator</h1>
-      <p class="tool-tagline">Calculate your exact age in multiple timeline granularities, track your birthday countdown, and discover fun stellar milestones.</p>
+      <p class="tool-tagline tool-description tool-description">Calculate your exact age in multiple timeline granularities, track your birthday countdown, and discover fun stellar milestones.</p>
       <a href="#workspace" class="btn-scroll-down">Use Tool Below ↓</a>
     </div>
   </section>
@@ -1067,7 +1067,7 @@
   <!-- Section 6: FAQ -->
   <section class="article-section">
     <h2>Frequently Asked Questions</h2>
-    <div class="faq-wrapper">
+    <div class="faq-wrapper faq-list faq-list">
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">Does this tool take leap years into account? <span>+</span></div>
         <div class="faq-answer">Yes, absolutely. The internal math checks year bounds for leap cycles, adding 366-day increments and adjusting the day counts in February dynamically.</div>
@@ -1387,6 +1387,14 @@
         item.classList.add('active');
       }
     }
+  </script>
+
+  <script type="module">
+    import { loadToolContent } from '../js/cms.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      const slug = window.location.pathname.split('/').pop().replace('.html', '');
+      loadToolContent(slug);
+    });
   </script>
 </body>
 </html>
