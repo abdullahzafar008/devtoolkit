@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /login.html
+Disallow: /signup.html
+Disallow: /dashboard.html
+Disallow: /profile.html
+Disallow: /history.html
+
+Sitemap: https://devtoolskit.eu.cc/sitemap.xml
